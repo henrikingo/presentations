@@ -1,0 +1,13 @@
+@import url(css/hovercraft-example.css);
+
+body {
+  background-image: url(images/lehti.png);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: bottom left;
+}
+
+#twoModels td,
+#propVsOpen td {
+  padding: 0.5em;
+}
