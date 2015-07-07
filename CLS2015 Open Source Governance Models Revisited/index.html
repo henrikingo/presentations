@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Open Source Governance Models Revisited 2015</title>
+    
+    <meta name="description" content="An update on open source governance models, their relative success wrt various metrics, including financial." />
+    <meta name="author" content="Henrik Ingo" />
+    <link href="css/classic-slides.css" rel="stylesheet" />
+    
+</head>
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress" data-transition-duration="1000">
+
+    <div class="step" id="initial-screenshot">
+      <img src="img/openlife-cc-screenshot.png" 
+           alt="Screenshot of the original post on openlife.cc" 
+           style="width: 1300px; height: 750px; position: relative; left: -250px;" />
+    </div>
+
+    <div class="step slide" data-rel-x="1500" id="table">
+      <table border="1">
+      <tr>
+      <th>&nbsp;</th>
+      <th>Foundation</th>
+      <th>Vendor</th>
+      <th>"Just a project"</th>
+      </tr>
+      <tr>
+      <th width="25%">XtraLarge<br />
+      1000+ devs<br />
+      100+ commits/day</th>
+      <td width="25%">Linux, KDE, Apache, Eclipse, Perl+CPAN, Mozilla+Addons, Gnome, Drupal</td>
+      <td width="25%">&nbsp;</td>
+      <td width="25%">&nbsp;</td>
+      </tr>
+      <tr>
+      <th>Large<br />
+      20-200 devs<br />
+      50-100 commits</th>
+      <td>GCC, Python, Samba</td>
+      <td>MySQL, Qt, OpenOffice, Mono, JBoss, OpenJDK</td>
+      <td>PHP+PEAR</td>
+      </tr>
+      <tr>
+      <th>Medium</th>
+      <td>GIMP</td>
+      <td>Subversion, GhostScript, Wordpress</td>
+      <td>phpMyAdmin</td>
+      </tr>
+      <tr>
+      <th>Missing data</th>
+      <td>Xorg, GNU system tools</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      </tr>
+      </table>    
+    </div>
+
+    <div class="step slide title" data-rel-x="800" data-rel-y="800" data-rotate="60">
+        <h1 style="margin-top: 200px"><big>2015?</big></h1>
+
+        <div class="notes">
+        </div>
+    </div>
+
+    <div class="step slide" data-rel-x="300" data-rel-y="1100" data-rotate="90">
+        <h2>1) observations support hypothesis</h2>
+        <ul>
+        <li>New XL projects: OpenStack, Hadoop, CloudFoundry, Node.js...
+           <ul>
+           <li>All governed by non-profit foundation.</li>
+           <li>(Though Node.js only recently.)</li>
+           </ul>
+        </li>
+        <li>Speaking of... No way ASF can be counted as a single project / community anymore.</li>
+        <li>"Controlled experiments" in IaaS space:
+            <ul>
+            <li>Eucalyptus vs OpenStack</li>
+            <li>CloudStack</li>
+            </ul>
+        </li>
+        </ul>
+        
+        <div class="notes">
+        </div>
+    </div>
+
+    <div class="step slide" data-rel-x="-300" data-rel-y="1100" data-rotate="120">
+        <h2>IaaS projects 2012</h2>
+
+        <p style="text-align: center">
+        <img src="img/Qyjohn2013.jpg" alt="Graph of mailing list messages for 4 IaaS projects" style="width: 700px" />
+        </p>
+        
+        <p class="left bottom"><small><a href="http://openlife.cc/blogs/2012/july/cloudstack-has-proof-foundations-way-create-foss-community">http://openlife.cc/blogs/2012/july/cloudstack-has-proof-foundations-way-create-foss-community</a> &amp; 
+        <a href="http://www.qyjohn.net/?p=3801">http://www.qyjohn.net/?p=3801</a></small></p>
+
+    </div>
+
+
+    <div class="step slide" data-rel-x="-300" data-rel-y="1100" data-rotate="90">
+        <h2>2) Non-cooperative multi-vendor</h2>
+        <ul>
+        <li>MySQL -&gt; Percona, MariaDB, WebScaleSQL, Galera + consultants</li>
+        <li>MongoDB -&gt; Percona (nèe Tokutek)</li>
+        <li>Tangent via Mike Olson (Cloudera):
+          <ul>
+          <li>Whenever an ecosystem reaches ~50MUSD, multiple vendors will appear.</li>
+          <li>Note: Governance model doesn't matter: Linux, Hadoop, OpenStack vs MySQL MongoDB</li>
+          </ul>
+        </li>
+        </ul>
+    </div>
+
+    <div class="step slide" data-rel-x="300" data-rel-y="1100" data-rotate="60" id="table2015">
+    <h2>New table à la 2015</h2>
+    <table border="1">
+    <tr><th></th><th>Foundation</th><th>Vendor</th></tr>
+    <tr><th width="20%">Multi-vendor</th>
+        <td width="40%">Linux, Drupal, Eclipse, Hadoop, OpenStack, <span class="moved">CloudStack</span>, 
+                        <span class="moved">Wordpress, Node.js</span></td>
+        <td width="40%"><span class="involuntary">MySQL, MongoDB</span></td>
+    </tr>
+    <tr><td colspan="3" style="text-align: center"><em>~50MUSD</em></td></tr>
+    <tr><th>Single-vendor</th>
+        <td>Mozilla, Cassandra, <span class="moved">Subversion</td>
+        <td>JBoss, Docker, Meteor, Qt...</td>
+    </tr>
+    </table>
+    <p style="margin-top: 50px; font-size: 70%;">
+       <span class="involuntary">involuntary category</span><br /> 
+       <span class="moved">moved to foundation</span><br />
+       Mozilla is an exception, 333MUSD revenues</p>
+
+
+    </div>
+
+    <div class="step slide" data-rel-x="800" data-rel-y="800" data-rotate="30">
+      <h2>3) Single vendor, permissive license</h2>
+      <p style="margin-top: 100px">Node.js, Docker, Meteor</p>
+      <p>BSD/MIT</p>
+      <p>100-1000s plugin contributors</p>
+      <p>Node is now a foundation</p>
+      <p>Docker under pressure</p>
+      </ul>
+    </div>
+
+    <div class="step slide" data-rel-x="1100" data-rel-y="300" data-rotate="0">
+      <h1>4) $$$</h1>
+      <p style="margin-top: 150px">Many more vendors have provided data on their revenues. We now have data to attack the primary question directly!</p>
+    </div>
+
+    <div class="step slide" data-rel-x="1100" data-rel-y="-300" data-rotate="-30">
+        <table id="datatable">
+        <tr><th>Company</th> <th>Ecosystem</th> <th>Income <small>(MUSD)</small></th> <th>Valuation <small>(MUSD)</small></th> <th>Governance</th><th></th></tr>
+        <tr><td>Red Hat</td> <td>Linux</td> <td>1500</td> <td>14110</td> <td>Foundation</td><td></td></tr>
+        <tr id="datatable-controls"><td><input type="text" id="datatable-company" style="width: 100px" /></td> 
+            <td><input type="text" id="datatable-ecosystem" style="width: 100px"/></td> 
+            <td><input type="text" id="datatable-income" style="width: 100px" /></td> 
+            <td><input type="text" id="datatable-valuation" style="width: 100px" /></td> 
+            <td><select id="datatable-governance" style="width: 100px"><option value="Foundation">Foundation</option>
+                                                                       <option value="Vendor">Vendor</option></select></td>
+            <td><button id="datatable-add" onclick="alert('todo');">Add</button></td></tr>
+        </table>
+        <script type="text/javascript" src="js/formdata.js" ></script>
+        <script type="text/javascript">
+            var t = new TableData();
+            t.id = "datatable";
+            t.orderBy = 2;
+            this.order = "DESC";
+            t.columns = ["Company", "Ecosystem", "Income <small>(MUSD)</small>", "Valuation <small>(MUSD)</small>", "Governance"];
+            t.data.push( ["Red Hat", "Linux", 1500, 14110, "Foundation"] );
+            t.renderTable();
+            
+            function addRow() {
+              var newRow = [];
+              newRow.push( document.getElementById("datatable-company").value );
+              newRow.push( document.getElementById("datatable-ecosystem").value );
+              newRow.push( document.getElementById("datatable-income").value );
+              newRow.push( document.getElementById("datatable-valuation").value );
+              newRow.push( document.getElementById("datatable-governance").value );
+              t.addRow(newRow);
+              document.getElementById("datatable-company").value = "";
+              document.getElementById("datatable-ecosystem").value = "";
+              document.getElementById("datatable-income").value = "";
+              document.getElementById("datatable-valuation").value = "";
+              document.getElementById("datatable-governance").value = "Foundation";
+            };
+        </script>
+       <table>
+        <tr id="datatable-controls"><td><input type="text" id="datatable-company" style="width: 100px" /></td> 
+            <td><input type="text" id="datatable-ecosystem" style="width: 100px"/></td> 
+            <td><input type="text" id="datatable-income" style="width: 100px" /></td> 
+            <td><input type="text" id="datatable-valuation" style="width: 100px" /></td> 
+            <td><select id="datatable-governance" style="width: 100px"><option value="Foundation">Foundation</option>
+                                                                       <option value="Vendor">Vendor</option></select></td>
+            <td><button id="datatable-add" onclick="addRow();">Add</button></td></tr>
+        </table>
+    </div>
+    
+    <div class="step slide" data-rel-x="1100" data-rel-y="-1100" data-rotate="720">
+        <table>
+        <tr><th>Company</th> <th>Ecosystem</th> <th>Income <small>(MUSD)</small></th> <th>Valuation <small>(MUSD)</small></th> <th>Governance</th></tr>
+        <tr><td>Red Hat</td> <td>Linux</td> <td>1500</td> <td>14110</td> <td>Foundation</td></tr>
+        <tr><td>Mozilla</td> <td>Firefox</td> <td>333</td> <td>-</td> <td>Foundation</td></tr>
+        <tr><td>Sourcefire</td> <td>Snort</td> <td>223</td> <td>2700</td> <td>Just a project</td></tr>
+        <tr><td>MySQL</td> <td>MySQL</td> <td>100</td> <td>1000</td> <td>Vendor</td></tr>
+        <tr><td>Acquia</td> <td>Drupal</td> <td>100</td> <td>-</td> <td>Foundation</td></tr>
+        <tr><td>Cloudera</td> <td>Hadoop</td> <td>100</td> <td>4000</td> <td>Foundation</td></tr>
+        <tr><td>HortonWorks</td> <td>Hadoop</td> <td>60</td> <td>1000</td> <td>Foundation</td></tr>
+        <tr><td>Pivotal</td> <td>CloudFoundry</td> <td>40</td> <td>-</td> <td>Foundation</td></tr>
+        <tr><td>Multiple vendors</td> <td>OpenStack</td> <td>&lt; 1000</td> <td>-</td> <td>Foundation</td></tr>
+        <tr><td>EnterpriseDB</td> <td>PostgreSQL</td> <td>?</td> <td>-</td> <td>Foundation</td></tr>
+        <tr><td>Jboss</td> <td>JBoss</td> <td>17</td> <td>350</td> <td>Vendor</td></tr>
+        <tr><td>Eucalyptus</td> <td>Eucalyptus</td> <td>10-20?</td> <td>50-100M?</td> <td>Vendor</td></tr>
+        <tr><td>JasperSoft</td> <td>JasperSoft</td> <td>10-20?</td> <td>-</td> <td>Vendor</td></tr>
+        <tr><td></td> <td></td> <td></td> <td></td> <td></td></tr>
+        <tr><td></td> <td></td> <td></td> <td></td> <td></td></tr>
+        <tr><td></td> <td></td> <td></td> <td></td> <td></td></tr>
+        <tr><td></td> <td></td> <td></td> <td></td> <td></td></tr>
+        <tr><td></td> <td></td> <td></td> <td></td> <td></td></tr>
+        
+        </table>
+
+        <div class="notes">
+        </div>
+    </div>
+
+    <div id="overview" class="step" data-x="5000" data-y="3500" data-scale="12">
+    </div>
+</div>
+
+
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="js/impress.js"></script>
+<script>impress().init();</script>
+
+<!--
+    Show a help popup for 5 seconds in the beginning, and if 'h' is pressed.
+    
+    This nice help popup is originally from hovercraft.js project, and while I didn't want to
+    use the rst markup from hovercraft, I've retained this popup, as it looks really nice.
+-->
+<div id="impress-help">
+  <table>
+    <tr><th>H</th><td>Toggle this help</td></tr>
+    <tr><th>Space</th><td>Forward</td></tr>
+    <tr><th>Right, Down, Page Down</th><td>Next slide</td></tr>
+    <tr><th>Left, Up, Page Up</th><td>Previous slide</td></tr>
+    <!-- Only shown if impressConsole.js is present, hence it needs a dedicated #id -->
+    <tr id="impress-help-p"><th>P</th><td>Open presenter console</td></tr>
+  </table>
+</div>
+
+<script type="text/javascript" src="js/impress-help-popup.js"></script>
+
+</body>
+</html>
