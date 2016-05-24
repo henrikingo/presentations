@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Dreams and fears of a database consultant | MongoDB engineering offsite 2016 | by Henrik Ingo @henrikingo</title>
+    
+    <meta name="description" content="User / field point of view for engineers who build a database product." />
+    <meta name="date" content="2016-05-08" />
+    <meta name="author" content="Henrik Ingo" />
+
+    <link href="css/dreams-and-fears.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/dark.css">
+    
+</head>
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+
+<div id="impress" data-transition-duration="1000">
+
+    <div id="overview" class="step" data-x="1500" data-y="0" data-scale="5" style="pointer-events: none;">
+    </div>
+
+    <div id="about" class="step" data-x="-1000" data-y="-1500">
+      <h1>About</h1>
+<pre><code>
+{ "About me" : { 
+    "Name": "Henrik Ingo",
+    "Context": "3 years Solutions Architect, now in server-perf.",
+    "Stuff I've influenced" : [ 
+        "We need a storage engine API",
+        "We need to do somehing about replication protocol",
+        "Partial indexes (specific customer request)" ],
+  }
+}
+</code></pre>
+    </div>
+    <div class="step" data-rel-x="0" data-rel-y="500" data-rotate-x="-30" data-rel-z="-100">
+<pre><code>
+{ "About this talk" : {
+    "General idea" : [
+      "Share field point of view.",
+      "Dreams and fears of a database consultant or advanced user." ],
+    "Table of Contents" : {
+      "Part 1" : "The Field team",
+      "Part 2" : "What experts do with the product", }
+  }
+}
+</code></pre>
+    </div>
+
+
+    <div id="people" class="step" data-x="1000" data-y="-1500" data-z="0">
+      <h1>People</h1>
+<pre><code>
+{ "Field team" : [
+    "Solutions Architect",
+    "Consulting Engineer",
+    "Technical Services Engineer"
+  ]
+}
+</code></pre>
+    </div>
+    <div class="step" data-rel-x="0" data-rel-y="500" data-rotate-x="-25" data-z="-100">
+<pre><code>
+{ "Type" : "Solutions Architect",
+  "aka"  : "Pre-Sales Consultant",
+  "What we do" : [
+    "Attend sales calls &amp; meetings",
+    { "Help prospects evaluate MongoDB" : [
+        "Migrate some functionality from old app to MongoDB",
+        "Meet performance goal",
+        "Try Ops Manager"]
+    },
+    "Account management",
+    "Evangelism" 
+  ],
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="500" data-rotate-x="-50" data-rel-z="-400">
+      <!-- Hack: For highlight.js, we need each snippet to be a complete JSON doc,
+           even in this presentation we actually want this to be continued from the
+           previous slide. Solution is to cover the opening brace with a black square. -->
+      <img src="img/black-square.png" class="black-square" />
+<pre><code>
+{ "My dream" : [
+    "Do the PoC that leads to largest deal in company history.",
+       "While helping customer replace an old Oracle Exadata / DB2.", 
+           <small>"(2013 this would have been Couchbase / Cassandra. And we'd lost.)",</small>
+       "Saving 10MUSD in the migration and enabling them to scale 100x."
+  ],
+  "My fear" : [
+    "A bug or missing functionality prevents successful PoC.",
+    "Note: Handling demos without bugs is part of the job!"
+  ],
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="300" data-rotate-x="-75" data-rel-z="-500">
+      <img src="img/black-square.png" class="black-square" />
+      <img src="img/SA_calendar.png" style="position: absolute; top: 140px; left: 5px; z-index: 2; width: 1300px;" />
+<pre><code>
+{ "Lifestyle" : {
+    "Sample calendar page" :
+      "",
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="200" data-rotate-x="-90" data-rel-z="-800">
+      <img src="img/black-square.png" class="black-square" />
+      <img src="img/2014-02-11 13.00.17.jpg" style="position: absolute; top: 110px; left: 5px; z-index: 2; width: 1300px;" />
+<pre><code>
+{   "Traveling" : "Working lunch with Koby &amp; Sharon",
+</code></pre>
+    </div>
+    
+    <div class="step" data-rel-x="0" data-rel-y="-100" data-rotate-x="-115" data-rel-z="-900">
+      <img src="img/black-square.png" class="black-square" />
+      <img src="img/Wifes_feet.jpg" style="position: absolute; top: 110px; left: 5px; z-index: 2; width: 1300px;" />
+<pre><code>
+{   "Downside" : "Can be hard on family",
+</code></pre>
+    </div>
+    
+    <div class="step" data-rel-x="0" data-rel-y="-500" data-rotate-x="-140" data-rel-z="-800">
+      <img src="img/black-square.png" class="black-square" />
+<pre><code>
+{  "Meeting open source friends" : {
+      "Sample Facebook post" : [
+        "Good Morning HighLoad++.",
+        "Morning meeting with our translators went like this:",
+        "<em>Translator:</em> So Henrik, I see you have 2 talks after each other.",
+        "Are they a sequel?",
+        "<em>Me:</em> No they are different topics. In fact they are No-sequel.",
+        "Bruce Momjian and Alvaro Hernandez from PostgreSQL", 
+        "burst into violent laugh attack"
+      ]
+    }
+  }
+</code></pre>
+<pre style="position: relative; top: -40px;"><code>
+}
+</pre></code>
+    </div>
+
+
+    <div class="step" data-rel-x="0" data-y="1100" data-rotate-x="0" data-z="0">
+    <!--<div class="step" data-rel-x="0" data-rel-y="-500" data-rotate-x="-165" data-rel-z="-800">-->
+<pre><code>
+{ "Type" : "Consulting Engineer",
+  "Trivia" : "Most customers prefer buying consulting over support",
+  "What we do" : [
+    "Health checks",
+    "Architecture & design",
+    "Fixing performance / other issues customer has",
+    { "Dedicated consulting engineer" : [
+        "Regular MongoDB expertise throughout the lifecycle of a project",
+        "Building MongoDB as a Service within the Enterprise" ] },
+    "Training"
+  ],
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-rel-z="-100">
+      <img src="img/black-square.png" class="black-square" />
+      <img src="img/Barney-stinson-true-story.jpg" style="position: absolute; left: 900px; top: 70px; width: 400px;">
+      <p style="position: absolute; left: 900px; top: 280px; font-weight: bold; color: #ffdd00; transform: rotate(20deg); z-index: 5; font-family: 'URW Chancery L'; font-size: 130%;"
+      >True story!<br />(MongoDB 2.6)</p>
+<pre><code>
+{ "My fear" : [
+    "Last month I taught customer",
+    "how to use covering indexes.",
+    "Today's GA release announcement",
+    "says new query planner doesn't use", 
+    "covering index scans.",
+    "When they upgrade, my queries will suck."
+  ],
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="1000" data-rel-y="-300" data-rel-z="1000" data-rotate="-90" data-rotate-y="75" data-rotate-x="10" data-scale="3">
+    <p>Helper slide: Look from the side</p>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="550" data-rotate-x="-25" data-z="-100">
+      <img src="img/black-square.png" class="black-square" />
+      <img src="img/Foto 29.07.15 21 35 11.jpg" style="position: absolute; left: 900px; top: 70px; width: 400px;">
+      <p style="position: absolute; left: 870px; top: 320px; font-weight: bold; color: #ffdd00; transform: rotate(20deg); z-index: 5; font-family: 'URW Chancery L'; font-size: 130%;"
+      >True story!<br/>(12000 x improvement)</p>
+<pre><code>
+{ "My dream" : [
+   "Customer had query running for hours", 
+   "trashing the servers.",
+   "After adding indexes and",
+   "optimizing the aggregation pipeline,",
+   "it now completes in 3 seconds."    
+  ],
+</code></pre>
+    </div>
+    <div class="step" data-rel-x="0" data-rel-y="550" data-rotate-x="0" data-rel-z="0">
+      <img src="img/black-square.png" class="black-square" />
+<pre><code>
+{ "Lifestyle" : {
+    "Like SA, but" : [
+      "Meet less customers / week",
+      "Away from home more"  
+    ]
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-z="-100">
+<pre><code>
+{ "Type" : "Technical Services Engineer",
+  "aka"  : "Support Engineer",
+  "What we do" : [
+    "Turn unhappy customers back into happy customers!",
+    "Analyze and respond to customer issues in Jira",
+      <small>"Often real problem is something else than customer thinks it is",</small>
+    "We do phone calls. We help with operating system issues...",
+    "Mini health cheks, optimizations",
+    "Named TSE",
+    "Proactive support",
+    "Community support"
+  ],
+</code></pre>
+    </div>
+    <div class="step" data-rel-x="0" data-rel-y="620" data-rotate-x="0" data-rel-z="0">
+      <img src="img/black-square.png" class="black-square" />
+      <p style="position: absolute; left: 1050px; top: 220px; font-weight: bold; color: #ffdd00; transform: rotate(20deg); z-index: 5; font-family: 'URW Chancery L'; font-size: 130%;"
+      >True story!</p>
+<pre><code>
+{ "My dream" : [
+    "Customer had deleted all their data.",
+    "MongoDB tried to prevent them from doing that, but they insisted.",
+    "Working as a team, around the clock, for 9 weeks,",
+    "we managed to restore 100% of customer data."
+  ],
+    "My fear" : [
+      "A bug in MongoDB takes down production systems",
+      "on a weekend when I'm on call."
+  ],
+</code></pre>
+    </div>
+    
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-z="-100">
+      <img src="img/black-square.png" class="black-square" />
+      <img src="img/bacon.jpg" style="position: absolute; left: 600px; top: 7px; width: 400px;">
+<pre><code>
+{ "Lifestyle" : [
+    "Don't get to travel",
+    "But we have bacon",
+    "Weekend responder",
+    "Even after shift ends, they still follow up on their tickets",
+    "When you make a bug, they take care of the mess",
+    "Hug your nearby TSE"
+  ]
+}
+</code></pre>
+    </div>
+
+
+
+    <div id="product" class="step" data-x="3000" data-y="-1500" data-z="0">
+      <h1>What experts do with the product</h1>
+<pre><code>
+{ "These things are important, but not to a SA/CE" : [
+    "Easy to use",
+    "Easy(ish) to scale &amp; HA",
+    "Developers love the API",
+    "Agile",
+    "Security (finance, government)"
+  ]
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-z="-100">
+<pre><code>
+{ "Query optimization" : [
+    "explain()",
+    "Add missing index" ],
+  "50% of all problems" : "are this!",
+  "MongoDB"             : "is good at this!"
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="0" data-z="0">
+<pre><code>
+{ "Joke version" : {
+    "The other 50%" : "Tell them to buy more RAM"
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-z="-100">
+<pre><code>
+{ "About application changes" : {
+    "Oracle expert" : "Buy more IOPS",
+    "MySQL expert"  : "Optimize the app's DB access"
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="0" data-z="0">
+<pre><code>
+{ "MongoDB specific" : {
+    "Index tuning" : "Still a thing, but &lt;50%",
+    "My theory"    : "Document model + CRUD is easier to get right",
+    "Training"     : "A lot of new users"
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-z="-100">
+<pre><code>
+{ "Advanced indexing" : {
+    "Compound PK" : "We::hack::this::with::regex::now",
+    "Clustered PK" : {
+      "Not to mention" : "clustered secondary keys",
+      "For document databases" : "clustered indexes &gt; covering keys"
+    },
+    "Covering index" : "Fine, but must include shard key"
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="0" data-z="0">
+<pre><code>
+{ "Different db products / engines" : {
+    "Philosophy" : "Right tool for the right job",
+    "Storage engines" : "Powerful concept. Separates API vs algorithms."
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-z="-100">
+<pre><code>
+{ "#MonitoringLove" : {
+    "Travel lightly" : "mtools, timeseries.py",
+    "Ops Mgr?" : [
+      "Don't assume root access",
+      "Too complex to install for a CE engagement",
+      "Sometimes need more detail than this"
+    ],
+    "mongod" : "has always been good at providing metrics!"
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="0" data-z="0">
+<pre><code>
+{ "NOT important" : [
+    "Performance for 3.2 improved 2x <small>(on a standalone instance without oplog)</small>",
+        <small>">99% of users use replication"</small>,
+    "Most users DON'T use sharding",
+        <small>"But they feel good knowing that they can if they have to",</small>
+    "CPU bound benchmarking"
+  ]
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-z="-100">
+<pre><code>
+{ "IMPORTANT" : [
+    "Uprade incompatibilities",
+    "Online upgrades",
+    "Stable performance > peak performance",
+        "aka <strong>No surprises</strong>",
+    "Backups",
+    "Do find() and aggregate() support the same set of operators yet?"
+  ]
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="0" data-z="0">
+<pre><code>
+{ "What do we fear" : [
+    "When I can't solve a problem with configuration/application change",
+        <small>"Note: undocumented config option is better than no configurability",</small>
+        <small>"Our WT integration is cool in this regard!",</small>
+    "Backwards incompatibility: It used to work, now it doesn't.",
+    { "Democratic decision making" : 
+        "I'm an expert. Sometimes the majority is wrong. Trust me." }
+  ]
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="600" data-rotate-x="-25" data-z="-100">
+<pre><code>
+{ "Special thanks to" : 
+    "Those writing the MongoDB manual. I'm a heavy user!"
+}
+</code></pre>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<!--
+    Add navigation-ui controls: back, forward and a select list.
+-->
+<div id="impress-navigation-ui"></div>
+
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="../impress.js/js/impress.js"></script>
+<script>impress().init();</script>
+
+<!--
+    Show a help popup for 5 seconds in the beginning, and if 'h' is pressed.
+    
+    This nice help popup is originally from hovercraft.js project, and while I didn't want to
+    use the rst markup from hovercraft, I've retained this popup, as it looks really nice.
+-->
+<div id="impress-help">
+  <table>
+    <tr><th>H</th><td>Toggle this help</td></tr>
+    <tr><th>Space</th><td>Forward</td></tr>
+    <tr><th>Right, Down, Page Down</th><td>Next slide</td></tr>
+    <tr><th>Left, Up, Page Up</th><td>Previous slide</td></tr>
+    <!-- Only shown if impressConsole.js is present, hence it needs a dedicated #id -->
+    <tr id="impress-help-p"><th>P</th><td>Open presenter console</td></tr>
+  </table>
+</div>
+
+<script type="text/javascript" src="../impress.js/extras/impress-console/js/impressConsole.js"></script>
+<script>
+// Init impressConsole.js. This does not yet show the window, just activates the plugin. Press 'P' to show the console.
+// Note that we must pass the correct path to css file as well.
+impressConsole().init(cssFile='../impress.js/extras/impress-console/css/impressConsole.css');
+
+// Optional. TODO: This would anyway be better moved into impressConsole.js itself.
+var impressattrs = document.getElementById('impress').attributes;
+if (impressattrs.hasOwnProperty('auto-console') && impressattrs['auto-console'].value.toLowerCase() === 'true') {
+    consoleWindow = impressConsole().open();
+}
+</script>
+
+<script type="text/javascript" src="js/impress-help-popup.js"></script>
+<script src="../impress.js/extras/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
