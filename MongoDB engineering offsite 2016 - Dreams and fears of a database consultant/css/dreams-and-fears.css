@@ -81,6 +81,11 @@ body {
     opacity: 0.2;
     transition:         opacity 2s;
 }
+.impress-enabled .step p {
+    opacity: 0;
+    transition:         opacity 2s;
+}
+.impress-enabled .step.active p,
 .impress-enabled .step.active pre,
 .impress-enabled .step.active img { 
     opacity: 1;
@@ -140,15 +145,9 @@ body {
 
 a {
     color: inherit;
-    text-decoration: none;
+    text-decoration: underline;
     padding: 0 0.1em;
-    background: rgba(200,200,200,0.2);
     text-shadow: -1px 1px 2px rgba(100,100,100,0.9);
-    border-radius: 0.2em;
-    border-bottom: 1px solid rgba(100,100,100,0.2);
-    border-left:   1px solid rgba(100,100,100,0.2);
-
-    transition:         0.5s;
 }
 a:hover,
 a:focus {
@@ -200,6 +199,7 @@ pre {
     margin-right:   0px;
     margin-top:    20px;
     margin-bottom: 20px;
+    right: 20px;
 }
 .step .left {
     float: left;
@@ -207,6 +207,7 @@ pre {
     margin-left:    0px;
     margin-top:    20px;
     margin-bottom: 20px;
+    left: 20px;
 }
 .step .top {
     position: absolute;
@@ -218,7 +219,7 @@ pre {
     position: absolute;
     bottom: 20px;
     margin-bottom:   0px;
-    margin-top:     20px;    
+    margin-top:     20px;
 }
 
 /* 
@@ -241,7 +242,16 @@ pre {
 .title h2 { top: 400px; }
 .title h3 { top: 500px; }
 
+/* 
+    Overview slide 
+*/
 
+#overview .bottom {
+    z-index: 5;
+    font-size: 50%;
+    background-color: #000;
+    border: solid #000 20px;
+}
 
 /* Styles for animating the contents of a slide, such as a img, p, li or span element. ********/
 
@@ -335,6 +345,9 @@ pre {
 .impress-enabled                          { pointer-events: none }
 .impress-enabled #impress                 { pointer-events: auto }
 .impress-enabled #impress-navigation-ui   { pointer-events: auto }
+/* Disable pointer events for overview slide, except the links I added to it later. */
+.impress-enabled #overview                { pointer-events: none }
+.impress-enabled #overview a              { pointer-events: auto }
 
 
 /*****************************************************************************************
