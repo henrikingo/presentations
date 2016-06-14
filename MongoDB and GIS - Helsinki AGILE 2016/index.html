@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>MongoDB and GIS | AGILE 2016, Helsinki | by Henrik Ingo @henrikingo</title>
+    
+    <meta name="date" content="2016-06-03" />
+    <meta name="author" content="Henrik Ingo" />
+
+    <link href="css/json-slides.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/dark.css">
+    
+</head>
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+
+<div id="impress" data-transition-duration="1000">
+
+    <div id="overview" class="step" data-x="1500" data-y="0" data-scale="5">
+    </div>
+
+    <div id="about" class="step" data-x="-1000" data-y="-1500">
+      <h1>About</h1>
+<pre><code>
+{ "About me" : { 
+    "Name": "Henrik Ingo",
+    "Previously": "MongoDB Solutions Architect", 
+    "Now": "Performance team in R&D",
+    "Earlier career": "DB architect at Nokia Maps"
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="500">
+    <img src="img/nosqlwheel.png" alt="Pie chart with MongoDB having 50% market share of all NoSQL users"
+                                  style="position: absolute; top: 110px; left: 150px; z-index: 2;" />
+<pre><code>
+{ "Leading NoSQL DB" : {
+
+
+
+
+
+
+
+
+
+
+  }
+}
+</code></pre>
+    </div>
+
+
+    <div class="step" data-rel-x="0" data-rel-y="800">
+    <img src="img/scalability_vs_features.png" alt="MongoDB has NoSQL scalability and RDBMS feature set"
+                                  style="width: 900px; position: absolute; top: 120px; left: 150px; z-index: 2;" />
+<pre><code>
+{ "Product vision" : {
+
+
+
+
+
+
+
+
+
+
+
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="800">
+    <h1>5 NoSQL categories</h2>
+<pre><code class="language-js" style="font-size: 100%">
+
+
+{ "Key-Value" }      { "Wide-Column" }       { "Document" }
+
+
+
+            { "Graph" }            { "Hadoop" }
+       
+</code></pre>
+    </div>
+
+    <div id="MongoDB-Basics" class="step" data-x="1000" data-y="-1500">
+      <p style="position: absolute; left: 750px; top: 200px; font-weight: bold; color: #ffdd00; transform: rotate(20deg); z-index: 5; font-family: 'URW Chancery L'; font-size: 130%;"
+      >Definition of Big Data:<br />3V</p>
+      <h1>MongoDB Basics</h1>
+<pre><code>
+{ "Document Database" : "JSON documents",
+  "Flexible schema"   : "Variability",
+  "Scalability"       : "Volume",
+  "Operational DBMS"  : "Velocity",
+  "High Availabillity": "Builtin replication"
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="500">
+<pre><code class="language-js">
+<span class="em-code">db.mycollection.insert</span>( { "Firstname" : "Henrik", "Lastname" : "Ingo", "Age" : 39 } )
+<span class="em-code">db.mycollection.insert</span>( { "Firstname" : "Eszter", "Lastname" : "Gálicz", 
+                                     "Hair" : { "Color" : "Brown", "Length" : "Long" } } )
+<span class="em-code">db.mycollection.find()</span>
+{ "_id" : ObjectId("575170c0570865e450b40687"), "Firstname" : "Henrik", "Lastname" : "Ingo", "Age" : 39 }
+{ "_id" : ObjectId("57517162570865e450b40688"), "Firstname" : "Eszter", "Lastname" : "Gálicz", "Hair" : { "Color" : "Brown", "Length" : "Long" } }
+
+<span class="em-code">db.mycollection.find().pretty()</span>
+{
+  "_id" : ObjectId("575170c0570865e450b40687"),
+  "Firstname" : "Henrik",
+  "Lastname" : "Ingo",
+  "Age" : 39
+}
+{
+  "_id" : ObjectId("57517162570865e450b40688"),
+  "Firstname" : "Eszter",
+  "Lastname" : "Gálicz",
+  "Hair" : { 
+      "Color" : "Brown", 
+      "Length" : "Long" 
+  }
+}
+
+</code></pre>
+    </div>
+
+
+    <div class="step" data-rel-x="0" data-rel-y="800">
+<pre><code class="language-js">
+db.mycollection.find( <span class="em-code">{ "_id" : ObjectId("575170c0570865e450b40687") }</span> )
+
+{ "_id" : ObjectId("575170c0570865e450b40687"), "Firstname" : "Henrik", "Lastname" : "Ingo", "Age" : 39 }
+
+db.mycollection.find( <span class="em-code">{ "Firstname" : "Eszter" }</span> ).pretty()
+{
+  "_id" : ObjectId("57517162570865e450b40688"),
+  "Firstname" : "Eszter",
+  "Lastname" : "Gálicz",
+  "Hair" : {
+    "Color" : "Brown",
+    "Length" : "Long"
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="700">
+    <h1>Indexes</h2>
+<pre><code class="language-js">
+<span class="em-code">db.mycollection.createIndex( { "Firstname" : 1 } )</span>
+{
+  "createdCollectionAutomatically" : false,
+  "numIndexesBefore" : 1,
+  "numIndexesAfter" : 2,
+  "ok" : 1
+}
+</code></pre>
+    </div>
+
+
+
+
+    <div id="MongoDB-GIS" class="step" data-x="3100" data-y="-1500" data-z="0">
+      <h1>MongoDB &amp; GIS</h1>
+<pre><code>
+{ "2d" : [
+    "Legacy (pre-2013)",
+    "(x,y) point on a 2d plane",
+    "Can't wrap over Anti-Meridian",
+    "Foursquare &amp; Grindr"
+  ],
+  "2dsphere" : [
+    "<a href="http://geojson.org/">GeoJSON</a>",
+    "<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS84</a>",
+    { "Units" : ["meters", "degrees"] },
+    { "Functions" : "$nearSphere, $near, $geoWithin, $geoIntersects" }
+  ]
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="800">
+    <h1>GeoJSON</h1>
+<pre><code>
+{ "type": "Point", 
+  "coordinates": [100.0, 0.0] }
+
+{ "type": "LineString",
+  "coordinates": [ [100.0, 0.0], [101.0, 1.0] ] }
+
+{ "type": "Polygon",
+  "coordinates": [
+    [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]
+  ] }
+</code></pre>
+    </div>
+
+
+    <div class="step" data-rel-x="0" data-rel-y="700">
+    <h1>A MongoDB document (OpenStreetmap)</h1>
+<pre><code class="language-js">
+{
+  "_id" : 60062438,
+  "amenity" : "bar",
+  "addr:city" : "Helsinki",
+  "url" : "http://www.mbar.fi/",
+  "wheelchair" : "yes",
+  "internet_access:fee" : "no",
+  "location" : <span class="em-code">{
+    "type" : "Point",
+    "coordinates" : [
+        24.9360765,
+        60.1706603
+    ]</span>
+  },
+  "internet_access" : "yes",
+  "addr:country" : "FI",
+  "name" : "Mbar"
+}
+</code></pre>
+<pre style="position: absolute; top: 80px; left: 600px;"><code class="language-js">
+{
+  "_id" : 358181115,
+  "building" : "yes",
+  "amenity" : "bar",
+  "name" : "Mbar",
+  "location" : <span class="em-code">{
+    "type" : "Polygon",
+    "coordinates" : [[[ 24.9362176, 60.1704103],
+                       [ 24.9362826, 60.1704122],
+                       [ 24.9362919, 60.1703316],
+                       [ 24.9362270, 60.1703298],
+                       [ 24.9362176, 60.1704103]]]
+  }</span>
+}
+</code></pre>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="700">
+    <h1>Add spatial (2dsphere) index</h1>
+<pre><code class="language-js">
+db.pubs.createIndex( { "location" : <span class="em-code">"2dsphere"</span> } )
+</code></pre>
+    </div>
+
+
+    <div class="step" data-rel-x="0" data-rel-y="400">
+    <h1>Find pubs near this conference</h1>
+<pre><code class="language-js">
+db.pubs.find({"location":{ <span class="em-code">"$nearSphere"</span> : {"type":"Point","coordinates":[24.94739,60.16945]}}}).pretty()
+{ "addr:city" : "Helsinki",
+  "location" : <span class="em-code">{
+    "type" : "Point",
+    "coordinates" : [
+      24.9465883,
+      60.1697204
+    ] },</span>
+  "opening_hours" : "Mo-Su 12:00-02:00",
+  "name" : <span class="em-code">"Helsinki Shot Bar"</span>
+}
+{ "addr:city" : "Helsinki",
+  "addr:postcode" : "00100",
+  "location" : <span class="em-code">{
+    "type" : "Point",
+    "coordinates" : [
+      24.9450634,
+      60.1696206
+    ] },</span>
+  "opening_hours" : "Mo-Tu 14:00-01:00; We-Th 14:00-02:00; Fr-Sa 12:00-03:00; Su 15:00-01:00",
+  "name" : <span class="em-code">"HemingwayS"</span>
+}
+</code></pre>
+    </div>
+
+    <div id="continued---" class="step" data-rel-x="0" data-rel-y="800">
+<pre><code class="language-js">
+{ "payment:bitcoin" : "yes",
+  "addr:city" : "Helsinki",
+  "name" : <span class="em-code">"Big Time Bar"</span>,
+  "website" : "http://www.bigtimebar.com/",
+  "location" : <span class="em-code">{
+    "type" : "Point",
+    "coordinates" : [
+      24.944314,
+      60.1694624
+    ] },</span>
+  "addr:street" : "Mikonkatu"
+}
+{ "addr:city" : "Helsinki",
+  "url" : "http://www.mollymalones.fi/",
+  "location" : <span class="em-code">{
+    "type" : "Point",
+    "coordinates" : [
+      24.9464097,
+      60.1709307
+    ] },</span>
+  "addr:street" : "Kaisaniemenkatu",
+  "name" : <span class="em-code">"Molly MaloneS"</span>
+}
+</code></pre>
+    </div>
+
+    <div id="more-info" class="step" data-rel-x="1800" data-rel-y="0">
+      <h1>More info</h1>
+      <ul>
+        <li><a href="https://docs.mongodb.com/manual/applications/geospatial-indexes/">MongoDB Manual</a></li>
+        <li><a href="http://blog.mongodb.org/post/50984169045/new-geo-features-in-mongodb-24">2dsphere internals overview</a></li>
+        <li>Optimizations
+          <ul>
+            <li><a href="https://www.mongodb.com/blog/post/mongodb-30-features-big-polygon">BigPolygon support (3.0)</a></li>
+            <li><a href="https://www.mongodb.com/blog/post/geospatial-performance-improvements-in-mongodb-3-2">Performance improvements (3.2)</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<!--
+    Add navigation-ui controls: back, forward and a select list.
+-->
+<div id="impress-navigation-ui"></div>
+
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="../impress.js/js/impress.js"></script>
+<script>impress().init();</script>
+
+<!--
+    Show a help popup for 5 seconds in the beginning, and if 'h' is pressed.
+    
+    This nice help popup is originally from hovercraft.js project, and while I didn't want to
+    use the rst markup from hovercraft, I've retained this popup, as it looks really nice.
+-->
+<div id="impress-help">
+  <table>
+    <tr><th>H</th><td>Toggle this help</td></tr>
+    <tr><th>Space</th><td>Forward</td></tr>
+    <tr><th>Right, Down, Page Down</th><td>Next slide</td></tr>
+    <tr><th>Left, Up, Page Up</th><td>Previous slide</td></tr>
+    <!-- Only shown if impressConsole.js is present, hence it needs a dedicated #id -->
+    <tr id="impress-help-p"><th>P</th><td>Open presenter console</td></tr>
+  </table>
+</div>
+
+<script type="text/javascript" src="../impress.js/extras/impress-console/js/impressConsole.js"></script>
+<script>
+// Init impressConsole.js. This does not yet show the window, just activates the plugin. Press 'P' to show the console.
+// Note that we must pass the correct path to css file as well.
+impressConsole().init(cssFile='../impress.js/extras/impress-console/css/impressConsole.css');
+
+// Optional. TODO: This would anyway be better moved into impressConsole.js itself.
+var impressattrs = document.getElementById('impress').attributes;
+if (impressattrs.hasOwnProperty('auto-console') && impressattrs['auto-console'].value.toLowerCase() === 'true') {
+    consoleWindow = impressConsole().open();
+}
+</script>
+
+<script type="text/javascript" src="js/impress-help-popup.js"></script>
+<script src="../impress.js/extras/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
