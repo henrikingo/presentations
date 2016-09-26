@@ -1,0 +1,263 @@
+/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic|Cutive+Mono); */
+@import url(fonts.css);
+
+
+
+body {
+    font-family: 'PT Sans', sans-serif;
+    min-height: 740px;
+    background: rgb(215, 215, 215);
+    color: rgb(102, 102, 102);
+}
+
+.step {
+    position: relative;
+    padding: 40px;
+    margin: 20px auto;
+
+    box-sizing:         border-box;
+
+    font-family: 'PT Serif', georgia, serif;
+    font-size: 22px;
+    line-height: 1.5;
+    z-index: 1;
+}
+
+.window {
+    z-index: 2;
+    display: none;
+}
+.window.active {
+    display: block;
+}
+
+.step.window {
+    width: 1400px;
+    height: 720px;    
+    text-align: left;
+}
+
+
+.plane { /* xy is a sibling to rotatex */
+    color: #f00;
+    height: 400px;
+    width: 900px;
+    border-width: 10px;
+    border-top-style: dotted;
+    border-left-style: dotted;
+    border-bottom-style: solid;
+    border-right-style: solid;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+
+.plane {
+    display: none;
+}
+
+.plane.rotatex {
+    color: #f00;
+    background-color: #f77;
+}
+.plane.rotatey {
+    color: #00f;
+    background-color: #77f;
+}
+.plane.rotatez {
+    color: #f0f;
+    background-color: #f7f;
+}
+.plane.rotatexy { /* also sibling with rotatez */
+    color: #0c0;
+    background-color: none;
+}
+.plane.rotatexz { /* sibling with rotatey */
+    color: #00f;
+    background-color: none;
+}
+.plane.rotateyz { /* sibling with rotatez */
+    color: #f0f;
+    background-color: none;
+}
+.plane.rotatexyz { /* also sibling with rotatez */
+    color: #000;
+    background-color: none;
+}
+
+
+
+.impress-on-title .plane90,
+.impress-on-window90 .plane90,
+.impress-on-window90-2 .plane90-2,
+.impress-on-window90-3 .plane90-3,
+.impress-on-window45-1 .plane45-1,
+.impress-on-window45-2 .plane45-2,
+.impress-on-window45-3 .plane45-3,
+.impress-on-window45-4 .plane45-4,
+.impress-on-window45-4b .plane45-4,
+.impress-on-window-all .plane-all {
+    display: block;
+}
+
+
+.window ul {
+    width: 16em;
+}
+
+.window ul li {
+    padding-left: 4px;
+    padding-right: 4px;
+    border-top-style: dotted;
+    border-left-style: dotted;
+    border-bottom-style: solid;
+    border-right-style: solid;
+    border-width: 1px;
+    margin-top: 2px;
+}
+
+li.red {
+    color: #f00;
+}
+li.blue {
+    color: #00f;
+}
+li.green {
+    color: #0a0;
+}
+li.purple {
+    color: #f0f;
+}
+
+li.red-fill {
+    color: #f00;
+    background-color: #f77;
+}
+li.blue-fill {
+    color: #00f;
+    background-color: #77f;
+}
+li.purple-fill {
+    color: #f0f;
+    background-color: #f7f;
+}
+
+
+
+
+/*
+    Speaker notes allow you to write comments within the steps, that will not 
+    be displayed as part of the presentation. However, they will be picked up
+    and displayed by impressConsole.js when integrated.
+*/
+
+.notes {
+    display: none;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
+    padding: 0 0.1em;
+    background: rgba(200,200,200,0.2);
+    text-shadow: -1px 1px 2px rgba(100,100,100,0.9);
+    border-radius: 0.2em;
+    border-bottom: 1px solid rgba(100,100,100,0.2);
+    border-left:   1px solid rgba(100,100,100,0.2);
+
+    transition:         0.5s;
+}
+a:hover,
+a:focus {
+    background: rgba(200,200,200,1);
+    text-shadow: -1px 1px 2px rgba(100,100,100,0.5);
+}
+
+blockquote {
+    font-family: 'PT Serif';
+    font-style: italic;
+    font-weight: 400;    
+}
+
+em {
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .3);    
+}
+
+strong {
+    text-shadow: -1px 1px 2px rgba(100,100,100,0.5);
+}
+
+q {
+    font-family: 'PT Serif';
+    font-style: italic;
+    font-weight: 400;    
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+}
+
+strike {
+    opacity: 0.7;
+}
+
+small {
+    font-size: 0.4em;
+}
+
+
+/*
+  This version of impress.js supports plugins, and in particular, a UI toolbar
+  plugin that allows easy navigation between steps and autoplay.
+*/
+.impress-enabled div#impress-toolbar {
+    position: fixed;
+    right: 1px;
+    bottom: 1px;
+    opacity: 0.6;
+    z-index: 10;
+}
+.impress-enabled div#impress-toolbar > span {
+    margin-right: 10px;
+}
+
+/*
+    With help from the mouse-timeout plugin, we can hide the toolbar and
+    have it show only when you move/click/touch the mouse.
+*/
+body.impress-mouse-timeout div#impress-toolbar {
+    display: none;
+}
+
+/*
+    In fact, we can hide the mouse cursor itself too, when mouse isn't used.
+*/
+body.impress-mouse-timeout {
+    cursor: none;
+}
+
+/* Help popup plugin */
+.impress-enabled #impress-help {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+    color: #EEEEEE;
+    font-size: 80%;
+    position: fixed;
+    left: 2em;
+    bottom: 2em;
+    width: 24em;
+    border-radius: 1em;
+    padding: 1em;
+    text-align: center;
+    z-index: 100;
+    font-family: Verdana, Arial, Sans;
+}
+.impress-enabled #impress-help td {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/*
+.impress-enabled                          { pointer-events: none }
+.impress-enabled #impress                 { pointer-events: auto }
+.impress-enabled #impress-toolbar         { pointer-events: auto }
+.impress-enabled #impress .window         { pointer-events: none }
+
+*/

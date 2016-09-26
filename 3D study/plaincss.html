@@ -1,0 +1,233 @@
+<html>
+<head>
+    <title>3Dstudy in pure CSS 3D, no impress.js involved</title>
+</head>
+<body style="background-color: #ddd; font-size: 200%;">
+
+<p>Below is the same 3d object created directly with CSS, in slightly different perspective.</p>
+<div id="rotate90" style="position: relative; top: 200px; left: 200px; perspective: 1000px; perspective-origin: -500px -300px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a00;
+                transform: rotateX(90deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: blue;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #00a;
+                transform: rotateY(90deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px purple; border-top-style: dotted; border-left-style: dotted; 
+                color: purple;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a0a;
+                transform: rotateZ(90deg);
+                ">123</div>
+</div>
+
+<p style="position: relative; top: 650px;">Now add 45 degree rotation around y axis</p>
+<div id="rotatey45" style="position: relative; top: 800px; left: 200px; perspective: 1000px; perspective-origin: -500px -300px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                transform: rotateY(45deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a00;
+                transform:  rotateX(90deg) rotateY(45deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: blue;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #00a;
+                transform: rotateY(135deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px purple; border-top-style: dotted; border-left-style: dotted; 
+                color: purple;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a0a;
+                transform: rotateY(90deg) rotateZ(90deg) ;
+                ">123</div>
+</div>
+
+<p style="position: relative; top: 1450px">Ok, that's the same anomaly as seen in impress.js. Just like in VPython, order matters. Below we've added rotateY first, not last:</p>
+
+<div id="rotatey45-2" style="position: relative; top: 1600px; left: 200px; perspective: 1000px; perspective-origin: -500px -300px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                transform: rotateY(45deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a00;
+                transform:  rotateY(45deg) rotateX(88deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: blue;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #00a;
+                transform: rotateY(135deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px purple; border-top-style: dotted; border-left-style: dotted; 
+                color: purple;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a0a;
+                transform: rotateY(45deg) rotateZ(90deg) ;
+                ">123</div>
+</div>
+
+
+<p style="position: relative; top: 2200px;">Instead of rotating 45 around y, rotate around z-axis:</p>
+
+<div id="rotatez45" style="position: relative; top: 2400px; left: 200px; perspective: 1000px; perspective-origin: 600px -300px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                transform: rotateZ(45deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a00;
+                transform:  rotateX(90deg) rotateZ(45deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: blue;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #00a;
+                transform: rotateY(90deg) rotateZ(45deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px purple; border-top-style: dotted; border-left-style: dotted; 
+                color: purple;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a0a;
+                transform: rotateZ(135deg) ;
+                ">123</div>
+</div>
+
+<p style="position: relative; top: 3000px;">Same effect, 2 out of 4 planes don't rotate correctly. But again, if we add the rotateZ() first, not last, it's correct:</p>
+
+
+<div id="rotatez45-2" style="position: relative; top: 3200px; left: 200px; perspective: 1000px; perspective-origin: -500px -300px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                transform: rotateZ(45deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a00;
+                transform: rotateZ(45deg) rotateX(90deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: blue;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #00a;
+                transform: rotateZ(45deg) rotateY(90deg);
+                ">123</div>
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px purple; border-top-style: dotted; border-left-style: dotted; 
+                color: purple;
+                position: absolute;
+                opacity: 0.4;
+                background-color: #a0a;
+                transform: rotateZ(135deg) ;
+                ">123</div>
+</div>
+
+<p style="position: relative; top: 3600px;">So what did we learn? The anomaly is not an impress.js bug, rather this is how rotations in 3d space work. Order matters, both in CSS and in VPython. In practice, it seems one should define "common" transformations (the 45 deg) first, and object specific transformations last. Once an object deviates from the common rotation, it lives in its own relative universe after that.<br /><br />
+Impress.js will always apply rotations in the same order: z, y, x. While this is not a bug, it is a limitation. In particular, it turns out if you apply rotateY(90deg), then the rotation around x-axis after that is exactly the same as rotating around z-axis before that. Here is the xy-plane rotated rotateX(90) and rotateY(90):</p>
+
+<div id="rotatey90" style="position: relative; top: 3800px; left: 200px; perspective: 1000px; perspective-origin: -500px -300px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                transform: rotateX(90deg) rotateY(90deg);
+                ">123</div>
+</div>
+<p style="position: relative; top: 4400px;">And here is the same with rotateY(90) rotateZ(90):</p>
+<div id="rotatey90-2" style="position: relative; top: 4600px; left: 200px; perspective: 1000px; perspective-origin: -500px -300px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                transform: rotateY(90deg) rotateZ(90deg);
+                ">123</div>
+</div>
+
+<p style="position: relative; top: 5050px;">That is also why (rotateZ(90) rotateY(90) rotateX(90)) is the same as just rotateY(90). The X and Z cancel each other out!<br /><br />
+This means with impress.js 3D model, with rotateY(90) you lose 1 dimension. Certain rotations aren't possible! The following is not possible in impress.js...<br/><br/>
+RotateY(-90deg):</p>
+<div id="rotatey90-2" style="position: relative; top: 5200px; left: 200px; perspective: 1000px; perspective-origin: -50px -25px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                transform: rotateY(-90deg);
+                ">123</div>
+</div>
+
+<p style="position: relative; top: 5650px;">RotateX(45deg) RotateY(-90deg):</p>
+<div id="rotatey90-2" style="position: relative; top: 5800px; left: 200px; perspective: 1000px; perspective-origin: -50px -25px;">
+    <div style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                transform:  rotateX(45deg) rotateY(-90deg);
+                ">123</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>3D study | various 3D geometries in impress.js | by Henrik Ingo @henrikingo</title>
+    
+    <link href="css/3dstudy.css" rel="stylesheet" />
+    
+</head>
+<body>
+<div id="impress" data-transition-duration="500">
+    <div id="title" class="step window" data-x="0" data-y="0" data-z="100" data-scale="10">
+        <h1>3D study</h1>
+        <h3>Various 3D geometries in impress.js</h3>
+        <p>Note: Click here to skip steps without graphics:<br />
+           <a href="#window90">Next...</a></p>
+    </div>
+    <div id="xy0" class="step plane plane90 skip xy" data-scale="6">123
+    </div>
+    <div id="rotatex90" class="step plane plane90 skip rotatex" data-rotate-x="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatey90" class="step plane plane90 skip rotatey" data-rotate-y="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatez90" class="step plane plane90 skip rotatez" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexz90" class="step plane plane90 skip rotatexz" data-rotate-x="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotateyz90" class="step plane plane90 skip rotateyz" data-rotate-y="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="window90" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>90 degree rotations around origin:</p>
+        <ul>
+        <li class="red">XY-plane (all coordinates 0)</li>
+        <li class="red-fill">RotateX=90</li>
+        <li class="blue-fill">RotateY=90</li>
+        <li class="purple-fill">RotateZ=90</li>
+        <li class="blue">RotateX, RotateZ =90</li>
+        <li class="purple">RotateY, RotateZ =90</li>
+        </ul>
+        <p>Note: dotted lines are the same (left, top) edges.<br />
+           Looks like the blue ones are not the same way!</p>
+        <p><a href="#window90-2">Next...</a></p>
+    </div>
+
+    <div id="xy0-2" class="step plane plane90-2 skip xy" data-scale="6">123
+    </div>
+    <div id="rotatex90-2" class="step plane plane90-2 skip rotatex" data-rotate-x="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatey90-2" class="step plane plane90-2 skip rotatey" data-rotate-y="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatez90-2" class="step plane plane90-2 skip rotatez" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexz90-2" class="step plane plane90-2 skip rotatexz" data-rotate-x="90" data-rotate-z="-90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotateyz90-2" class="step plane plane90-2 skip rotateyz" data-rotate-y="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="window90-2" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>90 degree rotations around origin:</p>
+        <ul>
+        <li class="red">XY-plane (all coordinates 0)</li>
+        <li class="red-fill">RotateX=90</li>
+        <li class="blue-fill">RotateY=90</li>
+        <li class="purple-fill">RotateZ=90</li>
+        <li class="blue">RotateX=90, <strong>RotateZ=-90</strong></li>
+        <li class="purple">RotateY, RotateZ =90</li>
+        </ul>
+        <p>Note: dotted lines are the same (left, top) edge.<br />
+           Looks like the blue ones are not the same way!<br />
+           Now that's better. (RotateZ=-90)<br />
+           <br />
+           Except it's still not perfect. The red ones are<br />
+           rotated counter-clockwise (wired vs filled),<br />
+           while the blue and purple pairs are rotated clockwise.</p>
+        <p><a href="#window90-3">Next...</a></p>
+    </div>
+    
+    <div id="xy0-3" class="step plane plane90-3 skip xy" data-scale="6">123
+    </div>
+    <div id="rotatex90-3" class="step plane plane90-3 skip rotatex" data-rotate-x="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatey90-3" class="step plane plane90-3 skip rotatey" data-rotate-y="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatez90-3" class="step plane plane90-3 skip rotatez" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexz90-3" class="step plane plane90-3 skip rotatexz" data-rotate-x="90" data-rotate-z="-90" data-rotate-y="180" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotateyz90-3" class="step plane plane90-3 skip rotateyz" data-rotate-y="-90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="window90-3" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>90 degree rotations around origin:</p>
+        <ul>
+        <li class="red">XY-plane (all coordinates 0)</li>
+        <li class="red-fill">RotateX=90</li>
+        <li class="blue-fill">RotateY=90</li>
+        <li class="purple-fill">RotateZ=90</li>
+        <li class="blue">RotateX=90, RotateZ=-90, <strong>RotateY=180</strong></li>
+        <li class="purple"><strong>RotateY=-90</strong>, RotateZ=90</strong></li>
+        </ul>
+        <p>This is what we'd have to do to have all of them<br />
+           rotate the same way.<br />
+           <br />
+           We will not use this for now.</p>
+        <p><a href="#window45-1">Next...</a></p>
+    </div>
+    
+    
+    <div id="xy45-1" class="step plane skip xy" data-scale="6">123
+    </div>
+    <div id="rotatex45-1" class="step plane plane45-1 skip rotatex" data-rotate-x="90" data-rotate-y="45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatey45-1" class="step plane plane45-1 skip rotatey" data-rotate-y="135" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatez45-1" class="step plane plane45-1 skip rotatez" data-rotate-z="90" data-rotate-y="45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexz45-1" class="step plane skip rotatexz" data-rotate-x="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotateyz45-1" class="step plane skip rotateyz" data-rotate-y="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="window45-1" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>Now rotate the filled planes 45 degrees around y-axis:</p>
+        <ul>
+        <li class="red" style="opacity: 0.1">XY-plane</li>
+        <li class="red-fill">RotateX=90 <strong>RotateY=45</strong></li>
+        <li class="blue-fill">RotateY=90 <strong>+45 = 135</strong></li>
+        <li class="purple-fill">RotateZ=90 <strong>RotateY=45</strong></li>
+        <li class="blue" style="opacity: 0.1">RotateX,Z =90</li>
+        <li class="purple" style="opacity: 0.1">RotateY,Z =90</li>
+        </ul>
+        <p>So let's go back to the simple geometry,<br />
+           where everything was rotated +90, and rotate +45<br />
+           along y-axis<br />
+           <br />
+           Wait, what's wrong with the red (RotateX=90) plane?</p>
+        <p><a href="#window45-2">Next...</a></p>
+    </div>
+    
+    <div id="xy45-2" class="step plane skip xy" data-scale="6">123
+    </div>
+    <div id="rotatex45-2" class="step plane plane45-2 skip rotatex" data-rotate-x="90" data-rotate-z="-45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatey45-2" class="step plane plane45-2 skip rotatey" data-rotate-y="135" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatez45-2" class="step plane plane45-2 skip rotatez" data-rotate-z="90" data-rotate-y="45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexz45-2" class="step plane skip rotatexz" data-rotate-x="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotateyz45-2" class="step plane skip rotateyz" data-rotate-y="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="window45-2" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>Now rotate the filled planes 45 degrees around y-axis:</p>
+        <ul>
+        <li class="red" style="opacity: 0.1">XY-plane</li>
+        <li class="red-fill">RotateX=90 <strong>RotateZ=-45</strong></li>
+        <li class="blue-fill">RotateY=90 +45 = 135</li>
+        <li class="purple-fill">RotateZ=90 RotateY=45</li>
+        <li class="blue" style="opacity: 0.1">RotateX,Z =90</li>
+        <li class="purple" style="opacity: 0.1">RotateY,Z=90</li>
+        </ul>
+        <p>Setting RotateZ=-45 fixes the red plane. (Why?)<br />
+           Ok, let's bring back the non-filled planes...</p>
+        <p><a href="#window45-3">Next...</a></p>
+    </div>
+
+    
+    <div id="xy45-3" class="step plane plane45-3 skip xy" data-rotate-y="45" data-scale="6">123
+    </div>
+    <div id="rotatex45-3" class="step plane plane45-3 skip rotatex" data-rotate-x="90" data-rotate-z="-45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatey45-3" class="step plane plane45-3 skip rotatey" data-rotate-y="135" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatez45-3" class="step plane plane45-3 skip rotatez" data-rotate-z="90" data-rotate-y="45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexz45-3" class="step plane plane45-3 skip rotatexz" data-rotate-x="90" data-rotate-z="90" data-rotate-y="45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotateyz45-3" class="step plane plane45-3 skip rotateyz" data-rotate-y="135" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="window45-3" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>Now rotate all planes 45 degrees around y-axis:</p>
+        <ul>
+        <li class="red">XY-plane <strong>RotateY=45</strong></li>
+        <li class="red-fill">RotateX=90 RotateZ=-45</li>
+        <li class="blue-fill">RotateY=90 +45 = 135</li>
+        <li class="purple-fill">RotateZ=90 RotateY=45</li>
+        <li class="blue">RotateX,Z=90 <strong>RotateY=45</strong></li>
+        <li class="purple">RotateZ=90 <strong>RotateY=90+45=135</strong></li>
+        </ul>
+        <p>Setting RotateZ=-45 fixes the red plane. (Why?)<br />
+           Ok, let's bring back the non-filled planes and add RotateY=45<br />
+           Now the blue one is off!</p>
+        <p><a href="#window45-4">Next...</a></p>
+    </div>
+    
+    <div id="xy45-4" class="step plane plane45-4 skip xy" data-rotate-y="45" data-scale="6">123
+    </div>
+    <div id="rotatex45-4" class="step plane plane45-4 skip rotatex" data-rotate-x="90" data-rotate-z="-45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatey45-4" class="step plane plane45-4 skip rotatey" data-rotate-y="135" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatez45-4" class="step plane plane45-4 skip rotatez" data-rotate-z="90" data-rotate-y="45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexz45-4" class="step plane plane45-4 skip rotatexz" data-rotate-x="90" data-rotate-z="45" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotateyz45-4" class="step plane plane45-4 skip rotateyz" data-rotate-y="135" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="window45-4" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>Now rotate all planes 45 degrees around y-axis:</p>
+        <ul>
+        <li class="red">XY-plane RotateY=45</li>
+        <li class="red-fill">RotateX=90 RotateZ=-45</li>
+        <li class="blue-fill">RotateY=90 +45 = 135</li>
+        <li class="purple-fill">RotateZ=90 RotateY=45</li>
+        <li class="blue">RotateX=90, <strong>RotateZ=90-45= -45</strong></li>
+        <li class="purple">RotateZ=90 RotateY=90+45=135</li>
+        </ul>
+        <p>Wait, what's wrong with the red (RotateX=90) plane?<br />
+           Setting RotateZ=-45 fixes the red plane. (Why?)<br />
+           Ok, let's bring back the non-filled planes and add RotateY=45<br />
+           Now the blue one is off!<br />
+           Setting an additional -45 on z-axis puts it right.</p>
+        <p><a href="#window45-4b">Next...</a></p>
+    </div>
+    <div id="window45-4b" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>Now rotate all planes 45 degrees around y-axis:</p>
+        <ul>
+        <li class="red">XY-plane RotateY=45</li>
+        <li class="red-fill">RotateX=90 <strong>RotateZ=-45</strong></li>
+        <li class="blue-fill">RotateY=90 +45 = 135</li>
+        <li class="purple-fill">RotateZ=90 RotateY=45</li>
+        <li class="blue">RotateX=90, <strong>RotateZ=90-45= -45</strong></li>
+        <li class="purple">RotateZ=90 RotateY=90+45=135</li>
+        </ul>
+        <p>So what is the conclusion?<br />
+           RotateX=90 causes something odd to happen, on those we<br />
+           must add RotateZ= -&alpha; instead of RotateY=&alpha;</p>
+        <p><a href="#title2">Next...</a></p>
+    </div>
+    
+
+
+    
+    <div id="title2" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <h1>But wait, there's more</h1>
+        <h3>Until now, we still left some combinations out.</h3>
+           <a href="#window-all">Next...</a></p>
+    </div>
+    <div id="xy-all" class="step plane plane-all skip xy" data-scale="6">123
+    </div>
+    <div id="rotatex-all" class="step plane plane-all skip rotatex" data-rotate-x="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatey-all" class="step plane plane-all skip rotatey" data-rotate-y="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatez-all" class="step plane plane-all skip rotatez" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexy-all" class="step plane plane-all skip rotatexy" data-rotate-x="90" data-rotate-y="90" data-scale="6" data-x="30" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexz-all" class="step plane plane-all skip rotatexz" data-rotate-x="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotateyz-all" class="step plane plane-all skip rotateyz" data-rotate-y="90" data-rotate-z="90" data-scale="6" data-x="0" data-y="0" data-z="0">123
+    </div>
+    <div id="rotatexyz-all" class="step plane plane-all skip rotatexyz" data-rotate-x="90" data-rotate-y="90" data-rotate-z="90" data-scale="6" data-x="30" data-y="0" data-z="0">123
+    </div>
+    <div id="window-all" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>90 degree rotations around origin:</p>
+        <ul>
+        <li class="red">XY-plane (all coordinates 0)</li>
+        <li class="red-fill">RotateX=90</li>
+        <li class="blue-fill">RotateY=90</li>
+        <li class="purple-fill">RotateZ=90</li>
+        <li class="green"><strong>RotateX, RotateZ =90</strong></li>
+        <li class="blue">RotateX, RotateZ =90</li>
+        <li class="purple">RotateY, RotateZ =90</li>
+        <li class="black"><strong>RotateX, Y, Z =90</strong></li>
+        </ul>
+        <p>Newly added rectangles are shifted +30 on the x-axis<br />
+           because they're overlapping with already existing rectangles.<br />
+           <br />
+           Observation: RotateX,Z (green) is the same rectangle as<br />
+           RotateY,Z (purple). RotateX,Y,Z (black) is the same as<br />
+           RotateY (blue-fill), except it's in opposite direction.</p>
+        <p><a href="#intermission">Next...</a></p>
+    </div>
+
+
+    <div id="intermission" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>I'm not good enough with math to claim the above behavior is a bug.</p>
+        <p>But I'm certainly used to math being more consistent and simple than this!</p>
+        <p>Let's compare to a reference implementation used by scientists.</p>
+        <p>Same transformations in <a href="http://vpython.org/">Visual Python</a> 3D framework.</p>
+        <p><a href="#vpython1">Next...</a></p>
+    </div>
+    <div id="vpython1" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <img src="vpython_img/3dstudy_1.png" width="800" />
+        <p><a href="#vpython2">Next...</a></p>
+    </div>
+    <div id="vpython2" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <img src="vpython_img/3dstudy_2.png" width="800" />
+        <p><a href="#vpython3">Next...</a></p>
+    </div>
+    <div id="vpython3" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <img src="vpython_img/3dstudy_3.png" width="800" />
+        <p><a href="#vpython4">Next...</a></p>
+    </div>
+    <div id="vpython4" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <img src="vpython_img/3dstudy_4.png" width="800" />
+        <p><a href="#vpython5">Next...</a></p>
+    </div>
+    <div id="vpython5" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <img src="vpython_img/3dstudy_5.png" width="800" />
+        <p><a href="#end">Next...</a></p>
+    </div>
+
+        <div id="end" class="step window" data-x="-2000" data-y="-1000" data-z="200" data-scale="10">
+        <p>Conclusion: When <em>data-rotate-x</em> is used, it distorts relationship between <em>data-rotate-y</em> and <em>-z</em>.</p>
+        <p>Is it a bug? If yes, is it in impress.js or the browser DOM? Latter would be unlikely...</p>
+        <p></p>
+        <p><a href="plaincss.html">Continue here to explore the same problem in plain css.</a></p>
+    </div>
+</div>
+
+<div id="impress-toolbar"></div>
+
+<!-- intentionally using a specific version of impress.js copied into this project: unmodified upstream -->
+<script type="text/javascript" src="js/impress.upstream.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
