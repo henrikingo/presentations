@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>3Dstudy in pure CSS 3D, no impress.js involved</title>
+    <script>
+    var v = [1, 0, 0];
+    var angle = 0;
+    var i = 1;
+    var j = 0;
+    squares = [];
+    var animate = function(){
+        if ( squares.length == 0 ) {
+            squares[0] = document.getElementById("square");
+        }
+        square = squares[ squares.length-1 ].cloneNode(true);
+        x = document.getElementById("x");
+        y = document.getElementById("y");
+        z = document.getElementById("z");
+        a = document.getElementById("angle");
+
+        x.innerHTML = v[0];
+        y.innerHTML = v[1];
+        z.innerHTML = v[2];
+        a.innerHTML = angle;
+        square.style.transform = "rotate3d(" + v[0] + ", " + v[1] + ", " + v[2] + ", " + angle + "deg)";
+        squares.push(square);
+        document.getElementById("canvas").appendChild(square);
+
+/*        opacity = 1;
+        for( x = squares.length-1; x >= 0; x-- ) {
+            squares[x].style.opacity = opacity;
+            opacity -= 0.05;
+        }
+*/
+        if ( Math.abs(angle % 90) < 0.05 ) {
+            square.style.opacity = 0.5;
+            square.style["border-width"] = "5px";
+            square.style["border-top-style"] = "dotted";
+            square.style["border-left-style"] = "dotted";
+        }
+        else {
+            square.style.opacity = 0.2;
+            square.style["border-width"] = "0px";
+        }
+
+
+        angle += 10;
+        if ( angle > 360 ) {
+            angle = 0;
+            v[i] += 0.1;
+            if ( v[i] > 1 ) {
+                v[i] = 0;
+                i++;
+                if( i > 2 ){
+                    v[0] = 0;
+                    v[1] = 1;
+                    i = 2;
+                    j++;
+                    if( j > 1 ) {
+                        v[0] = 1;
+                        v[1] = 1;
+                        i = 2;
+                        j++;
+                        if( j > 2 ) return;
+                    }
+                }
+                clear(squares);
+            }
+        }
+        setTimeout( animate, 200 );
+    };
+    
+    var clear = function(squares) {
+        for( x = squares.length-1; x >= 0; x-- ) {
+            squares[x].style.opacity = 0;
+        }
+    };
+    </script>
+</head>
+<body style="background-color: #ddd; font-size: 200%;" onload="animate();">
+
+<p>rotate3d(<span id="x"></span>, <span id="y"></span>, <span id="z"></span>, <span id="angle"></span>)</p>
+<div id="canvas" style="position: relative; top: 200px; left: 200px; perspective: 1000px;">
+    <div id="square" style="width: 400px; height: 200px; 
+                border: solid 5px; border-top-style: dotted; border-left-style: dotted; 
+                color: red;
+                position: absolute;
+                opacity: 0.4;
+                ">123</div>
+</div>
+
+</body>
+</html>
