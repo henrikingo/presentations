@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>EMEA SA team training 2016-04-05 | by Henrik Ingo @henrikingo</title>
+    
+    <meta name="author" content="Henrik Ingo" />
+    <link href="css/classic-slides.css" rel="stylesheet" />
+    
+</head>
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+
+<div id="impress" data-transition-duration="1000">
+
+    <div id="overview" class="step" data-x="3000" data-y="1500" data-z="-1" data-scale="10"
+         style="pointer-events: none;">
+        <img src="images/2330946464_788bec934a_o.jpg" alt="Large tree" width="1600"
+            style="position: inherit; top: -700px; left: -200px" />
+    </div>
+    
+    <div id="copyright" class="step skip" data-x="-3500" data-y="5600" data-scale="2">
+    <p style="text-align: left;">Image: 
+    <a href="https://www.flickr.com/photos/swernicke/2330946464/in/photolist-4xYHb9-e7R9F3-nReMTt-pGjxN4-oQoVe-218fy-5N3zdk-54xvtr-4rXppj-dQ9nPF-4sZZw6-pJf7gT-8MPHfx-2sgkrv-8mZora-ctQcCj-c687AE-5m8BtH-7cY5dr-FKxP5F-pNyseQ-9VYRBi-7HjcXs-qfxV8o-9F7MFg-4d1dmY-5eD5gE-8TBKgn-7YyCJN-9eL6Vg-7v4ipQ-mjtXoX-ee41nr-dr7bLS-53spM8-4BHvdg-8KL16E-94LdG4-4M53Sw-J56CK-ecCKW5-8m9At1-m4SiT-6CfNXu-71F19t-2MUM2-2yocxM-4c54u-dLKcwQ-b2PE94"
+    >swernicke @ flickr</a><br />
+    Clipart: <a href="http://www.openclipart.org">openclipart.org</a><br />
+    Presentation: (C) Henrik Ingo, 2017. Please share and reuse as explained in the <a href="https://creativecommons.org/licenses/by/4.0/">CreativeCommons Attribution License</a>.</p>
+    </div>
+
+    <div class="step title" data-x="-1000" data-y="4000" data-scale="3.5" id="title">
+        <h1>4 boring performance improvements in MongoDB 3.4 that matter</h1>
+        <h2>Henrik Ingo<br />Senior Performance Engineer<br />
+        2017-05-16</h3>
+    </div>
+
+    <div class="step" data-rel-x="2200" data-rel-y="600" data-rel-z="-10" data-rotate-y="180" id="h_ingo">
+        <img src="images/Henrik_Ingo_Portrait_by_Julian_Cash_2013_MySQL_Conference_L.png" 
+            align="right"/>
+        <img src="images/OSI_logo.png" width="100" height="100" 
+            style="position: inherit; top: 50px; left: 60px" />
+        <img src="images/OpenLife-cover.png" width="120" height="180" 
+            style="position: inherit; top: 75px; left: 330px" />
+        <img src="images/mysql-logo.png" width="200" height="200" 
+            style="position: inherit; top: 240px; left: 410px" />
+        <img src="images/druplicon.large.png" width="100" height="110" 
+            style="position: inherit; top: 250px; left: 20px" />
+        <img src="images/mongodb-logo-rgb.png" width="200" height="60" 
+            style="position: inherit; top: 440px; left: 210px" />
+        <p
+        style="position: inherit; top: 550px; left: 510px" />
+        <a href="http://twitter.com/h_ingo">@h_ingo</a></p>
+     </div>
+
+    <div class="step" data-x="5000" data-y="5500" data-z="0" data-rotate-y="0" data-scale="1"
+         id="topics">
+        <h1>4 boring topics</h1>
+        <ul>
+            <li>Faster initial sync for replica nodes</li>
+            <li>Moving balancer process from the mongos to config server</li>
+            <li>Removing throttling from shard re-balancing</li>
+            <li>Parallel migrations between shards</li>
+            <li>Future improvements to expect</li>
+        </ul>
+    </div>
+
+    <div class="step title" id="initialsync" data-rel-x="1500" data-rel-y="-100" data-scale="1.2">
+        <h1>1. Faster initial sync</h1>
+    </div>
+
+    <div class="step" style="text-align: center" data-rel-x="500" data-rel-y="-300" data-scale="0.8">
+        <h1>Initial sync recap</h1>
+        <img src="images/initialsync.svg" alt="MongoDB sharded cluster with a chunk migration happening"/>
+    </div>
+
+    <div class="step" data-rel-x="900" data-rel-y="250" data-scale="1.2">
+        <ul>
+        <li>Adding nodes to a replica set is easy: 
+            <ul>
+            <li>MongoDB will automatically take a snapshot of the database</li>
+            <li>...copy it over to the secondary</li>
+            <li>...then start replicating from the right position</li>
+            </ul>
+        </li>
+        <li>No manual action needed from the DBA!</li>
+        <li>But...</li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h1>At scale, ops become more interesting...</h1>
+        <ul>
+        <li>How long does it take to copy 1-2 TB over the network?</li>
+        <li>How long does it take to rebuild all indexes?</li>
+        <li>While DBA doesn't need to do anything but wait, it's not fun to wait week(s)</li>
+        <li>If there's network glitch during initial sync, start from scratch</li>
+        <li>Note: Manual workarounds existed to make this faster, but sometimes they can't be used (mmapv1->wiredTiger sync)</li>
+        </ul>
+    </div>
+
+    <div class="step" data-rel-x="1150" data-rel-y="-500">
+        <h1>MongoDB 3.4: Faster initial sync</h1>
+        <p>Main improvement: rebuild all indexes in parallel</p>
+        <p>We test this with a 1 TB sample of a real world DB</p>
+        <p>MongoDB 3.2 initial sync: ~ 1 week</p>
+        <p>MongoDB 3.4 initial sync: &lt; 24 h</p>
+    </div>
+
+    <div id="balancerRecap" class="step" style="text-align: center" data-x="3500" data-y="4350" data-scale="2">
+        <h1>Balancer recap</h1>
+        <img src="images/balancer.svg" alt="MongoDB sharded cluster with a chunk migration happening"/>
+    </div>
+
+    <div class="step" data-rel-x="800" data-rel-y="200">
+        <h1>A MongoDB cluster:</h1>
+        <ul>
+            <li>Consists of N shards (partitions)</li>
+            <li>...which consist of chunks (mini-partitions)</li>
+            <li>...each chunk contains ~ 64 MB of data (by default)</li>
+            <li><em><a href="https://docs.mongodb.com/manual/tutorial/manage-sharded-cluster-balancer/">The Balancer</a></em> tries to keep an even number of chunks on each shard</li>
+            <li>If you configured <a href="https://docs.mongodb.com/manual/tutorial/manage-shard-zone/">zones</a> the balancer tries to move chunks to the zone they belong</li>
+        </ul>
+    </div>
+
+    <div class="step" id="singleton"  data-x="6600" data-y="3850" data-scale="2">
+        <h1>2. Moving balancer to config server</h1>
+        <img width="300" src="images/balancer.svg" alt="MongoDB sharded cluster with a chunk migration happening"
+             class="right" />
+
+        <ul class="substep">
+        <li>Used to run on a mongos</li>
+        <li>Users have 100+ mongoses, but only 1 of them can run balancer</li>
+        <li>Led to unnecessary stress competing for the balancer lock</li>
+        <li>There's only 1 primary config server => No locking needed</li>
+        </ul>
+    </div>
+
+    <div class="step title" id="throttling" data-rotate="-90" data-x="9200" data-y="1800" data-scale="2">
+        <h1>3. Balancer throttling</h1>
+    </div>
+
+    <div class="step" data-rel-x="1000" data-rel-y="500" data-rotate="-70">
+        <h1>Throttling &amp; balancer</h1>
+        <ul>
+        <li>Balancer is a background process</li>
+        <li>Until MongoDB 3.2:
+            <ul>
+                <li>Throttle to limit overhead to application queries. (Important with MMAPv1 engine.)</li>
+                <li>Only 1 migration concurrently.</li>
+                <li><strong>w:2</strong> write concern used <strong>for each</strong> document insert &amp; delete.</li>
+            </ul>
+        </li>
+        <li>New in MongoDB 3.4:
+            <ul>
+                <li>Runs on the primary config server</li>
+                <li>No throttling for WiredTiger</li>
+                <li>1 migration <em>per shard</em> concurrently (max = shards/2)</li>
+            </ul>
+        </li>
+        <li>Hardwired <strong>w:majority</strong> at end of insert / delete of chunk</li>
+    </div>
+
+    <div class="step" data-rel-x="-300" data-rel-y="-1500" data-rotate="-130">
+        <h1>Configurability of the balancer</h1>
+        <ul>
+        <li>Users need to configure both ways:
+           <ul>
+           <li>Balancer is causing too much overhead: it should run less</li>
+           <li>Need to quickly move data to other shards: it should run faster</li>
+           </ul>
+        </li>
+        <li>Solutions available:
+            <ul>
+                <li><a href="https://docs.mongodb.org/manual/tutorial/configure-sharded-cluster-balancer/#schedule-a-window-of-time-for-balancing-to-occur">Set balancer time window</a></li>
+                <li>Since v3.0:<br /><a href="https://docs.mongodb.org/manual/tutorial/configure-sharded-cluster-balancer/#secondary-throttle">Configure _secondaryThrottle &amp; writeConcern</a></li>
+            </ul>
+        </li>
+        </ul>
+           
+    </div>
+
+    <div class="step" data-rel-x="-1000" data-rel-y="-600" data-rotate="-160">
+        <h1 style="text-align: left;">Example</h1>
+<pre>
+use config
+db.settings.update(
+   { "_id" : "balancer" },
+   { $set : { "_secondaryThrottle" : false ,
+              "writeConcern": { "w": 1 } } },
+   { upsert : true }
+)
+</pre>
+    </div>
+
+    <div id="benchmark" class="step" data-rel-x="-1200" data-rel-y="-900" data-rotate="-180">
+        <h1>Let's benchmark this</h1>
+        <p>YCSB load with 30 threads x 100 batchsize</p>
+        <p>3 shards * 3 replicas</p>
+        <p>MongoDB 3.2.4</p>
+        <p>AWS c3.large with standard EBS*</p>
+        <p>Throughput: 5k - 25k docs / sec **</p>
+        <p>&nbsp;</p>
+        <p style="line-height: 0.5em;"><small>*) Test is short enough that boosting provides good EBS perf.</small><br />
+           <small>**) This is a very low throughput, which is the point of this test.<br />
+           This test demonstrates a common effect where sharded clusters become unbalanced<br />
+           even with a simple insert workload when not using hashed shard key.</small></p>
+        <div class="notes">
+<pre>
+$ ./bin/ycsb load mongodb-async -s -P workloads/throttlingtest -threads 30
+$ cat workloads/throttlingtest 
+mongodb.url=mongodb://throttl-4.henrikingo3.8300.mongodbdns.com:27017/test
+mongodb.batchsize=100
+recordcount=50000000
+
+
+operationcount=1000
+workload=com.yahoo.ycsb.workloads.CoreWorkload
+
+readallfields=true
+
+readproportion=0.5
+updateproportion=0.5
+scanproportion=0
+insertproportion=0
+
+requestdistribution=zipfian
+</pre>
+        </div>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="-900" data-rotate="-180">
+       <img src="images/ycsb-load-1.png" />
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="-900" data-rotate="-180">
+       <img src="images/ycsb-load-2.png" />
+    </div>
+
+    <div class="step" data-scale="3" data-rel-y="-1400" data-rotate="-180">
+        <h1>What did we learn?</h1>
+        <ul>
+        <li>A naive insert / load test is not distributed well over all shards</li>
+        <li>With throttling on, balancer will not keep up = unbalanced cluster</li>
+        <li>With throttling off, balancer will keep up
+            <ul>
+            <li>Note: this is still an inefficient way of loading data into MongoDB</li>
+            <li>Point is just that the balancer is able to keep up</li>
+            </ul>
+        </li>
+        <li>The default in MongoDB 3.4 is <em>throttling off</em></li>
+        </ul>
+    </div>
+
+    <div class="step title" id="parallel" data-rel-x="-4000" data-rel-y="0" data-rotate="-230">
+        <h1>4. Parallel chunk migrations</h1>
+    </div>
+
+    <div class="step" style="text-align: center" data-rel-x="-4000" data-rel-y="-300" data-rotate="-280">
+        <img src="images/balancer-new-shard.svg" alt="MongoDB sharded cluster with a chunk migration happening"/>
+        <p>As with initial sync, adding a new shard to a cluster is easy. Just add an empty shard, and the balancer starts moving data to it.</p>
+    </div>
+
+    <div class="step" style="text-align: center" data-rel-x="-4000" data-rel-y="-300" data-rotate="-280">
+        <h1>At scale, ops become more interesting...</h1>
+        <img src="images/balancer-scale-10.svg" alt="MongoDB sharded cluster with 10 shards"
+             style="position: inherit; top: 40px; left: 340px"/>
+        <img src="images/balancer-scale-32.svg" alt="MongoDB sharded cluster with 20 shards and 1 migration happening"
+             style="position: inherit; top: 40px; left: 340px" class="substep" />
+        <p class="substep" style="margin-top: 260px;"><strong>MongoDB 3.2:</strong> Only 1 migration at a time.<br />
+                                                      All new shards but one remain empty. <br />
+                                                      The DBA just needs to wait... but how long?</p>
+        <p class="substep"><strong>MongoDB 3.4:</strong> N/2 migrations at a time.<br />
+                           Double nr of shards in same time as adding 1 shard.</p>
+        <img src="images/balancer-scale-34.svg" alt="MongoDB sharded cluster with 20 shards and 10 migrations happening"
+             style="position: inherit; top: 40px; left: 340px" class="substep" />
+    </div>
+
+    <div class="step" id="future" data-x="-30000" data-y="9000" data-z="8000" data-rotate-x="-95" data-rotate-y="-55" data-transition-duration="5000">
+        <h1>Future work</h1>
+        <p><em>Note: Not saying these will be in 3.6, in fact I know some of them won't.</em></p>
+        <ul>
+        <li><a href="https://jira.mongodb.org/browse/SERVER-20739">SERVER-20739</a> Make initial sync resilient to network/other failures</li>
+        <li><a href="https://jira.mongodb.org/browse/SERVER-5931">SERVER-5931</a> Secondary reads in a sharded cluster</li>
+        <li><a href="https://jira.mongodb.org/browse/SERVER-9287">SERVER-9287</a> Split chunks on mongod, not mongos</li>
+        <li><a href="https://jira.mongodb.org/browse/SERVER-27760"><strike>SERVER-27760</strike></a> Smarter, stateful orphan deletion</li>
+        <li>Maybe make chunk migrations even faster?
+            <ul>
+            <li>Bulk inserts</li>
+            <li>More than one per shard</li>
+            </ul>
+        </ul>
+    </div>
+
+</div>
+
+<div id="impress-toolbar"></div>
+<div id="impress-help"></div>
+
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="js/impress.js"></script>
+<script>impress().init();</script>
+</body>
+</html>
