@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>MongoDB and Raft | by Henrik Ingo @henrikingo</title>
+    
+    <meta name="author" content="Henrik Ingo" />
+    <link href="css/classic-slides.css" rel="stylesheet" />
+    <link rel="stylesheet" href="impress.js/extras/highlight/styles/darkula.css">
+    
+</head>
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+
+<div id="impress" data-transition-duration="1000">
+
+    <div id="title" class="step title" data-x="0" data-y="1000" data-z="-1" data-scale="5"
+        style="height: 600px;">
+        <img src="images/6238063087_9d0a8e1604_o.jpg" alt="Winter Palace at night, a boat in front." width="1600"
+            style="position: absolute; top: -180px; left: -200px; z-index: -1; border-radius: 20px;" />
+        <h1 style="position: relative; top: -120px; font-size: 45pt;">MongoDB and Raft</h1>
+        <h2 style="position: relative; top: 80px;">How MongoDB replication follows and doesn't the Raft algorithm</h2>
+        <h3 style="position: absolute; top: 570px; left: -70px; text-align: left; font-size: 16pt;"
+        >Henrik Ingo<br />
+        Senior Performance Engineer<br />
+        PGDay Russia, 2017-07-09</h3>
+    </div>
+
+    <div id="copyright" class="step skip" data-x="3000" data-y="2900" data-z="0" data-scale="1">
+    <p style="text-align: right; color: #222233; text-shadow: none;">Image CC BY-SA:
+    <a href="https://www.flickr.com/photos/bertogg/6238063087/in/photolist-aveGPR-gg69Xf-89o6Xi-dkcB3P-Nbvh5k-Mmq2W1-Nbvhaa-MRRXbj-N8NEwE-Mmq1Mh-Mmq1Yj-Mmhecn-Mmq2go-Nbvh1c-N8NXoA-NbvgpH-NbvhfF-NbvfbR-Mmq27q-Mmq2qG-MmpX5h-MmpU6b-zLUHAd-Nj7JLD-MmhnJn-MmpBS9-Nj7TVR-Nj7GU2-MRRYrq-N8P3aQ-NfVcRJ-MmpZ47-NfVc2N-NbvhKt-N8NMEN-MmhpBa-N8NWpG-MmpVGN-MmpVcu-MmpZQY-N8NNbN-Nbvfrv-NbvgJF-MmpY65-N8NVTG-NbvhNK-NfVeKd-NfVdoL-N8NTC9-Nj7Mp4"
+    >bertogg @ flickr</a><br />
+    Clipart: <a href="http://www.openclipart.org">openclipart.org</a><br />
+    Presentation: (C) Henrik Ingo, 2017. Please share and reuse as explained in the <a href="https://creativecommons.org/licenses/by/4.0/">CreativeCommons Attribution License</a>.</p>
+    </div>
+
+    <div id="h_ingo" class="step" data-rel-x="5200" data-rel-y="2600" data-rel-z="10000" data-scale="5">
+        <img src="images/Henrik_Ingo_Portrait_by_Julian_Cash_2013_MySQL_Conference_L.png" 
+            align="right"/>
+        <img src="images/OSI_logo.png" width="100" height="100" 
+            style="position: inherit; top: 200px; left: 60px" />
+        <img src="images/OpenLife-cover.png" width="120" height="180" 
+            style="position: inherit; top: 175px; left: 250px" />
+        <img src="images/mysql-logo.png" width="200" height="200" 
+            style="position: inherit; top: 240px; left: 410px" />
+        <img src="images/druplicon.large.png" width="100" height="110" 
+            style="position: inherit; top: 320px; left: 20px" />
+        <img src="images/Galera-Cluster-logo.png" width="100" 
+            style="position: inherit; top: 420px; left: 420px" />
+        <img src="images/mongodb-logo-rgb.png" width="200" height="60" 
+            style="position: inherit; top: 520px; left: 190px" />
+        <p style="position: inherit; top: 550px; left: 510px" />
+        <a href="http://twitter.com/h_ingo">@h_ingo</a></p>
+     </div>
+
+    <div id="agenda" class="step" data-x="500" data-y="300" data-z="-100" data-scale="1" data-transition-duration="2000">
+        <h1 style="text-align: left;">Agenda</h1>
+        <ul>
+            <li>Raft</li>
+            <li>MongoDB replication</li>
+        </ul>
+    </div>
+
+    <div id="raft" class="step" data-rel-x="1500" data-rel-y="100">
+        <img src="images/Raft-logo.png" width="150" style="position: inherit; left: 900px;" />
+        <h1>Raft</h1>
+        <p>English: lifeboat, floating device</p>
+        <p>Academic: Leader based distributed consensus algorithm <br />
+           John Osterhout, Diego Ongaro (USENIX 2014)</p>
+        <p>In practice: Single-master synchronous replication protocol</p>
+        <p>Similar to Vievstamp replication. Alternative to Paxos.</p>
+        <p><a href="https://raft.github.io/">https://raft.github.io/</a></p>
+    </div>
+
+    <div class="step">
+        <h1>Raft goals</h1>
+        <p>Easy to understand</p>
+        <p>Easy to discuss trade offs</p>
+        <p>Complete and practical<br />
+        <small>(Actually works if implemented)</small></p>
+    </div>
+
+    <div class="step">
+        <h1>Raft's concept of time</h1>
+        <p>Raft replicates a log. The state machine (aka database) is secondary.</p>
+        <p>At any given time, (at most) one node is <em>leader</em>.</p>
+        <p>Leaders are chosen with <em>elections</em>.</p>
+        <p>Time between elections is called <em>term</em>.</p>
+        <p>When observing new term, servers must immediately adopt it.</p>
+    </div>
+
+    <div class="step">
+        <h1>Example Raft log</h1>
+        <table>
+        <tr><td>index</td><td>term</td><td>command</td></tr>
+        <tr><td>1</td><td>1</td><td>a &lt;- 5</td></tr>
+        <tr><td>2</td><td>1</td><td>a &lt;- 7</td></tr>
+        <tr><td>3</td><td>1</td><td>b &lt;- 1</td></tr>
+        <tr><td>4</td><td>2</td><td>...</td></tr>
+        <tr><td>5</td><td>2</td><td>...</td></tr>
+        <tr><td>6</td><td>4</td><td>...</td></tr>
+        <tr><td>7</td><td>4</td><td>...</td></tr>
+        <tr><td>8</td><td>4</td><td>...</td></tr>
+        <tr><td>9</td><td>4</td><td>...</td></tr>
+        </table>
+    </div>
+
+    <div class="step">
+        <h1>Raft replication</h1>
+        <img src="images/Raft-AppendEntries.svg" />
+    </div>
+
+    <div class="step">
+        <h1 style="position: absolute; transform: rotate(-90deg); left: -170px; top: 400px;">Raft leader election</h1>
+        <p><img src="images/Raft-RulesForServers.png" height="900" /></p>
+    </div>
+
+    <div class="step">
+        <h1>Raft limitations</h1>
+        <ul style="text-align: left;">
+        <li>Replication first, then apply:
+            <ul>
+            <li>Assumes that transactions are deterministic and always succeed</li>
+            <li>Good for key-value store</li>
+            <li>Modification: Transactional databases replicate during pre-commit</li>
+            </ul>
+        </li>
+        <li>Simplicity over optimized:
+            <ul>
+            <li>AppendEntries will do linear scan of log to find starting position</li>
+            <li>Term inflation or leader flip-flopping</li>
+            </ul>
+        </li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h1>Additional reading on Raft</h1>
+        <ul style="text-align: left;">
+        <li><a href="https://github.com/ongardie/raftscope">RaftScope</a>: Interactive visualization of a Raft cluster</li>
+        <li><a href="http://openlife.cc/blogs/2015/september/4-modifications-raft-consensus">4 modifications for Raft consensus</a>, Henrik Ingo
+            <ul>
+            <li>Avoid minor annoyances like leader flip-flops and term inflation</li>
+            </ul>
+        </li>
+        <li><a href="http://www.cl.cam.ac.uk/~ms705/pub/papers/2015-osr-raft.pdf">Raft Refloated</a>, Heidi Howard
+            <ul>
+            <li>Durability and elections with other than majority</li>
+            </li>
+        </li>
+        </ul>
+    </div>
+
+    <div id="mongodb" class="step title" data-x="12500" data-y="-2000">
+        <img src="images/mongodb-logo-rgb.png" width="200" height="60" 
+            style="position: absolute; top: -100px; left: 1000px" />
+        <h1>MongoDB Replication</h1>
+    </div>
+
+    <div class="step" data-rel-x="-1500" data-rel-y="100">
+        <h1>MongoDB replication</h1>
+        <img src="images/MongoDB-replication.svg" />
+    </div>
+
+    <div class="step">
+        <h1>MongoDB replica sets (2010)</h1>
+        <table style="width: 100%;">
+        <tr><td style="width: 30%; vertical-align: top;">
+            <ul>
+            <li>Similarities<br /> to Raft
+                <ul>
+                <li>Leader</li>
+                <li>Log</li>
+                <li>Initial sync</li>
+                <li>Heartbeats &amp; Elections</li>
+                </ul>
+            </li>
+            </ul>
+        </td>
+        <td style="width: 70%; vertical-align: top;">
+            <ul>
+            <li>
+                Differences
+                <ul>
+                    <li>Apply first, then replicate</li>
+                    <li>Pull vs push</li>
+                    <li><a href="https://docs.mongodb.com/manual/reference/write-concern/">writeConcern</a> <small>(durability)</small></li>
+                    <li><a href="https://docs.mongodb.com/manual/reference/read-concern/">readConcern</a> <small>(isolation)</small></li>
+                    <li><a href="https://docs.mongodb.com/manual/reference/replica-configuration/#rsconf.writeConcernMajorityJournalDefault">writeConcernMajorityJournalDefault</a><br />
+                        <small>(disk based durability)</small></li>
+                    <li>Dry-run elections <small>(prevents term inflation)</small></li>
+                    <li><a href="https://docs.mongodb.com/manual/tutorial/manage-chained-replication/">Chained replication</a> <small>(prevents flip flops)</small></li>
+                    <li>Oplog hash field <small>(adds robustness)</small></li>
+                </ul>
+            </li>
+            </ul>
+        </td></tr>
+        </table>
+    </div>
+
+    <div id="pv0" class="step">
+        <h1>Protocol Version 0 (1.6 - 3.0)</h1>
+        <ul>
+        <li>MongoDB pv0 issues not in Raft:
+            <li>Replication &amp; heartbeats too independent=inconsistent</li>
+            <ul>
+            <li>Too many things to consider when casting a vote
+                <ul>
+                    <li>Highest priority?</li>
+                    <li>Who is freshest?</li>
+                    <li>Who appears to be available?</li>
+                </ul>
+            </li>
+            <li>For added emphasis: veto votes!</li>
+            <li>Lack of <em>term</em>
+                <ul>
+                <li>Sleep 30 sec to prevent double voting in same election</li>
+                <li>A rogue (previously stuck) node believes he is primary, with highest optime: All other nodes need to roll back committed transactions.</li>
+                </ul>
+            </li>
+            </ul>
+        </li>
+        </ul>
+        <p id="pv0-sub1" class="substep">Adopt term concept</p>
+        <p id="pv0-sub2" class="substep">Replication counts as heartbeat</p>
+        <p id="pv0-sub3" class="substep">Highest priority node likely,<br /> but not guaranteed to win</p>
+        <p id="pv0-sub4" class="substep">Freshness: Only majority commit guaranteed</p>
+        <p id="pv0-sub5" class="substep">Simplify: Vote for first qualified candidate</p>
+        <p id="pv0-sub6" class="substep">No veto!</p>
+    </div>
+
+    <div id="pv1" class="step">
+        <h1>Protocol Version 1 (3.2 - )</h1>
+        <ul>
+        <li>Configurable <a href="https://docs.mongodb.com/v3.2/reference/replica-configuration/#rsconf.settings.electionTimeoutMillis">election timeout</a></li>
+        <li><a href="https://docs.mongodb.com/manual/reference/replica-configuration/#rsconf.writeConcernMajorityJournalDefault"
+            >Disk based durability on secondaries</a></li>
+        </ul>
+        <h2>Related 3.2-3.4 enhancements</h2>
+        <ul>
+        <li><a href="https://docs.mongodb.com/manual/reference/read-concern/">readConcern: single, majority, linearizable</a></li>
+        </ul>
+    </div>
+
+    <div id="pv0-oplog" class="step">
+        <h1>PV0 oplog entry</h1>
+
+<pre><code>
+&gt; db.oplog.rs.find().sort( { $natural : -1 } ).limit(1).pretty()
+{ "ts" : Timestamp(1444466011, 1),
+  "h" : NumberLong("-6240522391332325619"),
+  "v" : 2,
+  "op" : "i",
+  "ns" : "test.nulltest",
+  "o" : { "_id" : 3, "a" : 3 }
+}
+</code></pre>
+
+        <p id="pv0-oplog1" class="substep">unix time + counter</p>
+        <p id="pv0-oplog2" class="substep">hash = gtid</p>
+    </div>
+
+    <div id="pv1-oplog" class="step">
+        <h1>PV1 oplog entry</h1>
+
+<pre><code>
+&gt; db.oplog.rs.find().sort( { $natural : -1 } ).limit(1).pretty()
+{ "ts" : Timestamp(1445632081, 861),
+  "t" : NumberLong(42),
+  "h" : NumberLong("5466055178864103715"),
+  "v" : 2,
+  "op" : "u",
+  "ns" : "ycsb.usertable",
+  "o2" : { "_id" : "user645414720104877157" },
+  "o" : { "$set" : { "field4" : BinData(0,"KT5sN1wrPl...Ny9wIg==") }
+} 
+</code></pre>
+
+        <p id="pv1-oplog1" class="substep">timestamp ~ Raft index</p>
+        <p id="pv1-oplog2" class="substep">Raft term</p>
+        <p id="pv1-oplog3" class="substep">random integer = gtid</p>
+    </div>
+
+    <div id="mongodb-summary" class="step">
+        <h1>MongoDB replication summary</h1>
+
+        <ul>
+        <li>Leader based</li>
+        <li>Pull based</li>
+        <li>Apply first, then replicate</li>
+        <li>writeConcern &amp; readConcern</li>
+        </ul>
+
+        <h2>Additional reading</h2>
+
+        <ul>
+        <li><a href="https://docs.mongodb.com/manual/reference/replica-set-protocol-versions/">Replica Set Protocol Versions</a></li>
+        <li><a href="https://gist.github.com/judahschvimer/95afe883ded355192d4b8f70db507daf">Replication Internals Wiki</a></li>
+        </ul>
+    </div>
+
+    <div id="questions" class="step">
+        <h1 style="position: relative; top: 250px; left: -50px;">Questions?</h1>
+        <p style="line-height: 50%; color: #333333; text-shadow: none;
+                  position: absolute; right: -100px; bottom: -250px; text-align: right">
+            <small style="text-shadow: none;">A young woman trying on earrings.<br />
+                   Rembrandt<br />
+                   CC-BY <a href="https://www.flickr.com/photos/jankruithof/7567010632" style="text-shadow: none;">jankruithof @ Flickr</a></small></p>
+        <img src="images/7567010632_deb41daae7_k.jpg" height="800" alt="" 
+             style="position: absolute; left: 350px; top: -300px; z-index: -1;"/>
+    </div>
+
+    <div id="overview" class="step skip" data-x="0" data-y="0" data-z="100" data-scale="10">
+    </div>
+
+</div>
+
+<div id="impress-toolbar"></div>
+<div id="impress-help"></div>
+
+<!--
+    Code highlight
+-->
+<script type="text/javascript" src="impress.js/extras/highlight/highlight.pack.js"></script>
+
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="impress.js/js/impress.js"></script>
+<script>impress().init();</script>
+</body>
+</html>

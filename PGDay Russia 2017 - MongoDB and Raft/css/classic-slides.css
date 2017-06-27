@@ -1,0 +1,392 @@
+/*
+  A common approach is to use googleapis.com to generate css for the webfonts you want to use.
+  The downside of this approach is that you have to be online. So below I have simply saved
+  the output of the googleapis url into a file. Then you of course also have to make sure
+  the webfonts are locally installed to make offline usage work. For Ubuntu (or Debian) I
+  successfully used the script from here to do that: 
+  http://www.webupd8.org/2011/01/automatically-install-all-google-web.html
+*/
+
+/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic); */
+@import url(fonts.css);
+
+
+
+/*
+    We display a fallback message for users with browsers that don't support
+    all the features required by it. All of the content will be still fully 
+    accessible for them, but some more advanced effects would be missing.
+    When impress.js detects that browser supports all necessary CSS3 features, 
+    the fallback-message style is hidden.
+*/
+
+.fallback-message {
+    font-family: sans-serif;
+    line-height: 1.3;
+
+    width: 780px;
+    padding: 10px 10px 0;
+    margin: 20px auto;
+
+    border: 1px solid #E4C652;
+    border-radius: 10px;
+    background: #EEDC94;
+}
+
+.fallback-message p {
+    margin-bottom: 10px;
+}
+
+.impress-supported .fallback-message {
+    display: none;
+}
+
+
+body {
+    font-family: 'PT Sans', sans-serif;
+    min-height: 740px;
+
+    background: linear-gradient(#101010, #000005);
+}
+
+/*
+    Now let's style the presentation steps.
+*/
+
+.step {
+    display: block;
+
+    position: relative;
+    width: 1200px;
+    padding: 40px;
+    margin: 20px auto;
+
+    box-sizing:         border-box;
+
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 26pt;
+    letter-spacing: -1px;
+    /*background-color: #000005;*/
+    color: #ffeeee;
+    text-shadow: 1px 1px #aaaaff;
+}
+
+/*
+    Which steps are transparent and when.
+*/
+
+/* The presentation mostly happens "behind" the Winter Palace / Title slide. This means it must be
+   transparent, so we can see the actual presentation.
+*/
+.impress-enabled #title {
+    opacity: 0;
+    transition:        opacity 5s;
+}
+
+.impress-enabled.impress-on-overview #title,
+.impress-enabled.impress-on-title #title,
+.impress-enabled.impress-on-h_ingo #title {
+    opacity: 1;
+    transition:        opacity 1s;
+}
+
+
+/* Show the about-me slide only when actually on it. */
+.impress-enabled #h_ingo {
+    opacity: 0;
+}
+.impress-enabled #h_ingo.active {
+    opacity: 1;
+    transition:         opacity 1s;
+}
+
+/* When not on a slide, dim them just a little bit... */
+.impress-enabled .step {
+    opacity: 0.7;
+    transition:         opacity 1s;
+}
+
+.impress-enabled .step.active { opacity: 1 }
+
+/*
+    Speaker notes allow you to write comments within the steps, that will not 
+    be displayed as part of the presentation. However, they will be picked up
+    and displayed by impressConsole.js when integrated.
+*/
+
+.notes {
+    display: none;
+}
+
+
+h1, 
+h2, 
+h3 {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    text-align: center;
+}
+
+h1 {
+    font-size: 40pt;
+}
+
+h2 {
+    font-size: 30pt;
+}
+
+h3 {
+    font-size: 26pt;
+}
+
+p {
+    text-align: center;
+    margin: 0.7em;
+}
+
+li {
+    margin: 0.2em;
+}
+
+li li {
+    font-size: 92%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    padding: 0 0.2em;
+    text-shadow: 1px 2px 2px #aaaaff;
+    border-radius: 0.2em;
+    border-bottom: 1px solid rgba(100,100,100,0.8);
+    border-left:   1px solid rgba(100,100,100,0.8);
+    border-top: 1px solid rgba(100,100,100,0.3);
+    border-right:   1px solid rgba(100,100,100,0.3);
+
+    transition:         0.5s;
+}
+a:hover,
+a:focus {
+    background: rgba(200,200,200,0.1);
+    text-shadow: 1px 2px 2px #aaaaff;
+}
+
+blockquote {
+    font-family: 'PT Serif';
+    font-style: italic;
+    font-weight: 400;    
+}
+
+em {
+    text-shadow: 1px 2px 2px #aaaaff;
+}
+
+strong {
+    text-shadow: 1px 2px 2px #aaaaff;
+}
+
+q {
+    font-family: 'PT Serif';
+    font-style: italic;
+    font-weight: 400;    
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+}
+
+strike {
+    opacity: 0.7;
+}
+
+small {
+    font-size: 0.5em;
+    text-shadow: 1px 0px #aaaaff;
+}
+
+table {
+    /* How to make a table centered: https://www.granneman.com/webdev/coding/css/centertables/ */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table td {
+    padding: 10px;
+}
+
+/* 
+    Specific styles for: .title slides 
+*/
+
+.title {
+    text-align: center;
+}
+
+.title h1,
+.title h2,
+.title h3 {
+}
+.title h1 { font-size: 46pt; }
+.title h2 { font-size: 26pt; }
+.title h3 { }
+
+
+
+/*
+    Other slides
+*/
+#copyright a {
+    background: none;
+}
+
+#pv0 p,
+#pv0-oplog p,
+#pv1-oplog p {
+    position: absolute;
+    padding: 20px;
+    border-radius: 50px;
+    background: black;
+    color: #ff3300;
+    text-shadow: 1px -1px #ff33aa;
+    transform: rotate(-30deg);
+}
+
+#pv0-sub1 {
+    bottom: 150px;
+    right: 5px;
+}
+
+#pv0-sub2 {
+    top: 80px;
+    right: 400px;
+}
+
+#pv0-sub3 {
+    top: 120px;
+    right: 350px;
+}
+
+#pv0-sub4 {
+    top: 150px;
+    right: 60px;
+}
+
+#pv0-sub5 {
+    top: 220px;
+    right: 70px;
+}
+
+#pv0-sub6 {
+    top: 350px;
+    right: 400px;
+}
+
+#pv0-oplog1 {
+    top: 150px;
+    right: 100px;
+}
+
+#pv0-oplog2 {
+    top: 200px;
+    right: 100px;
+}
+
+#pv1-oplog1 {
+    top: 150px;
+    right: 50px;
+}
+
+#pv1-oplog2 {
+    top: 220px;
+    right: 150px;
+}
+
+#pv1-oplog3 {
+    top: 250px;
+    right: -30px;
+}
+
+
+/*
+    Plugin functionality
+*/
+
+
+/* Substeps */
+
+.impress-enabled .substep {
+    opacity: 0;
+}
+
+.impress-enabled .substep.substep-visible {
+    opacity: 0.9;
+    transition: 1s;
+}
+
+
+
+/*
+  This version of impress.js supports plugins, and in particular, a UI plugin
+  that allows easy navigation between steps.
+*/
+.impress-enabled #impress-toolbar {
+    position: fixed;
+    right: 1px;
+    bottom: 1px;
+    opacity: 0.6;
+}
+/*
+    With help from the mouse-timeout plugin, we can hide the toolbar and
+    have it show only when you move/click/touch the mouse.
+*/
+body.impress-mouse-timeout div#impress-toolbar {
+    display: none;
+}
+
+/*
+    In fact, we can hide the mouse cursor itself too, when mouse isn't used.
+*/
+body.impress-mouse-timeout {
+    cursor: none;
+}
+
+.impress-enabled                          { pointer-events: none }
+.impress-enabled #impress                 { pointer-events: auto }
+.impress-enabled #impress-toolbar         { pointer-events: auto }
+.impress-enabled #overview                { pointer-events: none }
+.impress-enabled #title                   { pointer-events: none }
+
+/*****************************************************************************************
+ * Help popup
+ * 
+ * This is originally from hovercraft.js project. I found it helpful so have started to
+ * integrate with all my impress.js presentations.
+ */
+
+.impress-enabled #impress-help {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+    color: #EEEEEE;
+    font-size: 80%;
+    left: 2em;
+    bottom: 2em;
+    width: 24em;
+    border-radius: 1em;
+    padding: 1em;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    z-index: 100;
+    display: block;
+    font-family: Verdana, Arial, Sans;
+}
+
+.impress-enabled #impress-help.hide {
+    display: none;
+}
+
+/*
+    Extra plugins
+*/
+
+/* Highlight.js has its own CSS, but I'll tune it a little */
+
+div.step pre code {
+    background: none;
+}
