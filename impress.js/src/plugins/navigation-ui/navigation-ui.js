@@ -4,105 +4,103 @@
  * This plugin provides UI elements "back", "forward" and a list to select
  * a specific slide number.
  *
- * This plugin is what we call a _UI plugin_. It's actually an init plugin, but
- * exposes visible UI elements. All UI plugins available in the default
- * set, must be invisible by default. To add these controls, add the following
- * empty div to your html:
- *
- *     <div id="impress-navigation-ui" style="position: fixed;"></div>
- *
- * (The style attribute is optional, but it's my preferred way of of preventing
- * mouse clicks from propagating through the UI elements into the slides, that
- * may be behind the elements we create here. Since clicking on a slide causes
- * impress.js to navigate to that slide, this will be in conflict with the
- * intended behavior of these controls.)
+ * The navigation controls are added to the toolbar plugin via DOM events. User must enable the
+ * toolbar in a presentation to have them visible.
  *
  * Copyright 2016 Henrik Ingo (@henrikingo)
  * Released under the MIT license.
  */
 (function ( document, window ) {
     'use strict';
+    var toolbar;
     var api;
     var root;
     var steps;
-    var controls;
+    var hideSteps = [];
     var prev;
     var select;
     var next;
-    var timeoutHandle;
-    // How many seconds shall UI controls be visible after a touch or mousemove
-    var timeout = 3;
+
+    var triggerEvent = function (el, eventName, detail) {
+        var event = document.createEvent("CustomEvent");
+        event.initCustomEvent(eventName, true, true, detail);
+        el.dispatchEvent(event);
+    };
+
+    var makeDomElement = function ( html ) {
+        var tempDiv = document.createElement("div");
+        tempDiv.innerHTML = html;
+        return tempDiv.firstChild;
+    };
+    
+    var selectOptionsHtml = function(){
+        var options = "";
+        for ( var i = 0; i < steps.length; i++ ) {
+            // Omit steps that are listed as hidden from select widget
+            if ( hideSteps.indexOf( steps[i] ) < 0 ) {
+                options = options + '<option value="' + steps[i].id + '">' + steps[i].id + '</option>' + "\n";
+            }
+        }
+        return options;    
+    };
 
     var addNavigationControls = function( event ) {
         api = event.detail.api;
+        var gc = api.lib.gc;
         root = event.target;
         steps = root.querySelectorAll(".step");
 
-        controls.setAttribute( "id", "impress-navigation-ui");
-        controls.classList.add( "impress-navigation-ui");
-        // You can use CSS to hide these controls when marked with the hide class.
-        controls.classList.add( "impress-navigation-ui-hide" );
+        var prevHtml   = '<button id="impress-navigation-ui-prev" title="Previous" class="impress-navigation-ui">&lt;</button>';
+        var selectHtml = '<select id="impress-navigation-ui-select" title="Go to" class="impress-navigation-ui">' + "\n"
+                           + selectOptionsHtml();
+                           + '</select>';
+        var nextHtml   = '<button id="impress-navigation-ui-next" title="Next" class="impress-navigation-ui">&gt;</button>';
 
-       var options = "";
-       for ( var i = 0; i < steps.length; i++ ) {
-           options = options + '<option value="' + steps[i].id + '">' + steps[i].id + '</option>' + "\n";
-       }
-
-        controls.innerHTML = '<button id="impress-navigation-ui-prev" class="impress-navigation-ui">&lt;</button>' + "\n"
-                           + '<select id="impress-navigation-ui-select" class="impress-navigation-ui">' + "\n"
-                           + options
-                           + '</select>' + "\n"
-                           + '<button id="impress-navigation-ui-next" class="impress-navigation-ui">&gt;</button>' + "\n";
-
-        document.body.appendChild(controls);
-
-        prev = document.getElementById("impress-navigation-ui-prev");
+        prev = makeDomElement( prevHtml );
         prev.addEventListener( "click",
             function( event ) {
                 api.prev();
         });
-        select = document.getElementById("impress-navigation-ui-select");
+        select = makeDomElement( selectHtml );
         select.addEventListener( "change",
             function( event ) {
                 api.goto( event.target.value );
         });
-        next = document.getElementById("impress-navigation-ui-next");
+        gc.addEventListener(root, "impress:steprefresh", function(event){
+            // As impress.js core now allows to dynamically edit the steps, including adding, removing,
+            // and reordering steps, we need to requery and redraw the select list on every stepenter event.
+            steps = root.querySelectorAll(".step");
+            select.innerHTML = "\n" + selectOptionsHtml();
+            // Make sure the list always shows the step we're actually on, even if it wasn't selected from the list
+            select.value = event.target.id;
+        });
+        next = makeDomElement( nextHtml );
         next.addEventListener( "click",
             function() {
                 api.next();
         });
         
+        triggerEvent(toolbar, "impress:toolbar:appendChild", { group : 0, element : prev } );
+        triggerEvent(toolbar, "impress:toolbar:appendChild", { group : 0, element : select } );
+        triggerEvent(toolbar, "impress:toolbar:appendChild", { group : 0, element : next } );
+        
     };
     
-    /**
-     * Add a CSS class to mark that controls should be shown. Set timeout to switch to a class to hide them again.
-     */
-    var showControls = function(){
-        controls.classList.add( "impress-navigation-ui-show" );
-        controls.classList.remove( "impress-navigation-ui-hide" );
-
-        if ( timeoutHandle ) {
-            clearTimeout(timeoutHandle);
+    // API for not listing given step in the select widget.
+    // For example, if you set class="skip" on some element, you may not want it to show up in the list either.
+    // Otoh we cannot assume that, or anything else, so steps that user wants omitted must be specifically added with this API call.
+    document.addEventListener("impress:navigation-ui:hideStep", function (event) {
+        hideSteps.push(event.target);
+        if (select) {
+            select.innerHTML = selectOptionsHtml();
         }
-        timeoutHandle = setTimeout( function() { 
-            controls.classList.add( "impress-navigation-ui-hide" );
-            controls.classList.remove( "impress-navigation-ui-show" );
-        }, timeout*1000 );
-    };
-
+    }, false);
+    
     // wait for impress.js to be initialized
     document.addEventListener("impress:init", function (event) {
-        controls = document.getElementById("impress-navigation-ui");
-        if ( controls ) {
+        toolbar = document.querySelector("#impress-toolbar");
+        if(toolbar) {
             addNavigationControls( event );
-
-            document.addEventListener("mousemove", showControls);
-            document.addEventListener("click", showControls);
-            document.addEventListener("touch", showControls);
-            
-            root.addEventListener("impress:stepenter", function(event){
-                select.value = event.target.id;
-            });
         }
     }, false);
     

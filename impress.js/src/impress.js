@@ -85,6 +85,26 @@
         return isNaN(numeric) ? (fallback || 0) : Number(numeric);
     };
     
+    var validateOrder = function ( order, fallback ) {
+        var validChars = "xyz";
+        var returnStr = "";
+        if ( typeof order == "string" ) {
+            for ( var i in order.split("") ) {
+                if( validChars.indexOf( order[i] >= 0 ) ) {
+                    returnStr += order[i];
+                    // Each of x,y,z can be used only once.
+                    validChars = validChars.split(order[i]).join("");
+                }
+            }
+        }
+        if ( returnStr )
+            return returnStr;
+        else if ( fallback !== undefined )
+            return fallback;
+        else
+            return "xyz";
+    };
+    
     // `byId` returns element with given `id` - you probably have guessed that ;)
     var byId = function ( id ) {
         return document.getElementById(id);
@@ -121,11 +141,17 @@
     // By default the rotations are in X Y Z order that can be reverted by passing `true`
     // as second parameter.
     var rotate = function ( r, revert ) {
-        var rX = " rotateX(" + r.x + "deg) ",
-            rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotateZ(" + r.z + "deg) ";
-        
-        return revert ? rZ+rY+rX : rX+rY+rZ;
+        var order = r.order ? r.order : "xyz";
+        var css = "";
+        var axes = order.split("");
+        if ( revert ) {
+            axes = axes.reverse();
+        }
+
+        for ( var i in axes ) {
+            css += " rotate" + axes[i].toUpperCase() + "(" + r[axes[i]] + "deg)"
+        }
+        return css;
     };
     
     // `scale` builds a scale transform string for given data.
@@ -166,29 +192,17 @@
     
     // CHECK SUPPORT
     var body = document.body;
-    
-    var ua = navigator.userAgent.toLowerCase();
     var impressSupported = 
                           // browser should support CSS 3D transtorms 
                            ( pfx("perspective") !== null ) &&
-                           
                           // and `classList` and `dataset` APIs
                            ( body.classList ) &&
-                           ( body.dataset ) &&
-                           
-                          // but some mobile devices need to be blacklisted,
-                          // because their CSS 3D support or hardware is not
-                          // good enough to run impress.js properly, sorry...
-                           ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
+                           ( body.dataset );
     
     if (!impressSupported) {
         // we can't be sure that `classList` is supported
         body.className += " impress-not-supported ";
-    } else {
-        body.classList.remove("impress-not-supported");
-        body.classList.add("impress-supported");
     }
-    
     // GLOBALS AND DEFAULTS
     
     // This is where the root elements of all impress.js instances will be kept.
@@ -197,6 +211,7 @@
     var roots = {};
     
     var preInitPlugins = [];
+    var preStepLeavePlugins = [];
     
     // some default config values.
     var defaults = {
@@ -230,7 +245,9 @@
                 goto: empty,
                 prev: empty,
                 next: empty,
-                addPreInitPlugin: empty
+                addPreInitPlugin: empty,
+                addPreStepLeavePlugin: empty,
+                lib: {}
             };
         }
         
@@ -241,6 +258,13 @@
             return roots["impress-root-" + rootId];
         }
         
+        // The gc library depends on being initialized before we do any changes to DOM.
+        var lib = initLibraries(rootId);
+        if (lib === "error") return;
+        
+        body.classList.remove("impress-not-supported");
+        body.classList.add("impress-supported");
+
         // data of all presentation steps
         var stepsData = {};
         
@@ -279,43 +303,24 @@
         // `onStepEnter` is called whenever the step element is entered
         // but the event is triggered only if the step is different than
         // last entered step.
+        // We sometimes call `goto`, and therefore `onStepEnter`, just to redraw a step, such as
+        // after screen resize. In this case - more precisely, in any case - we trigger a
+        // `impress:steprefresh` event.
         var onStepEnter = function (step) {
             if (lastEntered !== step) {
                 triggerEvent(step, "impress:stepenter");
                 lastEntered = step;
             }
+            triggerEvent(step, "impress:steprefresh");
         };
         
         // `onStepLeave` is called whenever the step element is left
         // but the event is triggered only if the step is the same as
         // last entered step.
-        var onStepLeave = function (step) {
-            if (lastEntered === step) {
-                triggerEvent(step, "impress:stepleave");
+        var onStepLeave = function (currentStep, nextStep) {
+            if (lastEntered === currentStep) {
+                triggerEvent(currentStep, "impress:stepleave", { next : nextStep } );
                 lastEntered = null;
-            }
-        };
-        
-        // `addPreInitPlugin` allows plugins to register a function that should
-        // be run (synchronously) at the beginning of init, before 
-        // impress().init() itself executes.
-        var addPreInitPlugin = function( plugin, weight ) {
-            weight = toNumber(weight,10);
-            if ( preInitPlugins[weight] === undefined ) {
-                preInitPlugins[weight] = [];
-            }
-            preInitPlugins[weight].push( plugin );
-        };
-        
-        // Called at beginning of init, to execute all pre-init plugins.
-        var execPreInitPlugins = function() {
-            for( var i = 0; i < preInitPlugins.length; i++ ) {
-                var thisLevel = preInitPlugins[i];
-                if( thisLevel !== undefined ) {
-                    for( var j = 0; j < thisLevel.length; j++ ) {
-                        thisLevel[j]();
-                    }
-                }
             }
         };
         
@@ -332,9 +337,11 @@
                     rotate: {
                         x: toNumber(data.rotateX),
                         y: toNumber(data.rotateY),
-                        z: toNumber(data.rotateZ || data.rotate)
+                        z: toNumber(data.rotateZ || data.rotate),
+                        order: validateOrder(data.rotateOrder)
                     },
                     scale: toNumber(data.scale, 1),
+                    transitionDuration: toNumber(data.transitionDuration, config.transitionDuration),
                     el: el
                 };
             
@@ -354,10 +361,17 @@
             });
         };
         
+        // Initialize all steps.
+        // Read the data-* attributes, store in internal stepsData, and render with CSS.
+        var initAllSteps = function() {
+            steps = $$(".step", root);
+            steps.forEach( initStep );
+        };
+        
         // `init` API function that initializes (and runs) the presentation.
         var init = function () {
             if (initialized) { return; }
-            execPreInitPlugins();
+            execPreInitPlugins(root);
             
             // First we set up the viewport for mobile devices.
             // For some reason iPad goes nuts when it is not done properly.
@@ -414,13 +428,12 @@
             body.classList.add("impress-enabled");
             
             // get and init steps
-            steps = $$(".step", root);
-            steps.forEach( initStep );
+            initAllSteps();
             
             // set a default initial state of the canvas
             currentState = {
                 translate: { x: 0, y: 0, z: 0 },
-                rotate:    { x: 0, y: 0, z: 0 },
+                rotate:    { x: 0, y: 0, z: 0, order: "xyz" },
                 scale:     1
             };
             
@@ -446,11 +459,23 @@
         var stepEnterTimeout = null;
         
         // `goto` API function that moves to step given with `el` parameter (by index, id or element),
-        // with a transition `duration` optionally given as second parameter.
-        var goto = function ( el, duration ) {
+        // `duration` optionally given as second parameter, is the transition duration in css.
+        // `reason` is the string "next", "prev" or "goto" (default) and will be made available to preStepLeave plugins.
+        // `origEvent` may contain the event that caused the calll to goto, such as a key press event
+        var goto = function ( el, duration, reason, origEvent ) {
+            reason = reason || "goto";
+            origEvent = origEvent || null;
             
-            if ( !initialized || !(el = getStep(el)) ) {
-                // presentation not initialized or given element is not a step
+            if ( !initialized ) {
+                return false;
+            }
+            
+            // Re-execute initAllSteps for each transition. This allows to edit step attributes dynamically,
+            // such as change their coordinates, or even remove or add steps, and have that change
+            // apply when goto() is called.
+            initAllSteps();
+            
+            if ( !(el = getStep(el)) ) {
                 return false;
             }
             
@@ -465,6 +490,28 @@
             window.scrollTo(0, 0);
             
             var step = stepsData["impress-" + el.id];
+            duration = (duration !== undefined ? duration : step.transitionDuration);
+            
+            // If we are in fact moving to another step, start with executing the registered preStepLeave plugins.
+            if (activeStep && activeStep !== el) {
+                var event = { target: activeStep, detail : {} };
+                event.detail.next = el;
+                event.detail.transitionDuration = duration;
+                event.detail.reason = reason;
+                if ( origEvent ) {
+                    event.origEvent = origEvent;
+                }
+                
+                if( execPreStepLeavePlugins(event) === false ) {
+                    // preStepLeave plugins are allowed to abort the transition altogether, by returning false.
+                    // see stop and substep plugins for an example of doing just that
+                    return false;
+                }
+                // Plugins are allowed to change the detail values
+                el = event.detail.next;
+                step = stepsData["impress-" + el.id];
+                duration = event.detail.transitionDuration;
+            }
             
             if ( activeStep ) {
                 activeStep.classList.remove("active");
@@ -479,7 +526,8 @@
                 rotate: {
                     x: -step.rotate.x,
                     y: -step.rotate.y,
-                    z: -step.rotate.z
+                    z: -step.rotate.z,
+                    order: step.rotate.order
                 },
                 translate: {
                     x: -step.translate.x,
@@ -510,7 +558,7 @@
             
             // trigger leave of currently active element (if it's not the same step again)
             if (activeStep && activeStep !== el) {
-                onStepLeave(activeStep);
+                onStepLeave(activeStep, el);
             }
             
             // Now we alter transforms of `root` and `canvas` to trigger transitions.
@@ -576,21 +624,123 @@
         };
         
         // `prev` API function goes to previous step (in document order)
-        var prev = function () {
+        // `event` is optional, may contain the event that caused the need to call prev()
+        var prev = function (origEvent) {
             var prev = steps.indexOf( activeStep ) - 1;
             prev = prev >= 0 ? steps[ prev ] : steps[ steps.length-1 ];
             
-            return goto(prev);
+            return goto(prev, undefined, "prev", origEvent);
         };
         
         // `next` API function goes to next step (in document order)
-        var next = function () {
+        // `event` is optional, may contain the event that caused the need to call next()
+        var next = function (origEvent) {
             var next = steps.indexOf( activeStep ) + 1;
             next = next < steps.length ? steps[ next ] : steps[ 0 ];
             
-            return goto(next);
+            return goto(next, undefined, "next", origEvent);
         };
         
+        // Swipe for touch devices by @and3rson.
+        // Below we extend the api to control the animation between the currently
+        // active step and a presumed next/prev step. See touch plugin for
+        // an example of using this api.
+        
+        // Helper function
+        var interpolate = function(a, b, k) {
+            return a + (b - a) * k;
+        };
+    
+        // Animate a swipe. 
+        //
+        // pct is a value between -1.0 and +1.0, designating the current length
+        // of the swipe.
+        //
+        // If pct is negative, swipe towards the next() step, if positive, 
+        // towards the prev() step. 
+        //
+        // Note that pre-stepleave plugins such as goto can mess with what is a 
+        // next() and prev() step, so we need to trigger the pre-stepleave event 
+        // here, even if a swipe doesn't guarantee that the transition will
+        // actually happen.
+        //
+        // Calling swipe(), with any value of pct, won't in itself cause a
+        // transition to happen, this is just to animate the swipe. Once the
+        // transition is committed - such as at a touchend event - caller is
+        // responsible for also calling prev()/next() as appropriate.
+        var swipe = function(pct){
+            if( Math.abs(pct) > 1 ) return;
+            // Prepare & execute the preStepLeave event
+            var event = { target: activeStep, detail : {} };
+            event.detail.swipe = pct;
+            // Will be ignored within swipe animation, but just in case a plugin wants to read this, humor them
+            event.detail.transitionDuration = config.transitionDuration;
+            if (pct < 0) {
+                var idx = steps.indexOf(activeStep) + 1;
+                event.detail.next = idx < steps.length ? steps[idx] : steps[0];
+                event.detail.reason = "next";
+            } else if (pct > 0) {
+                var idx = steps.indexOf(activeStep) - 1;
+                event.detail.next = idx >= 0 ? steps[idx] : steps[steps.length - 1];
+                event.detail.reason = "prev";
+            } else {
+                // No move
+                return;
+            }
+            if( execPreStepLeavePlugins(event) === false ) {
+                // If a preStepLeave plugin wants to abort the transition, don't animate a swipe
+                // For stop, this is probably ok. For substep, the plugin it self might want to do some animation, but that's not the current implementation.
+                return false;
+            }
+            var nextElement = event.detail.next;
+            
+            var nextStep = stepsData['impress-' + nextElement.id];
+            var zoomin = nextStep.scale >= currentState.scale;
+            // if the same step is re-selected, force computing window scaling,
+            var nextScale = nextStep.scale * windowScale;
+            var k = Math.abs(pct);
+
+            var interpolatedStep = {
+                translate: {
+                    x: interpolate(currentState.translate.x, -nextStep.translate.x, k),
+                    y: interpolate(currentState.translate.y, -nextStep.translate.y, k),
+                    z: interpolate(currentState.translate.z, -nextStep.translate.z, k)
+                },
+                rotate: {
+                    x: interpolate(currentState.rotate.x, -nextStep.rotate.x, k),
+                    y: interpolate(currentState.rotate.y, -nextStep.rotate.y, k),
+                    z: interpolate(currentState.rotate.z, -nextStep.rotate.z, k),
+                    // Unfortunately there's a discontinuity if rotation order changes. Nothing I can do about it?
+                    order: k < 0.7 ? currentState.rotate.order : nextStep.rotate.order
+                },
+                scale: interpolate(currentState.scale, nextScale, k)
+            };
+
+            css(root, {
+                // to keep the perspective look similar for different scales
+                // we need to 'scale' the perspective, too
+                transform: perspective(config.perspective / interpolatedStep.scale) + scale(interpolatedStep.scale),
+                transitionDuration: "0ms",
+                transitionDelay: "0ms"
+            });
+
+            css(canvas, {
+                transform: rotate(interpolatedStep.rotate, true) + translate(interpolatedStep.translate),
+                transitionDuration: "0ms",
+                transitionDelay: "0ms"
+            });
+        };
+        
+        // Teardown impress
+        // Resets the DOM to the state it was before impress().init() was called.
+        // (If you called impress(rootId).init() for multiple different rootId's, then you must
+        // also call tear() once for each of them.)
+        var tear = function() {
+            lib.gc.teardown();
+            delete roots[ "impress-root-" + rootId ];
+        }
+
+
         // Adding some useful classes to step elements.
         //
         // All the steps that have not been shown yet are given `future` class.
@@ -604,19 +754,19 @@
         // There classes can be used in CSS to style different types of steps.
         // For example the `present` class can be used to trigger some custom
         // animations when step is shown.
-        root.addEventListener("impress:init", function(){
+        lib.gc.addEventListener(root, "impress:init", function(){
             // STEP CLASSES
             steps.forEach(function (step) {
                 step.classList.add("future");
             });
             
-            root.addEventListener("impress:stepenter", function (event) {
+            lib.gc.addEventListener(root, "impress:stepenter", function (event) {
                 event.target.classList.remove("past");
                 event.target.classList.remove("future");
                 event.target.classList.add("present");
             }, false);
             
-            root.addEventListener("impress:stepleave", function (event) {
+            lib.gc.addEventListener(root, "impress:stepleave", function (event) {
                 event.target.classList.remove("present");
                 event.target.classList.add("past");
             }, false);
@@ -624,7 +774,7 @@
         }, false);
         
         // Adding hash change support.
-        root.addEventListener("impress:init", function(){
+        lib.gc.addEventListener(root, "impress:init", function(){
             
             // last hash detected
             var lastHash = "";
@@ -635,11 +785,11 @@
             // And it has to be set after animation finishes, because in Chrome it
             // makes transtion laggy.
             // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
-            root.addEventListener("impress:stepenter", function (event) {
+            lib.gc.addEventListener(root, "impress:stepenter", function (event) {
                 window.location.hash = lastHash = "#/" + event.target.id;
             }, false);
             
-            window.addEventListener("hashchange", function () {
+            lib.gc.addEventListener(window, "hashchange", function () {
                 // When the step is entered hash in the location is updated
                 // (just few lines above from here), so the hash change is 
                 // triggered and we would call `goto` again on the same element.
@@ -663,13 +813,89 @@
             goto: goto,
             next: next,
             prev: prev,
-            addPreInitPlugin: addPreInitPlugin
+            swipe: swipe,
+            tear: tear,
+            lib: lib
         });
 
     };
     
     // flag that can be used in JS to check if browser have passed the support test
     impress.supported = impressSupported;
+    
+    // ADD and INIT LIBRARIES
+    // Library factories are defined in src/lib/*.js, and register themselves by calling
+    // impress.addLibraryFactory(libraryFactoryObject). They're stored here, and used to augment
+    // the API with library functions when client calls impress(rootId).
+    // See src/lib/README.md for clearer example.
+    // (Advanced usage: For different values of rootId, a different instance of the libaries are
+    // generated, in case they need to hold different state for different root elements.)
+    var libraryFactories = {};
+    impress.addLibraryFactory = function(obj){
+        for (var libname in obj) {
+            libraryFactories[libname] = obj[libname];
+        }
+    };
+    // Call each library factory, and return the lib object that is added to the api.
+    var initLibraries = function(rootId){
+        var lib = {}
+        for (var libname in libraryFactories) {
+            if(lib[libname] !== undefined) {
+                console.log("impress.js ERROR: Two libraries both tried to use libname: " + libname);
+                return "error";
+            }
+            lib[libname] = libraryFactories[libname](rootId);
+        }
+        return lib;
+    };
+
+    // `addPreInitPlugin` allows plugins to register a function that should
+    // be run (synchronously) at the beginning of init, before 
+    // impress().init() itself executes.
+    impress.addPreInitPlugin = function( plugin, weight ) {
+        weight = toNumber(weight,10);
+        if ( preInitPlugins[weight] === undefined ) {
+            preInitPlugins[weight] = [];
+        }
+        preInitPlugins[weight].push( plugin );
+    };
+    
+    // Called at beginning of init, to execute all pre-init plugins.
+    var execPreInitPlugins = function(root) {
+        for( var i = 0; i < preInitPlugins.length; i++ ) {
+            var thisLevel = preInitPlugins[i];
+            if( thisLevel !== undefined ) {
+                for( var j = 0; j < thisLevel.length; j++ ) {
+                    thisLevel[j](root);
+                }
+            }
+        }
+    };
+    
+    // `addPreStepLeavePlugin` allows plugins to register a function that should
+    // be run (synchronously) at the beginning of goto()
+    impress.addPreStepLeavePlugin = function( plugin, weight ) {
+        weight = toNumber(weight,10);
+        if ( preStepLeavePlugins[weight] === undefined ) {
+            preStepLeavePlugins[weight] = [];
+        }
+        preStepLeavePlugins[weight].push( plugin );
+    };
+    
+    // Called at beginning of goto(), to execute all preStepLeave plugins.
+    var execPreStepLeavePlugins = function(event) {
+        for( var i = 0; i < preStepLeavePlugins.length; i++ ) {
+            var thisLevel = preStepLeavePlugins[i];
+            if( thisLevel !== undefined ) {
+                for( var j = 0; j < thisLevel.length; j++ ) {
+                    if ( thisLevel[j](event) === false ) {
+                        // If a plugin returns false, the stepleave event (and related transition) is aborted
+                        return false;
+                    }
+                }
+            }
+        }
+    };
 
 })(document, window);
 

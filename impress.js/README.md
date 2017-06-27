@@ -1,7 +1,9 @@
 impress.js
 ============
 
-It's a presentation framework based on the power of CSS3 transforms and 
+[![CircleCI](https://circleci.com/gh/henrikingo/impress.js.svg?style=svg)](https://circleci.com/gh/henrikingo/impress.js)
+
+It's a presentation framework based on the power of CSS3 transforms and
 transitions in modern browsers and inspired by the idea behind prezi.com.
 
 **WARNING**
@@ -12,30 +14,23 @@ impress.js may not help you if you have nothing interesting to say ;)
 HOW TO USE IT
 ---------------
 
-[Use the source](http://github.com/henrikingo/impress.js/blob/master/index.html), Luke ;)
+### Checking out and initializing the git repository
 
-If you have no idea what I mean by that, or you just clicked that link above and got 
-very confused by all these strange characters that got displayed on your screen,
-it's a sign, that impress.js is not for you.
-
-Sorry.
-
-Fortunately there are some guys on GitHub that got quite excited with the idea of building
-editing tool for impress.js. Let's hope they will manage to do it.
-
-GIT SUBMODULES
---------------
- 
-Some plugins under [extras/](extras/) are independent git repositories
-that are imported as git submodules. After cloning this repo, you need to
-
+    git clone https://github.com/henrikingo/impress.js.git
+    cd impress.js
+    # Not all presentations need the extra addons, but if you do, then
     git submodule init
     git submodule update
 
-For more info, [see this tutorial](https://git-scm.com/book/en/v2/Git-Tools-Submodules#Cloning-a-Project-with-Submodules).
+(Note: There's actually a simpler way. Just add the `--recursive` option to `git clone` and the
+submodule is automatically cloned too.)
 
-EXAMPLES AND OTHER LEARNING RESOURCES
----------------------------------------
+### Documentation
+
+
+Reference documentation of all impress.js features and API you can find it in [DOCUMENTATION.md](DOCUMENTATION.md).
+
+The [HTML source code](index.html) of the official [impress.js demo](http://henrikingo.github.io/impress.js/) serves as a good example usage and contains comments explaning various features of impress.js. For more information about styling you can look into [CSS code](css/impress-demo.css) which shows how classes provided by impress.js can be used. Last but not least [JavaScript code of impress.js](js/impress.js) has some useful comments if you are interested in how everything works. Feel free to explore!
 
 ### Official demo
 
@@ -43,16 +38,24 @@ EXAMPLES AND OTHER LEARNING RESOURCES
 
 ### Examples and demos
 
-More examples and demos can be found on [Examples and demos wiki page](http://github.com/bartaz/impress.js/wiki/Examples-and-demos).
+The [Classic Slides](http://henrikingo.github.io/impress.js/examples/classic-slides/) demo is targeted towards beginners, or can be used as a template for presentations that look like the traditional PowerPoint slide deck. Over time, it also grew into the example presentation that uses most of the features and addons available.
+
+More examples and demos can be found on [Examples and demos wiki page](http://github.com/impress/impress.js/wiki/Examples-and-demos).
 
 Feel free to add your own example presentations (or websites) there.
 
 ### Other tutorials and learning resources
 
-If you want to learn even more there is a [list of tutorials and other learning resources](https://github.com/bartaz/impress.js/wiki/impress.js-tutorials-and-other-learning-resources)
+If you want to learn even more there is a [list of tutorials and other learning resources](https://github.com/impress/impress.js/wiki/impress.js-tutorials-and-other-learning-resources)
 on the wiki, too.
 
 There is also a book available about [Building impressive presentations with impress.js](http://www.packtpub.com/building-impressive-presentations-with-impressjs/book) by Rakhitha Nimesh Ratnayake.
+
+You may want to check out the sibling project [Impressionist|https://github.com/henrikingo/impressionist]: a 3D GUI editor that can help you in creating impress.js presentations.
+
+### Mailing list
+
+You're welcome to ask impress.js related questions on the [impressionist-presentations](https://groups.google.com/forum/#!forum/impressionist-presentations) mailing list.
 
 
 REPOSITORY STRUCTURE
@@ -79,9 +82,7 @@ REPOSITORY STRUCTURE
   creates the CSS it needs dynamically.
 * [extras/](extras/) contains plugins that for various reasons aren't
   enabled by default. You have to explicitly add them with their own `script`
-  element to use them. Some of them are also imported from other git 
-  repositories as git submodules. See [.gitmodule](.gitmodule) and also 
-  [a tutorial on managing git modules](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+  element to use them.
 * [build.js](build.js): Simple build file that creates `js/impress.js`. It also
   creates a minified version `impress.min.js`, but that one is not included in the
   github repository.
@@ -96,91 +97,51 @@ REPOSITORY STRUCTURE
 WANT TO CONTRIBUTE?
 ---------------------
 
-If you've found a bug or have a great idea for new feature let me know by [adding your suggestion]
-(http://github.com/bartaz/impress.js/issues/new) to [issues list](https://github.com/bartaz/impress.js/issues).
+For developers, once you've made changes to the code, you should run these commands for testing:
 
-If you have fixed a bug or implemented a feature that you'd like to share, send your pull request against [dev branch]
-(http://github.com/bartaz/impress.js/tree/dev). But remember that I only accept code that fits my vision of impress.js
-and my coding standards - so make sure you are open for discussion :)
+    npm run build
+    npm run test
+    npm run lint
 
-**Note:** The team has changed, so there will be many changes in the upcoming versions.
-If you need informations about versions, check the [changelog](CHANGELOG.md).
+Note that running `firefox qunit_test_runner.html` is usually more informative than running `karma` with `npm run test`. They both run the same tests.
+
+More info about the [src/](src/) directory can be found in [src/plugins/README.md](src/plugins/README.md).
+
+[Upstream impress.js](https://github.com/impress/impress.js/) has its own bureacracy around contributing. I welcome pull requests against this fork as well, just submit a PR on github and I'll be happy to look at it :-)
+
+Note that if, for example, you want to add a new plugin, you should do it against [this fork](https://github.com/henrikingo/impress.js), since upstream impress.js doesn't have a plugin API yet. Hopefully one day the progress from this fork will trickle back to upstream repository.
 
 
 ABOUT THE NAME
 ----------------
 
-impress.js name in [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
+impress.js name is [courtesy of @skuzniak](http://twitter.com/skuzniak/status/143627215165333504).
 
 It's an (un)fortunate coincidence that a Open/LibreOffice presentation tool is called Impress ;)
 
+Reference API
+--------------
+
+See the [Reference API](DOCUMENTATION.md)
 
 BROWSER SUPPORT
 -----------------
 
-### TL;DR;
+The design goal for impress.js has been to showcase awesome CSS3 features as found in modern browser versions. We also use some new DOM functionality, and specifically do not use jQuery or any other JavaScript libraries, nor our own functions, to support older browsers. In general, recent versions of Firefox and Chrome are known to work well. IE works, except there are known issues with its CSS 3D implementation, so advanced presentations won't.
 
-Currently impress.js works fine in latest Chrome/Chromium browser, Safari 5.1 and Firefox 10.
-With addition of some HTML5 polyfills (see below for details) it should work in Internet Explorer 10, 11 and Edge.
-It doesn't work in Opera, as it doesn't support CSS 3D transforms.
+The typical use case for impress.js is to create presentations that you present from your own laptop, with a browser version you know works well. Some people also use impress.js successfully to embed animations or presentations in a web page, however, be aware that in this some of your visitors may not see the presentation correctly, or at all.
 
-If you find impress.js working on other browsers, feel free to tell us and we'll update this documentation.
+In particular, impress.js makes use of the following JS and CSS features:
 
-As a presentation tool it was not developed with mobile browsers in mind, but some tablets are good
-enough to run it, so it should work quite well on iPad (iOS 5, or iOS 4 with HTML5 polyfills) and 
-Blackberry Playbook. Inform us of any bug and we will try to fix this.
+* [DataSet API](http://caniuse.com/#search=dataset)
+* [ClassList API](http://caniuse.com/#search=classlist)
+* [CSS 3D Transforms](http://caniuse.com/#search=css%203d)
+* [CSS Transitions](http://caniuse.com/#search=css%20transition)
 
-### Still interested? Read more...
+COPYRIGHT AND LICENSE
+---------------------
 
-Additionally for the animations to run smoothly it's required to have hardware
-acceleration support in your browser. This depends on the browser, your operating
-system and even kind of graphic hardware you have in your machine.
+Copyright 2011-2016 Bartek Szopka
+Copyright 2015-2017 Henrik Ingo
 
-For browsers not supporting CSS3 3D transforms impress.js adds `impress-not-supported`
-class on `#impress` element, so fallback styles can be applied to make all the content accessible.
-
-
-### Even more explanation and technical stuff
-
-Let's put this straight -- wide browser support was (and is) not on top of my priority list for
-impress.js. It's built on top of fresh technologies that just start to appear in the browsers
-and I'd like to rather look forward and develop for the future than being slowed down by the past.
-
-But it's not "hard-coded" for any particular browser or engine. If any browser in future will
-support features required to run impress.js, it will just begin to work there without changes in
-the code.
-
-From technical point of view all the positioning of presentation elements in 3D requires CSS 3D
-transforms support. Transitions between presentation steps are based on CSS transitions.
-So these two features are required by impress.js to display presentation correctly.
-
-Unfortunately the support for CSS 3D transforms and transitions is not enough for animations to
-run smoothly. If the browser doesn't support hardware acceleration or the graphic card is not 
-good enough the transitions will be laggy.
-
-Additionally the code of impress.js relies on APIs proposed in HTML5 specification, including
-`classList` and `dataset` APIs. If they are not available in the browser, impress.js will not work.
-
-Fortunately, as these are JavaScript APIs there are polyfill libraries that patch older browsers
-with these APIs.
-
-For example IE10 is said to support CSS 3D transforms and transitions, but it doesn't have `classList`
-nor `dataset` APIs implemented at the moment. So including polyfill libraries *should* help IE10
-with running impress.js.
-
-
-### And few more details about mobile support
-
-Mobile browsers are currently not supported. Even Android browsers that support CSS 3D transforms are
-forced into fallback view at this point.
-
-Fortunately some tablets seem to have good enough hardware support and browsers to handle it.
-Currently impress.js presentations should work on iPad and Blackberry Playbook.
-
-In theory iPhone should also be able to run it (as it runs the same software as iPad), but I haven't
-found a good way to handle its small screen.
-
-Also note that iOS supports `classList` and `dataset` APIs starting with version 5, so iOS 4.X and older
-requires polyfills to work.
-
-Copyright 2011-2016 Bartek Szopka - Released under the MIT [License](LICENSE)
+Released under the MIT [License](LICENSE)

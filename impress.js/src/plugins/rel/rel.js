@@ -22,6 +22,14 @@
  * create a boring presentation where each slide shifts for example 1000px down 
  * from the previous.
  * 
+ * In addition to plain numbers, which are pixel values, it is also possible to
+ * define relative positions as a multiple of screen height and width, using
+ * a unit of "h" and "w", respectively, appended to the number.
+ * 
+ * Example:
+ *
+ *        <div class="step" data-rel-x="1.5w" data-rel-y="1.5h">
+ *
  * This plugin is a *pre-init plugin*. It is called synchronously from impress.js
  * core at the beginning of `impress().init()`. This allows it to process its own
  * data attributes first, and possibly alter the data-x, data-y and data-z attributes
@@ -37,8 +45,33 @@
 (function ( document, window ) {
     'use strict';
 
+    var startingState = {};
+
+    /**
+     * Copied from core impress.js. We currently lack a library mechanism to
+     * to share utility functions like this.
+     */
     var toNumber = function (numeric, fallback) {
         return isNaN(numeric) ? (fallback || 0) : Number(numeric);
+    };
+
+    /**
+     * Extends toNumber() to correctly compute also relative-to-screen-size values 5w and 5h.
+     *
+     * Returns the computed value in pixels with w/h postfix removed.
+     */
+    var toNumberAdvanced = function (numeric, fallback) {
+        if (!(typeof numeric == 'string')) {
+            return toNumber(numeric, fallback);
+        }
+        var ratio = numeric.match(/^([+-]*[\d\.]+)([wh])$/);
+        if (ratio == null) {
+            return toNumber(numeric, fallback);
+        } else {
+            var value = parseFloat(ratio[1]);
+            var multiplier = ratio[2] == 'w' ? window.innerWidth : window.innerHeight;
+            return value * multiplier;
+        }
     };
 
     var computeRelativePositions = function ( el, prev ) {
@@ -54,9 +87,9 @@
                 y: toNumber(data.y, prev.y),
                 z: toNumber(data.z, prev.z),
                 relative: {
-                    x: toNumber(data.relX, prev.relative.x),
-                    y: toNumber(data.relY, prev.relative.y),
-                    z: toNumber(data.relZ, prev.relative.z)
+                    x: toNumberAdvanced(data.relX, prev.relative.x),
+                    y: toNumberAdvanced(data.relY, prev.relative.y),
+                    z: toNumberAdvanced(data.relZ, prev.relative.z)
                 }
             };
         // Relative position is ignored/zero if absolute is given.
@@ -66,6 +99,7 @@
         if(data.z !== undefined) step.relative.z = 0;
         
         // Apply relative position to absolute position, if non-zero
+        // Note that at this point, the relative values contain a number value of pixels.
         step.x = step.x + step.relative.x;
         step.y = step.y + step.relative.y;
         step.z = step.z + step.relative.z;
@@ -73,12 +107,18 @@
         return step;        
     };
             
-    var rel = function() {
-        var root  = document.querySelector("#impress");
+    var rel = function(root) {
         var steps = root.querySelectorAll(".step");
         var prev;
+        startingState[root.id] = [];
         for ( var i = 0; i < steps.length; i++ ) {
             var el = steps[i];
+            startingState[root.id].push({
+                el: el,
+                x: el.getAttribute("data-x"),
+                y: el.getAttribute("data-y"),
+                z: el.getAttribute("data-z")
+            });
             var step = computeRelativePositions( el, prev );
             // Apply relative position (if non-zero)
             el.setAttribute( "data-x", step.x );
@@ -89,7 +129,36 @@
     };
     
     // Register the plugin to be called in pre-init phase
-    impress().addPreInitPlugin( rel );
+    impress.addPreInitPlugin( rel );
     
+    // Register teardown callback to reset the data.x, .y, .z values.
+    document.addEventListener( "impress:init", function(event) {
+        var root = event.target;
+        event.detail.api.lib.gc.addCallback( function(){
+            var steps = startingState[root.id];
+            var step;
+            while( step = steps.pop() ){
+                if( step.x === null ) {
+                    step.el.removeAttribute( "data-x" );
+                }
+                else {
+                    step.el.setAttribute( "data-x", step.x );
+                }
+                if( step.y === null ) {
+                    step.el.removeAttribute( "data-y" );
+                }
+                else {
+                    step.el.setAttribute( "data-y", step.y );
+                }
+                if( step.z === null ) {
+                    step.el.removeAttribute( "data-z" );
+                }
+                else {
+                    step.el.setAttribute( "data-z", step.z );
+                }
+            }
+            delete startingState[root.id];
+        });
+    }, false);
 })(document, window);
 

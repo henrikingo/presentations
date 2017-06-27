@@ -24,19 +24,12 @@
 (function ( document, window ) {
     'use strict';
     
-    // throttling function calls, by Remy Sharp
-    // http://remysharp.com/2010/07/21/throttling-function-calls/
-    var throttle = function (fn, delay) {
-        var timer = null;
-        return function () {
-            var context = this, args = arguments;
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                fn.apply(context, args);
-            }, delay);
-        };
+    var triggerEvent = function (el, eventName, detail) {
+        var event = document.createEvent("CustomEvent");
+        event.initCustomEvent(eventName, true, true, detail);
+        el.dispatchEvent(event);
     };
-    
+
     // wait for impress.js to be initialized
     document.addEventListener("impress:init", function (event) {
         // Getting API from event data.
@@ -44,18 +37,9 @@
         // or anything. `impress:init` event data gives you everything you 
         // need to control the presentation that was just initialized.
         var api = event.detail.api;
-        
-        // KEYBOARD NAVIGATION HANDLERS
-        
-        // Prevent default keydown action when one of supported key is pressed.
-        document.addEventListener("keydown", function ( event ) {
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-                event.preventDefault();
-            }
-        }, false);
-        
-        // Trigger impress action (next or prev) on keyup.
-        
+        var gc = api.lib.gc;
+        var tab = 9;
+
         // Supported keys are:
         // [space] - quite common in presentation software to move forward
         // [up] [right] / [down] [left] - again common and natural addition,
@@ -69,34 +53,76 @@
         //   positioning. I didn't want to just prevent this default action, so I used [tab]
         //   as another way to moving to next step... And yes, I know that for the sake of
         //   consistency I should add [shift+tab] as opposite action...
-        document.addEventListener("keyup", function ( event ) {
-
-            if ( event.shiftKey || event.altKey || event.ctrlKey || event.metaKey ){
-                return;
+        var isNavigationEvent = function (event) {
+            // Don't trigger navigation for example when user returns to browser window with ALT+TAB
+            if ( event.altKey || event.ctrlKey || event.metaKey ){
+                return false;
             }
             
-            if ( event.keyCode === 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
-                switch( event.keyCode ) {
-                    case 33: // pg up
-                    case 37: // left
-                    case 38: // up
-                             api.prev();
-                             break;
-                    case 9:  // tab
-                    case 32: // space
-                    case 34: // pg down
-                    case 39: // right
-                    case 40: // down
-                             api.next();
-                             break;
+            // In the case of TAB, we force step navigation always, overriding the browser navigation between
+            // input elements, buttons and links.
+            if ( event.keyCode === 9 ) {
+                return true;
+            }
+            
+            // With the sole exception of TAB, we also ignore keys pressed if shift is down.
+            if ( event.shiftKey ){
+                return false;
+            }
+
+            // For arrows, etc, check that event target is html or body element. This is to allow presentations to have,
+            // for example, forms with input elements where user can type text, including space, and not move to next step.
+            if ( event.target.nodeName != "BODY" && event.target.nodeName != "HTML" ) {
+                return false;
+            }
+
+            if ( ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40 ) ) {
+                return true;
+            }
+        };
+        
+        
+        // KEYBOARD NAVIGATION HANDLERS
+        
+        // Prevent default keydown action when one of supported key is pressed.
+        gc.addEventListener(document, "keydown", function ( event ) {
+            if ( isNavigationEvent(event) ) {
+                event.preventDefault();
+            }
+        }, false);
+        
+        // Trigger impress action (next or prev) on keyup.
+        gc.addEventListener(document, "keyup", function ( event ) {
+            if ( isNavigationEvent(event) ) {
+                if ( event.shiftKey ) {
+                    switch( event.keyCode ) {
+                        case 9: // shift+tab
+                            api.prev();
+                            break;
+                    }
                 }
-                
+                else {
+                    switch( event.keyCode ) {
+                        case 33: // pg up
+                        case 37: // left
+                        case 38: // up
+                                 api.prev(event);
+                                 break;
+                        case 9:  // tab
+                        case 32: // space
+                        case 34: // pg down
+                        case 39: // right
+                        case 40: // down
+                                 api.next(event);
+                                 break;
+                    }
+                }
                 event.preventDefault();
             }
         }, false);
         
         // delegated handler for clicking on the links to presentation steps
-        document.addEventListener("click", function ( event ) {
+        gc.addEventListener(document, "click", function ( event ) {
             // event delegation with "bubbling"
             // check if event target (or any of its parents is a link)
             var target = event.target;
@@ -121,7 +147,7 @@
         }, false);
         
         // delegated handler for clicking on step elements
-        document.addEventListener("click", function ( event ) {
+        gc.addEventListener(document, "click", function ( event ) {
             var target = event.target;
             // find closest step element that is not active
             while ( !(target.classList.contains("step") && !target.classList.contains("active")) &&
@@ -134,35 +160,8 @@
             }
         }, false);
         
-        // touch handler to detect taps on the left and right side of the screen
-        // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
-        document.addEventListener("touchstart", function ( event ) {
-            if (event.touches.length === 1) {
-                var x = event.touches[0].clientX,
-                    width = window.innerWidth * 0.3,
-                    result = null;
-                    
-                if ( x < width ) {
-                    result = api.prev();
-                } else if ( x > window.innerWidth - width ) {
-                    result = api.next();
-                }
-                
-                if (result) {
-                    event.preventDefault();
-                }
-            }
-        }, false);
-        
-        // TODO: This was originally defined here, when impress.js was a single file.
-        // It has nothing to do with key navigation events, but it depends on the 
-        // throttle function defined above. Leaving here for now.
-        
-        // rescale presentation when window is resized
-        window.addEventListener("resize", throttle(function () {
-            // force going to active step again, to trigger rescaling
-            api.goto( document.querySelector(".step.active"), 500 );
-        }, 250), false);
+        // Add a line to the help popup
+        triggerEvent(document, "impress:help:add", { command : "Left &amp; Right", text : "Previous &amp; Next step", row : 1} );
         
     }, false);
         

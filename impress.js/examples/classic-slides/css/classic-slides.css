@@ -7,7 +7,7 @@
   http://www.webupd8.org/2011/01/automatically-install-all-google-web.html
 */
 
-/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic); */
+/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic|Cutive+Mono); */
 @import url(fonts.css);
 
 
@@ -53,6 +53,7 @@ body {
     min-height: 740px;
 
     background: rgb(215, 215, 215);
+    color: rgb(102, 102, 102);
 }
 
 /*
@@ -114,7 +115,6 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
 
-    color: rgb(102, 102, 102);
     text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
 
     font-family: 'Open Sans', Arial, sans-serif;
@@ -145,6 +145,12 @@ body {
     font-size: 14px;
     text-shadow: 0 0 0 rgba(0, 0, 0, 0);
 }
+
+/* Inline code, no Highlight.js */
+code {
+    font-family: "Cutive mono","Courier New", monospace;
+}
+
 
 a {
     color: inherit;
@@ -298,20 +304,138 @@ img {
 }
 
 /*
-  This version of impress.js supports plugins, and in particular, a UI plugin
-  that allows easy navigation between steps.
+  This version of impress.js supports plugins, and in particular, a UI toolbar
+  plugin that allows easy navigation between steps and autoplay.
 */
-.impress-enabled #impress-navigation-ui {
+.impress-enabled div#impress-toolbar {
     position: fixed;
     right: 1px;
     bottom: 1px;
     opacity: 0.6;
+    z-index: 10;
 }
-.impress-enabled #impress-navigation-ui.impress-navigation-ui-show {
-    display: block;
+.impress-enabled div#impress-toolbar > span {
+    margin-right: 10px;
 }
-.impress-enabled #impress-navigation-ui.impress-navigation-ui-hide {
+
+/*
+    With help from the mouse-timeout plugin, we can hide the toolbar and
+    have it show only when you move/click/touch the mouse.
+*/
+body.impress-mouse-timeout div#impress-toolbar {
     display: none;
+}
+
+/*
+    In fact, we can hide the mouse cursor itself too, when mouse isn't used.
+*/
+body.impress-mouse-timeout {
+    cursor: none;
+}
+
+
+
+/* Progress bar */
+.impress-progressbar {
+  position: absolute;
+  right: 118px;
+  bottom: 1px;
+  left: 118px;
+  border-radius: 7px;
+  border: 2px solid rgba(100, 100, 100, 0.2);
+}
+.impress-progressbar DIV {
+  width: 0;
+  height: 2px;
+  border-radius: 5px;
+  background: rgba(75, 75, 75, 0.4);
+  transition: width 1s linear;
+}
+.impress-progress {
+  position: absolute;
+  left: 59px;
+  bottom: 1px;
+  text-align: left;
+  font-size: 10pt;
+  opacity: 0.6;
+}
+
+/* Help popup plugin */
+.impress-enabled #impress-help {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+    color: #EEEEEE;
+    font-size: 80%;
+    position: fixed;
+    left: 2em;
+    bottom: 2em;
+    width: 24em;
+    border-radius: 1em;
+    padding: 1em;
+    text-align: center;
+    z-index: 100;
+    font-family: Verdana, Arial, Sans;
+}
+.impress-enabled #impress-help td {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/* Substep plugin */
+
+#impress .step .substep {
+    opacity: 0;
+}
+
+#impress .step .substep.substep-visible {
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+/*
+    Styles for specific slides.
+*/
+
+/* The bar graph for Acme Inc profits */
+
+#acme-graph-bottom {
+    position: absolute;
+    bottom: 100px;
+    left: 440px;
+    background-color: black;
+    width: 410px;
+    height: 2px;
+}
+
+/* height: is set from javascript */
+#acme-graph-q1,
+#acme-graph-q2,
+#acme-graph-q3,
+#acme-graph-q4 {
+    border: solid 1px black;
+    width: 70px;
+    margin-left: 10px;
+    position: absolute;
+    bottom: 100px;
+}
+
+#acme-graph-q1 {
+    background-color: red;
+    left: 450px;
+}
+
+#acme-graph-q2 {
+    background-color: blue;
+    left: 550px;
+}
+
+#acme-graph-q3 {
+    background-color: green;
+    left: 650px;
+}
+
+#acme-graph-q4 {
+    background-color: purple;
+    left: 750px;
 }
 
 /*
@@ -337,33 +461,4 @@ img {
 */
 .impress-enabled                          { pointer-events: none }
 .impress-enabled #impress                 { pointer-events: auto }
-.impress-enabled #impress-navigation-ui   { pointer-events: auto }
-
-
-/*****************************************************************************************
- * Help popup
- * 
- * This is originally from hovercraft.js project. I found it helpful so have started to
- * integrate with all my impress.js presentations.
- */
-
-.impress-enabled #impress-help {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
-    color: #EEEEEE;
-    font-size: 80%;
-    left: 2em;
-    bottom: 2em;
-    width: 24em;
-    border-radius: 1em;
-    padding: 1em;
-    position: fixed;
-    right: 0;
-    text-align: center;
-    z-index: 100;
-    display: block;
-    font-family: Verdana, Arial, Sans;
-}
-
-.impress-enabled #impress-help.hide {
-    display: none;
-}
+.impress-enabled #impress-toolbar         { pointer-events: auto }
