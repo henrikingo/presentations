@@ -99,6 +99,10 @@ body {
     opacity: 1;
     transition:         opacity 1s;
 }
+.impress-enabled.impress-on-overview #h_ingo {
+    opacity: 1;
+    transition:        opacity 1s;
+}
 
 /* When not on a slide, dim them just a little bit... */
 .impress-enabled .step {
@@ -107,16 +111,6 @@ body {
 }
 
 .impress-enabled .step.active { opacity: 1 }
-
-/*
-    Speaker notes allow you to write comments within the steps, that will not 
-    be displayed as part of the presentation. However, they will be picked up
-    and displayed by impressConsole.js when integrated.
-*/
-
-.notes {
-    display: none;
-}
 
 
 h1, 
@@ -289,8 +283,8 @@ table td {
 }
 
 #pv1-oplog1 {
-    top: 150px;
-    right: 50px;
+    top: 130px;
+    right: 40px;
 }
 
 #pv1-oplog2 {
@@ -308,6 +302,16 @@ table td {
     Plugin functionality
 */
 
+
+/*
+    Speaker notes allow you to write comments within the steps, that will not 
+    be displayed as part of the presentation. However, they will be picked up
+    and displayed by impressConsole.js when integrated.
+*/
+
+.notes {
+    display: none;
+}
 
 /* Substeps */
 
