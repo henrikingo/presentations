@@ -83,8 +83,8 @@ body {
     transition:        opacity 5s;
 }
 
+.impress-enabled #title.active,
 .impress-enabled.impress-on-overview #title,
-.impress-enabled.impress-on-title #title,
 .impress-enabled.impress-on-h_ingo #title {
     opacity: 1;
     transition:        opacity 1s;
@@ -95,10 +95,8 @@ body {
 .impress-enabled #h_ingo {
     opacity: 0;
 }
-.impress-enabled #h_ingo.active {
-    opacity: 1;
-    transition:         opacity 1s;
-}
+
+.impress-enabled #h_ingo.active,
 .impress-enabled.impress-on-overview #h_ingo {
     opacity: 1;
     transition:        opacity 1s;
@@ -355,7 +353,6 @@ body.impress-mouse-timeout {
 .impress-enabled #impress                 { pointer-events: auto }
 .impress-enabled #impress-toolbar         { pointer-events: auto }
 .impress-enabled #overview                { pointer-events: none }
-.impress-enabled #title                   { pointer-events: none }
 
 /*****************************************************************************************
  * Help popup
