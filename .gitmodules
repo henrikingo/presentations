@@ -1,4 +1,0 @@
-[submodule "impress.js"]
-	path = impress.js
-	url = git@github.com:henrikingo/impress.js.git
-	branch = myfork
