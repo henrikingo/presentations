@@ -175,6 +175,7 @@ table td {
 #agenda ul {
     position: relative;
     left: 350px;
+    list-style-type: none;
 }
 
 table.assumptions {

@@ -82,7 +82,7 @@
         <h1 style="position:relative; top: -30px">Agenda</h1>
         <ul>
             <li><a href="#evergreen">MongoDB performance testing</a></li>
-            <li><a href="#assumptions">Assumptions</a></li>
+            <li><a href="#assumptions">Witchcraft</a></li>
             <li><a href="#method">Method for testing noise in our EC2 clusters</a></li>
             <li><a href="#io">I/O tests</a></li>
             <li><a href="#cpu">CPU tests</a></li>
@@ -113,9 +113,17 @@
         <img src="images/arrow.svg" width="200" style="position: absolute; bottom: 110px; right: 180px;" />
         <img src="images/arrow.svg" width="200" style="position: absolute; bottom: 90px; right: 180px; transform: rotate(5deg);" />
 
+        <p style="position: absolute; top:140px; left: 490px; font-size: 80%;">
+        100+ Projects<br />
+        1500+ Hosts<br />
+        100+ Build Variants<br />
+        400k hours/month<br />
+        Performance = 5% of that<br />
+        (more in $$$)</p>
+
         <p style="position: absolute; bottom: 330px; left: 100px;">
             <a href="https://github.com/evergreen-ci/evergreen/">github.com/evergreen-ci</a></p>
-        <p style="position: absolute; top: 330px; left: 130px;">
+        <p style="position: absolute; top: 170px; left: 100px;">
             Microbenchmarks</p>
         <p style="position: absolute; bottom: 430px; right: 10px;">
             System performance test <br />
@@ -141,7 +149,7 @@
         <table border="1" class="assumptions">
           <tr><th>Assumption</th><th>True / False</th></tr>
           <tr><td>Dedicated instance = more stable performance</td><td>Not tested</td></tr>
-          <tr><td>Placement groups minimize network latency &amp; variance</td><td>Not used</td></tr>
+          <tr><td>Placement groups minimize network latency &amp; variance</td><td>Not used <strong>yet</strong></td></tr>
           <tr><td>Different availability zones have different hardware</td><td>Not tested <strong>yet</strong></td></tr>
           <tr><td>For write heavy tests, noise comes from disk</td><td>False</td></tr>
           <tr><td>Ephemeral (SSD) disks have least variance</td><td>False</td></tr>
