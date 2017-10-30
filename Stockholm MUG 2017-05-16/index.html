@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>4 boring performance improvements in MongoDB 3.4 that matter | by Henrik Ingo @henrikingo</title>
+    <title>5 boring performance improvements in MongoDB 3.4 that matter | by Henrik Ingo @henrikingo</title>
     
     <meta name="author" content="Henrik Ingo" />
     <link href="css/classic-slides.css" rel="stylesheet" />
@@ -32,39 +32,46 @@
     </div>
 
     <div class="step title" data-x="-1000" data-y="4000" data-scale="3.5" id="title">
-        <h1>4 boring performance improvements in MongoDB 3.4 that matter</h1>
+        <h1>5 boring performance improvements in MongoDB 3.4 that matter</h1>
         <h2>Henrik Ingo<br />Senior Performance Engineer<br />
-        2017-05-16</h3>
+        <br />
+        HighLoad++, 2017</h2>
+        <p style="text-align: right;"><small>v2</small></p>
     </div>
 
     <div class="step" data-rel-x="2200" data-rel-y="600" data-rel-z="-10" data-rotate-y="180" id="h_ingo">
         <img src="images/Henrik_Ingo_Portrait_by_Julian_Cash_2013_MySQL_Conference_L.png" 
             align="right"/>
         <img src="images/OSI_logo.png" width="100" height="100" 
-            style="position: inherit; top: 50px; left: 60px" />
+            style="position: inherit; top: 170px; left: 60px" />
         <img src="images/OpenLife-cover.png" width="120" height="180" 
-            style="position: inherit; top: 75px; left: 330px" />
+            style="position: inherit; top: 55px; left: 250px" />
         <img src="images/mysql-logo.png" width="200" height="200" 
             style="position: inherit; top: 240px; left: 410px" />
+        <img src="images/Tux.png" height="200" 
+            style="position: inherit; top: 290px; left: 190px" />
         <img src="images/druplicon.large.png" width="100" height="110" 
-            style="position: inherit; top: 250px; left: 20px" />
+            style="position: inherit; top: 320px; left: 20px" />
+        <img src="images/Galera-Cluster-logo.png" width="100" 
+            style="position: inherit; top: 420px; left: 420px" />
         <img src="images/mongodb-logo-rgb.png" width="200" height="60" 
-            style="position: inherit; top: 440px; left: 210px" />
-        <p
-        style="position: inherit; top: 550px; left: 510px" />
+            style="position: inherit; top: 520px; left: 250px" />
+        <p style="position: inherit; top: 550px; left: 510px" />
         <a href="http://twitter.com/h_ingo">@h_ingo</a></p>
      </div>
 
+
     <div class="step" data-x="5000" data-y="5500" data-z="0" data-rotate-y="0" data-scale="1"
          id="topics">
-        <h1>4 boring topics</h1>
-        <ul>
+        <h1>5 boring topics</h1>
+        <ol>
             <li>Faster initial sync for replica nodes</li>
             <li>Moving balancer process from the mongos to config server</li>
+            <li>Wire compression</li>
             <li>Removing throttling from shard re-balancing</li>
             <li>Parallel migrations between shards</li>
             <li>Future improvements to expect</li>
-        </ul>
+        </ol>
     </div>
 
     <div class="step title" id="initialsync" data-rel-x="1500" data-rel-y="-100" data-scale="1.2">
@@ -138,8 +145,19 @@
         </ul>
     </div>
 
+    <div class="step" id="compression"  data-rel-x="0" data-rel-y="-1200" data-scale="2">
+        <h1>3. Compression of Wire Protocol (<a href="https://jira.mongodb.org/browse/SERVER-3018">SERVER-3018</a>)</h1>
+
+        <ul>
+        <li><code>--networkMessageCompressors=snappy</code></li>
+        <li>Big deal over WAN</li>
+        <li>Snappy compression usually 4-5x &amp; light on CPU</li>
+        <li>I have no test results, sorry :-(</li>
+        </ul>
+    </div>
+
     <div class="step title" id="throttling" data-rotate="-90" data-x="9200" data-y="1800" data-scale="2">
-        <h1>3. Balancer throttling</h1>
+        <h1>4. Balancer throttling</h1>
     </div>
 
     <div class="step" data-rel-x="1000" data-rel-y="500" data-rotate="-70">
@@ -255,7 +273,7 @@ requestdistribution=zipfian
     </div>
 
     <div class="step title" id="parallel" data-rel-x="-4000" data-rel-y="0" data-rotate="-230">
-        <h1>4. Parallel chunk migrations</h1>
+        <h1>5. Parallel chunk migrations</h1>
     </div>
 
     <div class="step" style="text-align: center" data-rel-x="-4000" data-rel-y="-300" data-rotate="-280">
@@ -280,12 +298,11 @@ requestdistribution=zipfian
 
     <div class="step" id="future" data-x="-30000" data-y="9000" data-z="8000" data-rotate-x="-95" data-rotate-y="-55" data-transition-duration="5000">
         <h1>Future work</h1>
-        <p><em>Note: Not saying these will be in 3.6, in fact I know some of them won't.</em></p>
         <ul>
+        <li><a href="https://jira.mongodb.org/browse/SERVER-27760"><strike>SERVER-27760</strike></a> Smarter, stateful orphan deletion (3.6)</li>
+        <li><a href="https://jira.mongodb.org/browse/SERVER-5931"><strike>SERVER-5931</strike></a> Secondary reads in a sharded cluster (3.6)</li>
         <li><a href="https://jira.mongodb.org/browse/SERVER-20739">SERVER-20739</a> Make initial sync resilient to network/other failures</li>
-        <li><a href="https://jira.mongodb.org/browse/SERVER-5931">SERVER-5931</a> Secondary reads in a sharded cluster</li>
         <li><a href="https://jira.mongodb.org/browse/SERVER-9287">SERVER-9287</a> Split chunks on mongod, not mongos</li>
-        <li><a href="https://jira.mongodb.org/browse/SERVER-27760"><strike>SERVER-27760</strike></a> Smarter, stateful orphan deletion</li>
         <li>Maybe make chunk migrations even faster?
             <ul>
             <li>Bulk inserts</li>
@@ -299,11 +316,6 @@ requestdistribution=zipfian
 <div id="impress-toolbar"></div>
 <div id="impress-help"></div>
 
-<!--
-    To make all described above really work, you need to include impress.js in the page.
-    You also need to call a `impress().init()` function to initialize impress.js presentation.
-    And you should do it in the end of your document. 
--->
 <script type="text/javascript" src="js/impress.js"></script>
 <script>impress().init();</script>
 </body>
