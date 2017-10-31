@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>impress.js demo with large background image | Henrik Ingo @henrikingo</title>
+
+    <meta name="author" content="Henrik Ingo" />
+
+    <link href="css/presentation.css" rel="stylesheet" />
+    <link href="css/impress.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../impress.js/extras/highlight/styles/github.css">    
+</head>
+
+<body class="impress-not-supported">
+<!--
+    This fallback message is only visible when there is `impress-not-supported` class on body.
+-->
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+
+<div id="impress" data-transition-duration="2000">
+
+    <div id="title" class="step title" data-x="-650" data-y="-1500">
+        <h1>Background image demo</h1>
+    </div>
+
+    <div id="background1" class="step skip" data-x="2000" data-y="2000" data-z="-500" data-scale="13">
+        <img src="molumen-world-map.svg"
+             style="position: absolute; left: 0px; top: 0px; z-index: -1; height: 500px;" />
+    </div>
+
+    <div class="step" data-x="500" data-y="500" data-z="0">
+        <h1>What?</h1>
+        <p>A common way to create <a href="http://impress.github.io/impress.js/">impress.js</a> presentations: Put a large image in the background, then position slides on top of it.</p>
+        <p>Background image could be a map, or just some picture related to the topic.</p>
+        <p>It looks like the presentation is flying or traveling above the background image.</p>
+        <p>I've used this technique a lot: <a href="http://henrikingo.github.io/presentations/Oscon%202015%20-%20Selling%20Open%20Source%20101/#/step-1">Oscon presentation</a>, <a href="http://henrikingo.github.io/presentations/Highload%202017%20-%20Measuring%20performance%20variability%20of%20EC2/index.html#/title">HighLoad "cloud" presentation</a></p>
+    </div>
+
+    <div class="step" data-x="2000" data-y="1100" data-z="0">
+        <h1>How?</h1>
+        <p>2 ways to do it:</p>
+<pre><code>&lt;div class="step skip" data-scale="15"&gt;
+</code></pre>
+
+        <p>For added effect, also set:</p>
+
+<pre><code>data-z="-500"
+</code></pre>
+    </div>
+
+    <div class="step" data-x="1800" data-y="-1200" data-z="0">
+        <h1>So?</h1>
+        <ul>
+        <li>The "data-scale method" uses CSS 3D functionality, just like all impress.js slides, to scale up
+        the image to be really large.</li>
+        <li>Pro's: <ul>
+            <li>Simple (same as creating any slide)</li>
+            <li>Efficient (browser can use graphics card)</li>
+            </ul>
+        </li>
+        <li>Con: <ul>
+            <li>Do you see how blurred the background is?</li>
+            <li>This happens, because the browser first renders the image in 1:1 scale, then scales it 15x from there.</li>
+            <li>It doesn't matter if you used a really HD picture, the browser will still only render it in 1:1 scale and you can't improve that precision.</li>
+            </ul>
+        </li>
+        <li>So let's try another way...</li>
+    </div>
+
+    <div id="background2" class="step skip" data-x="6000" data-y="-3000" data-z="-500" data-scale="1">
+        <img src="molumen-world-map.svg"
+             style="position: absolute; left: 0px; top: 0px; z-index: -1; width: 9000px;" />
+    </div>
+
+    <div class="step" data-x="6000" data-y="-2800" data-z="0">
+        <h1>2. Large width &amp; height, no scaling</h1>
+<pre><code>&lt;div class="step skip" data-scale="1"&gt;
+    &lt;img src="molumen-world-map.svg"
+         style="z-index: -1; width: 9000px;" /&gt;
+</code></pre>
+
+    </div>
+
+    <div class="step" data-x="6000" data-y="-1300" data-z="0">
+        <h1>So is it better?</h1>
+        <ul>
+        <li>Pro's: <ul>
+            <li>As you can see, the lines on right hand side are sharp and clear!</li>
+            </ul>
+        </li>
+        <li>Con: <ul>
+            <li>Takes up lots of RAM!</li>
+            <li>In fact, often on the <a href="#overview">overview step</a>, browser will fail to render the entire image.</li>
+            <li>Some transitions may become bumpy.</li>
+            <li>If background image is missing, try refreshing the presentation.</li>
+            </ul>
+        </li>
+        <li>For optimal results, try mixing both. Maybe <code>data-scale="2"</code> and <code>&lt;img width="5000px"</code></li>
+        <li>Advanced: Break down background into smaller tiles, use CSS to hide the parts that don't need to be shown at a given time.</li>
+    </div>
+
+    <div id="overview" class="step" data-x="5000" data-y="2000" data-scale="15" style="pointer-events: none;">
+    </div>
+</div>
+
+<div id="impress-toolbar"></div>
+
+<div id="impress-help"></div>
+
+<script type="text/javascript" src="../impress.js/extras/highlight/highlight.pack.js"></script>
+
+<script type="text/javascript" src="../impress.js/js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>

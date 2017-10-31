@@ -1,0 +1,181 @@
+/*
+  A common approach is to use googleapis.com to generate css for the webfonts you want to use.
+  The downside of this approach is that you have to be online. So below I have simply saved
+  the output of the googleapis url into a file. Then you of course also have to make sure
+  the webfonts are locally installed to make offline usage work. For Ubuntu (or Debian) I
+  successfully used the script from here to do that: 
+  http://www.webupd8.org/2011/01/automatically-install-all-google-web.html
+*/
+
+/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic); */
+@import url(fonts.css);
+
+
+
+body {
+    font-family: 'PT Sans', sans-serif;
+    min-height: 740px;
+
+    background: #fdfdff;
+}
+
+/*
+    Now let's style the presentation steps.
+*/
+
+.step {
+    display: block;
+
+    width: 1400px;
+    height: 900px;
+    padding: 40px;
+    margin: 20px auto;
+
+    box-sizing:         border-box;
+
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 26pt;
+    letter-spacing: -1px;
+    color: #115511;
+    text-shadow: 2px 2px 2px rgba(255, 255, 255, 1);
+}
+
+
+
+
+h1, 
+h2, 
+h3 {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    text-align: center;
+}
+
+h1 {
+    font-size: 40pt;
+}
+
+h2 {
+    font-size: 30pt;
+}
+
+h3 {
+    font-size: 26pt;
+}
+
+p {
+    text-align: center;
+    margin: 0.7em;
+}
+
+li {
+    margin: 0.2em;
+}
+
+li li {
+    font-size: 92%;
+}
+
+a {
+    color: inherit;
+}
+
+blockquote {
+    font-family: 'PT Serif';
+    font-style: italic;
+    font-weight: 400;    
+}
+
+em {
+    /*text-shadow: 2px 1px 1px rgba(0, 0, 0, 1);*/
+    text-shadow: 2px 1px 1px rgba(155, 155, 155, 1);
+}
+
+strong {
+    /*text-shadow: 2px 1px 1px rgba(0, 0, 0, 1);*/
+    text-shadow: 2px 1px 1px rgba(155, 155, 155, 1);
+}
+
+q {
+    font-family: 'PT Serif';
+    font-style: italic;
+    font-weight: 400;    
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+}
+
+strike {
+    opacity: 0.7;
+}
+
+small {
+    font-size: 0.5em;
+    text-shadow: 1px 0px rgba(155, 155, 155, 1);
+}
+
+/* 
+    Specific styles for: .title slides 
+*/
+
+.title {
+    text-align: center;
+}
+
+.title h1,
+.title h2,
+.title h3 {
+}
+.title h1 { 
+    font-size: 46pt;
+    position: relative;
+    top: 100px;
+}
+.title h2 { 
+    font-size: 26pt;
+    position: absolute;
+    bottom: 80px;
+    right: 0px;
+    text-align: right;
+}
+.title h3 { }
+
+
+
+/*
+    Specific slides
+*/
+
+#agenda ul {
+    position: relative;
+    left: 350px;
+    list-style-type: none;
+}
+
+table.assumptions {
+    background: linear-gradient(#2255ff, #0044ff);
+    opacity: 0.97;
+    font-size: 75%;
+    position: relative;
+    left: -150px;
+    top: 150px;
+    text-shadow: 2px 1px 1px rgba(0, 0, 0, 1);
+    color: #ffffff;
+}
+
+table.assumptions em,
+table.assumptions strong {
+    text-shadow: 2px 1px 1px rgba(0, 0, 0, 1);
+}
+
+.dark {
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 1);
+    color: #eeeeff;
+}
+
+.dark h1,
+.dark h2,
+.dark h3 {
+    text-shadow: 4px 3px 2px rgba(0, 0, 0, 1);
+}
+.dark small {
+    text-shadow: 1px 0px rgba(0, 0, 0, 1);
+}
