@@ -23,7 +23,7 @@
     <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
 </div>
 
-<p id="twitter-handle" class="dark" style="position: fixed; bottom: 30px; left: 30px; font-size: 30px; z-index: 100;" />
+<p id="twitter-handle" class="dark" />
 <a href="http://twitter.com/h_ingo">@h_ingo</a></p>
 
 <div id="impress" data-transition-duration="2000">
@@ -306,14 +306,11 @@
 
     <div id="canary" class="step dark" data-rel-y="-2000" data-rotate="-180">
         <h1>Canary tests</h1>
+        <p>The above fio, cpu and iperf3 tests were themselves added to our daily CI tests</p>
 
-        <ul style="margin: 200px;">
-        <li>The above fio, cpu and iperf3 tests were themselves added to our daily CI tests</li>
-        <li>Run at the beginning of every cluster lifecycle</li>
-        <li>Gives insight into EC2 noise, should it happen</li>
-        <li>Has proven useful when triaging test failures!</li>
-        <li>So far it mostly gives us confidence there's no correlation with our MongoDB tests</li>
-        </ul>
+        <img src="images/meltdown-spectre.png" style="display: block; margin-left: auto; margin-right: auto; width: 1000px;">
+
+        <p class="substep">Kernel / user space context switches 30% slower on Jan 4, 2018</p>
     </div>
 
 
