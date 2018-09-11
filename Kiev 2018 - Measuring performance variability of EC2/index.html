@@ -34,18 +34,12 @@
              style="position: absolute; left: -100px; top: -200px; z-index: -1;" />
 
         <h1>Measuring performance variability of EC2</h1>
-        <h2>Henrik Ingo (<a href="https://creativecommons.org/licenses/by/4.0/">cc by</a>)<br />
-            Highload fwdays 2018 <small>v1</small>
+        <h2>Henrik Ingo (<a href="https://creativecommons.org/licenses/by/4.0/">cc by</a>) <small>v1</small>
         </h2>
-
-        <div class="notes">
-        Note: This presentation will work on Chrome only. Firefox will just show the cloud image that's on front.
-        Chrome will zoom in behind it, so that you see the stuff behind it.
-        </div>
-
+        <img src="images/fwdays-logo.png" style="width: 150px; position: relative; right: -650px; top: 100px;" />
     </div>
 
-    <div id="h_ingo" class="step dark" data-rel-x="500" data-rel-y="240" data-z="-800" data-scale="0.1">
+    <div id="h_ingo" class="step dark" data-rel-x="-310" data-rel-y="190" data-z="-800" data-scale="0.1">
         <img src="images/Henrik_Ingo_Portrait_by_Julian_Cash_2013_MySQL_Conference_L.png" 
             align="right"/>
         <img src="images/OSI_logo.png" width="100" height="100" 
@@ -151,8 +145,8 @@
         <table border="1" class="assumptions">
           <tr><th>Assumption</th><th>True / False</th></tr>
           <tr><td>Dedicated instance = more stable performance</td><td>Not tested</td></tr>
-          <tr><td>Placement groups minimize network latency &amp; variance</td><td>Not used <strong>yet</strong></td></tr>
-          <tr><td>Different availability zones have different hardware</td><td>Not tested <strong>yet</strong></td></tr>
+          <tr><td>Placement groups minimize network latency &amp; variance</td><td>Not tested</td></tr>
+          <tr><td>Different availability zones have different hardware</td><td>Seems False</td></tr>
           <tr><td>For write heavy tests, noise comes from disk</td><td>False</td></tr>
           <tr><td>Ephemeral (SSD) disks have least variance</td><td>False</td></tr>
           <tr><td>There are good and bad EC2 instances</td><td>False</td></tr>
@@ -294,7 +288,7 @@
         <li>Observed variability, especially in latency</li>
         <li>No tuning made it go away</li>
         <li>Otoh effect on our test results seems to be negligible</li>
-        <li>Recently discovered we were using EC2 placement groups wrong</li>
+        <li>Later discovered we were using EC2 placement groups wrong</li>
         </ul>
     </div>
 
