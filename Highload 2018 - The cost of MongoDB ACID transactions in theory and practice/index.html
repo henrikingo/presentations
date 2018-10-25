@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>The cost of MongoDB ACID transactions in theory and practice | by Henrik Ingo @h_ingo</title>
+    
+    <meta name="description" content="Authoring impress.js presentations in Markdown" />
+    <meta name="author" content="Henrik Ingo" />
+    <link rel="stylesheet" href="extras/highlight/styles/github.css">
+
+    <link href="css/presentation.css" rel="stylesheet" />
+</head>
+
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress" data-transition-duration="1000">
+
+<div id="markdown" class="step slide markdown" data-rel-x="0" data-rel-y="900">
+# The cost of MongoDB ACID transactions 
+## in theory and practice
+
+.
+
+
+Henrik Ingo
+
+Senior Performance Engineer, MongoDB
+
+Highload++ 2018
+
+-----
+# Write Concern (Durability)
+
+* w:0
+* w:1 (async)
+* j:true (fsync)
+* w:2
+* w:majority (sync)
+* w:N
+* w:majority + j:true
+
+-----
+# Consistency (SQL: Isolation)
+
+* readPreference
+  * primary (CP-ish)
+  * secondary (eventual consistency, AP)
+* readConcern
+  * local (read uncommitted, AP)
+  * majority (read committed)
+  * linearizable (serializable)
+  * snapshot
+* sessions
+  * causal consistency
+* transactions (ACID)
+  * Atomic for multi-document, multi-statement
+
+-----
+# Write Concerns
+
+![Replica Set with different write concerns](images/write_concerns.svg)
+
+-----
+# Write Concerns Notes
+
+* w:0 really? Yes, really.
+* Default: No durability
+* Durability is client side option: Power to developers!
+* Replication wins fsyncs
+* `writeConcernMajorityJournalDefault` - ugly duckling:
+  * server side
+  * fsync by default (safe by default, wtf?)
+  * w:majority and w:2 behave different
+  * Follow Raft paper
+
+-----
+# Write Concern cost (theory)
+
+| setting | latency (theory) |
+|:--------|-----------------:|
+| w:0     | 0                |
+| **w:1** | 1 rtt            |
+| w:2     | 2 rtt            |
+| w:N     | 2 rtt            |
+| j:true  | 1 fsync          |
+| w:2 j:true     | 2 rtt + 1 fsync |
+| w:majority *(1)* | 2 rtt + 1 fsync |
+| w:majority j:false | 2 rtt       |
+| w:majority j:true  | 2 rtt + 1 fsync |
+
+*1) See [writeConcernMajorityJournalDefault](https://docs.mongodb.com/manual/reference/write-concern/#acknowledgement-behavior)*
+
+-----
+# Test cluster 1 (Single region)
+
+![Test cluster 1](images/cluster1.svg)
+
+TODO: rtt
+
+
+-----
+# Write Concern cost (practice)
+
+| setting | latency (theory) |       latency (ms) |
+|:--------|-----------------:|-------------------:|
+| w:0     | 0                | TODO               |
+| **w:1** | 1 rtt            |                    |
+| w:2     | 2 rtt            |                    |
+| w:N     | 2 rtt            |                    |
+| j:true  | 1 fsync          |                    |
+| w:2 j:true     | 2 rtt + 1 fsync |              |
+| w:majority j:false | 2 rtt       |              |
+| w:majority j:true  | 2 rtt + 1 fsync |          |
+
+-----
+# Test cluster 2 (Multi-region)
+
+![Test cluster 2](images/cluster2.svg)
+
+TODO: rtt
+
+-----
+# Write Concern (multi region)
+
+| setting | latency (theory) |       Client1 (ms) | Client2 (ms) |
+|:--------|-----------------:|-------------------:|-------------:|
+| w:0     | 0                | TODO               | TODO         |
+| **w:1** | 1 rtt            |                    |              |
+| w:2     | 2 rtt            |                    |              |
+| w:N     | 2 rtt            |                    |              |
+| j:true  | 1 fsync          |                    |              |
+| w:2 j:true     | 2 rtt + 1 fsync |              |              |
+| w:majority j:false | 2 rtt       |              |              |
+| w:majority j:true  | 2 rtt + 1 fsync |          |              |
+
+
+
+</div>
+
+
+
+<!-- One block with absolute positioning to start from the top. Then following slides are relative again. -->
+<div id="column2start" class="step slide markdown" data-x="1500" data-y="900" data-transition-duration="2000">
+# Isolation Levels
+
+![Jepsen map of isolation levels](images/jepsen-consistency-map.svg)
+
+[(C) Kyle Kingsbury jepsen.io/consistency](https://jepsen.io/consistency)
+
+</div>
+
+<div id="column2" class="step slide markdown" data-rel-x="0" data-rel-y="900">
+# Isolation Levels &amp; MongoDB
+
+![Jepsen map with MongoDB isolation levels overlaid](images/mongodb-consistency-map.svg)
+-----
+# Worth mentioning
+
+_Causal sessions_ are implemented by passing latest timestamp to clients. If all clients were to exchange these timestamps with each other, the result is equivalent to _Linearizable_ isolation.
+
+
+MongoDB transactions require a session. Therefore transactions provide both _Snapshot Isolation_ and _Causal Consistency_.
+
+-----
+TODO: Test results for read concern &amp; trx
+
+
+</div>
+
+<div id="overview" class="step" data-x="6000" data-y="5000" data-scale="15" style="pointer-events: none;">
+</div>
+
+</div>
+
+<div id="impress-toolbar"></div>
+<div id="impress-help"></div>
+
+
+<!-- Extra modules
+     Load highlight.js, mermaid.js and markdown.js from extras.
+     See also src/plugins/extras/extras.js -->
+<script type="text/javascript" src="extras/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="extras/mermaid/mermaid.min.js"></script>
+<script type="text/javascript" src="extras/markdown/markdown.js"></script>
+
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="js/impress.js"></script>
+<script>impress().init();</script>
+</body>
+</html>
