@@ -95,26 +95,31 @@ Highload++ 2018
 *1) See [writeConcernMajorityJournalDefault](https://docs.mongodb.com/manual/reference/write-concern/#acknowledgement-behavior)*
 
 -----
-# Test cluster 1 (Single region)
+# Test cluster 1 (Same AZ+PG)
 
 ![Test cluster 1](images/cluster1.svg)
 
-TODO: rtt
+-----
+# Simple update (single threaded)
 
+    db.hltest.update_one( {'_id': 1}, {'$inc': {'n': 1}} )
+
+
+* [> Full benchmark code](single_threaded.py)
 
 -----
 # Write Concern cost (practice)
 
-| setting | latency (theory) |       latency (ms) |
-|:--------|-----------------:|-------------------:|
-| w:0     | 0                | TODO               |
-| **w:1** | 1 rtt            |                    |
-| w:2     | 2 rtt            |                    |
-| w:N     | 2 rtt            |                    |
-| j:true  | 1 fsync          |                    |
-| w:2 j:true     | 2 rtt + 1 fsync |              |
-| w:majority j:false | 2 rtt       |              |
-| w:majority j:true  | 2 rtt + 1 fsync |          |
+| setting | latency (theory) | latency  avg/99 (ms) |
+|:--------|-----------------:|---------------------:|
+| w:0     | 0                | 0.20 / 0.23          |
+| **w:1** | 1 rtt            | 0.61 / 0.66          |
+| w:2     | 2 rtt            | 4.12 / 4.93          |
+| w:N     | 2 rtt            | 4.08 / 5.33          |
+| j:true  | 1 fsync          | 1.25 / 2.05          |
+| w:2 j:true     | 2 rtt + 1 fsync | 3.16 / 3.89    |
+| w:majority j:false | 2 rtt       | 4.06 / 9.20    |
+| w:majority j:true  | 2 rtt + 1 fsync | 3.18 / 4.12|
 
 -----
 # Test cluster 2 (Multi-region)
