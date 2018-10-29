@@ -16,9 +16,23 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="cluster2.svg">
+   sodipodi:docname="cluster3.svg">
   <defs
      id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;"
+       inkscape:isstock="true">
+      <path
+         id="path4544"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
     <inkscape:path-effect
        effect="spiro"
        id="path-effect6112"
@@ -121,22 +135,6 @@
        effect="spiro"
        id="path-effect5307"
        is_visible="true" />
-    <marker
-       inkscape:stockid="Arrow1Lend"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Arrow1Lend"
-       style="overflow:visible"
-       inkscape:isstock="true"
-       inkscape:collect="always">
-      <path
-         id="path4718"
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
-         transform="matrix(-0.8,0,0,-0.8,-10,0)"
-         inkscape:connector-curvature="0" />
-    </marker>
     <linearGradient
        id="linearGradient3000">
       <stop
@@ -876,6 +874,16 @@
        y1="85.529999"
        x2="48.067001"
        y2="155.92" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3247"
+       id="linearGradient4859"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(4.1306,0,0,2.9846,55.846,193.49)"
+       x1="52.874001"
+       y1="167.86"
+       x2="48.997002"
+       y2="77.000999" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -885,7 +893,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1381984"
-     inkscape:cx="552.53958"
+     inkscape:cx="314.44401"
      inkscape:cy="265.28744"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -1450,7 +1458,7 @@
          style="fill:#f3f5eb;stroke:#999999;stroke-width:0.16686426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.16686426, 0.50059277999999996;stroke-opacity:1;stroke-dashoffset:0;fill-opacity:1" />
     </g>
     <g
-       transform="matrix(-0.26540346,0,0,0.26540346,656.63334,471.44166)"
+       transform="matrix(-0.26540346,0,0,0.26540346,656.63334,391.44166)"
        inkscape:label="Layer 1"
        id="layer1-5">
       <g
@@ -1487,7 +1495,7 @@
            id="path356" />
         <path
            inkscape:connector-curvature="0"
-           style="fill:url(#linearGradient3247);fill-rule:evenodd;stroke:#000000;stroke-width:6.58339977;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.19607999"
+           style="fill:url(#linearGradient4859);fill-rule:evenodd;stroke:#000000;stroke-width:6.58339977;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.19607999"
            d="m 197.88,419.89 20.707,273.79 358.92,-23.425 -13.8,-248.55 -365.81,-1.808 z"
            id="path357" />
         <path
@@ -1544,11 +1552,6 @@
            id="path4286" />
       </g>
     </g>
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
-       d="m 548.43619,551.86492 0,-60.10408"
-       id="path4707"
-       inkscape:connector-curvature="0" />
     <rect
        style="opacity:1;fill:#008000;fill-opacity:1;stroke:#d5db8f;stroke-width:7.24876881;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect6416"
@@ -1824,15 +1827,15 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:27.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="456.02783"
-       y="734.82373"
+       y="654.82373"
        id="text8778"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan8780"
          x="456.02783"
-         y="734.82373">Client1</tspan></text>
+         y="654.82373">Client1</tspan></text>
     <g
-       transform="matrix(-0.26540346,0,0,0.26540346,1042.8594,247.31033)"
+       transform="matrix(-0.26540346,0,0,0.26540346,1042.8594,141.31033)"
        inkscape:label="Layer 1"
        id="layer1-5-9">
       <g
@@ -1926,21 +1929,16 @@
            id="path4286-2" />
       </g>
     </g>
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5715)"
-       d="m 940.66231,327.73359 0,-60.10408"
-       id="path4707-2"
-       inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:27.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="848.25397"
-       y="510.69238"
+       y="404.69238"
        id="text8778-8"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan8780-9"
          x="848.25397"
-         y="510.69238">Client2</tspan></text>
+         y="404.69238">Client2</tspan></text>
   </g>
 </svg>

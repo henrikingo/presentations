@@ -70,7 +70,7 @@ Highload++ 2018
 * w:0 really? Yes, really.
 * Default: No durability
 * Durability is client side option: Power to developers!
-* Replication wins fsyncs
+* Replication wins fsyncs for durability
 * `writeConcernMajorityJournalDefault` - ugly duckling:
   * server side
   * fsync by default (safe by default, wtf?)
@@ -108,40 +108,59 @@ Highload++ 2018
 * [> Full benchmark code](single_threaded.py)
 
 -----
-# Write Concern cost (practice)
+# Write Concern (4.0.2, no-SSL)
 
-| setting | latency (theory) | latency  avg/99 (ms) |
-|:--------|-----------------:|---------------------:|
-| w:0     | 0                | 0.20 / 0.23          |
-| **w:1** | 1 rtt            | 0.61 / 0.66          |
-| w:2     | 2 rtt            | 4.12 / 4.93          |
-| w:N     | 2 rtt            | 4.08 / 5.33          |
-| j:true  | 1 fsync          | 1.25 / 2.05          |
-| w:2 j:true     | 2 rtt + 1 fsync | 3.16 / 3.89    |
-| w:majority j:false | 2 rtt       | 4.06 / 9.20    |
-| w:majority j:true  | 2 rtt + 1 fsync | 3.18 / 4.12|
+![Graph](images/durability1.png)
 
 -----
-# Test cluster 2 (Multi-region)
+# Observations
+
+* j:true is 2x slower than w:1. This is reasonable!
+* w:majority slower than j:true!
+  * Reason: To ensure data integrity, oplog must be flushed before new entries become visible.
+  * Replication cannot possibly be faster than fsync.
+  * Using j:true actually makes replication faster (25%)
+* Note: You still MUST use w:majority for durability. j:true does not ensure durability across cluster during failover.
+
+-----
+# Test cluster 2 (Multi-AZ)
 
 ![Test cluster 2](images/cluster2.svg)
 
-TODO: rtt
+-----
+# Write Concern (Multi-AZ, SSL)
+
+![Graph](images/durability2.png)
 
 -----
-# Write Concern (multi region)
+# Observations
 
-| setting | latency (theory) |       Client1 (ms) | Client2 (ms) |
-|:--------|-----------------:|-------------------:|-------------:|
-| w:0     | 0                | TODO               | TODO         |
-| **w:1** | 1 rtt            |                    |              |
-| w:2     | 2 rtt            |                    |              |
-| w:N     | 2 rtt            |                    |              |
-| j:true  | 1 fsync          |                    |              |
-| w:2 j:true     | 2 rtt + 1 fsync |              |              |
-| w:majority j:false | 2 rtt       |              |              |
-| w:majority j:true  | 2 rtt + 1 fsync |          |              |
+* Largely similar to single AZ results
+* Use of SSL adds 0.15 ms to w:0
+* fsync and replication latency dominate, so client2 is not disadvantaged except for w:1
 
+-----
+# Test cluster 3 (Multi-region)
+
+![Test cluster 3](images/cluster3.svg)
+
+-----
+# Write Concern (Multi-R, SSL)
+
+![Graph](images/durability3.png)
+
+-----
+# Observations
+
+* Geographical latency dominates everything!
+* Secondaries with uneven RTT, so w:2 and w:3 different
+* Even w:0 has its limits, average = 5 ms as TCP buffers fill up.
+* Poor 99% percentile for client2 with j:true w:2
+
+-----
+# Atlas Latency Calculator
+
+![World map with latencies](images/AtlasLatencyMap.png)
 
 
 </div>
@@ -150,23 +169,32 @@ TODO: rtt
 
 <!-- One block with absolute positioning to start from the top. Then following slides are relative again. -->
 <div id="column2start" class="step slide markdown" data-x="1500" data-y="900" data-transition-duration="2000">
+# How many
+# **Isolation Levels**
+# do you know?
+
+</div>
+
+<div id="column2" class="step slide markdown" data-rel-x="0" data-rel-y="900">
 # Isolation Levels
 
 ![Jepsen map of isolation levels](images/jepsen-consistency-map.svg)
 
 [(C) Kyle Kingsbury jepsen.io/consistency](https://jepsen.io/consistency)
 
-</div>
+-----
 
-<div id="column2" class="step slide markdown" data-rel-x="0" data-rel-y="900">
 # Isolation Levels &amp; MongoDB
 
 ![Jepsen map with MongoDB isolation levels overlaid](images/mongodb-consistency-map.svg)
 -----
-# Worth mentioning
+# Consistency Levels Details
+
+_r:majority_ has no latency overhead, but has overhead on the _MVCC_ storage engine needing to keep older snapshots in RAM.
+
+_Linearizeable_ consistency is implemented by turning reads into no-op writes with w:majority.
 
 _Causal sessions_ are implemented by passing latest timestamp to clients. If all clients were to exchange these timestamps with each other, the result is equivalent to _Linearizable_ isolation.
-
 
 MongoDB transactions require a session. Therefore transactions provide both _Snapshot Isolation_ and _Causal Consistency_.
 
