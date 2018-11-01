@@ -20,7 +20,8 @@
 <div id="impress" data-transition-duration="1000">
 
 <div id="markdown" class="step slide markdown" data-rel-x="0" data-rel-y="900">
-# The cost of MongoDB ACID transactions 
+## The cost of 
+# MongoDB ACID transactions 
 ## in theory and practice
 
 .
@@ -104,11 +105,11 @@ Highload++ 2018
 
     db.hltest.update_one( {'_id': 1}, {'$inc': {'n': 1}} )
 
-
+* Note: Several results would be different for multi-threaded high load test. This test gives insight into basic behavior of the implementation.
 * [> Full benchmark code](single_threaded.py)
 
 -----
-# Write Concern (4.0.2, no-SSL)
+# Write Concerns
 
 ![Graph](images/durability1.png)
 
@@ -128,7 +129,7 @@ Highload++ 2018
 ![Test cluster 2](images/cluster2.svg)
 
 -----
-# Write Concern (Multi-AZ, SSL)
+# Write Concerns
 
 ![Graph](images/durability2.png)
 
@@ -145,7 +146,7 @@ Highload++ 2018
 ![Test cluster 3](images/cluster3.svg)
 
 -----
-# Write Concern (Multi-R, SSL)
+# Write Concerns
 
 ![Graph](images/durability3.png)
 
@@ -176,7 +177,7 @@ Highload++ 2018
 </div>
 
 <div id="column2" class="step slide markdown" data-rel-x="0" data-rel-y="900">
-# Isolation Levels
+# Consistency Levels
 
 ![Jepsen map of isolation levels](images/jepsen-consistency-map.svg)
 
@@ -184,7 +185,7 @@ Highload++ 2018
 
 -----
 
-# Isolation Levels &amp; MongoDB
+# Consistency Levels &amp; MongoDB
 
 ![Jepsen map with MongoDB isolation levels overlaid](images/mongodb-consistency-map.svg)
 -----
@@ -199,8 +200,74 @@ _Causal sessions_ are implemented by passing latest timestamp to clients. If all
 MongoDB transactions require a session. Therefore transactions provide both _Snapshot Isolation_ and _Causal Consistency_.
 
 -----
-TODO: Test results for read concern &amp; trx
+# Simple transaction (1 thread)
 
+    amount = random.randint(-100, 100)
+    result1 = db.hltest.find_one( { '_id': 1 } )
+    db.hltest.update_one( {'_id': 1}, {'$inc': {'n': -amount}} )
+    result2 = db.hltest.find_one( { '_id': 2 } )
+    db.hltest.update_one( {'_id': 2}, {'$inc': {'n': amount}} )
+    result = db.hltest.aggregate( [ { '$group': { '_id': 'foo', 'total' : { '$sum': '$n' } } } ] )
+    assert result['total'] == 200
+
+* Note: Several results would be different for multi-threaded high load test. This test gives insight into basic behavior of the implementation.
+* [> Full benchmark code](single_threaded.py)
+
+-----
+# Consistency levels (1)
+
+![Graph](images/consistency1.png)
+-----
+# Observations
+
+* No latency overhead from session
+* Session is faster than linearizable
+* readConcern:snapshot a little faster than readConcern:majority
+* No errors from invariant, yet...
+* Transactions: Pymongo was ignoring default connection settings, must `set` w &amp; `r` in `start_transaction()`
+
+-----
+# Consistency levels (2)
+
+![Graph](images/consistency2.png)
+-----
+# Observations
+
+* Invariant errors on (w:1 r:local rp:secondary) &amp; (w:m r:m rp:secondary).
+* No error when using session!
+* (Linearizable cannot read from secondary.)
+
+
+-----
+# Consistency levels (3)
+
+![Graph](images/consistency3.png)
+-----
+# Observations
+
+* Same results as before, but more accentuated:
+  * readConcern:snapshot now 2x faster than w:majority
+  * readPreference:secondary now clearly benefits client2
+-----
+# Summary of main findings
+
+* To avoid eventual consistency effects, use linearizable, session or transaction.
+  * readPreference:secondary benefit in global clusters
+  * Note: For full ACID guarantees, use transaction.
+* Session is similar to linearizable but no latency overhead.
+* w:majority was slower than j:true.
+  * You still must use w:majority.
+* readConcern:snapshot is up to 2x faster than readConcern:majority.
+  * (Snapshot has more overhead on a large and busy server.)
+
+
+-----
+# Future
+
+* Multi-shard transactions (4.2)
+  * Based on 2 Phase Commit.
+  * Needs 2x w:majority commit on each shard. Better make them faster :-)
+* Remove need for fsync before oplog reads
 
 </div>
 
