@@ -17,6 +17,10 @@
     <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
 </div>
 
+<p id="twitter-handle" class="dark" style="line-height: 1;"/>
+<a href="http://twitter.com/h_ingo">@h_ingo</a>&nbsp;&nbsp;&nbsp;&nbsp;<small style="font-size: 50%; color: #aaaaaa; text-shadow: none;"><a href="https://creativecommons.org/licenses/by/4.0/">(CC) BY</a></small>
+</p>
+
 <div id="impress" data-transition-duration="1000">
 
 <div id="markdown" class="step slide markdown" data-rel-x="0" data-rel-y="900">
@@ -34,15 +38,27 @@ Senior Performance Engineer, MongoDB
 Highload++ 2018
 
 -----
+# Agenda
+
+* MongoDB features:
+  * write concern, read preference, read concern
+* Durability cost
+  * Theory
+  * Practice
+* Consistency level cost
+  * Theory
+  * Practice
+
+-----
 # Write Concern (Durability)
 
-* w:0
-* w:1 (async)
-* j:true (fsync)
-* w:2
-* w:majority (sync)
-* w:N
-* w:majority + j:true
+* `w:0`
+* `w:1` (async)
+* `j:true` (fsync)
+* `w:2`
+* `w:majority` (sync)
+* `w:N`
+* `w:majority + j:true`
 
 -----
 # Consistency (SQL: Isolation)
@@ -68,14 +84,14 @@ Highload++ 2018
 -----
 # Write Concerns Notes
 
-* w:0 really? Yes, really.
+* `w:0` really? Yes, really.
 * Default: No durability
 * Durability is client side option: Power to developers!
 * Replication wins fsyncs for durability
 * `writeConcernMajorityJournalDefault` - ugly duckling:
   * server side
   * fsync by default (safe by default, wtf?)
-  * w:majority and w:2 behave different
+  * `w:majority` and `w:2` behave different
   * Follow Raft paper
 
 -----
@@ -83,15 +99,15 @@ Highload++ 2018
 
 | setting | latency (theory) |
 |:--------|-----------------:|
-| w:0     | 0                |
-| **w:1** | 1 rtt            |
-| w:2     | 2 rtt            |
-| w:N     | 2 rtt            |
-| j:true  | 1 fsync          |
-| w:2 j:true     | 2 rtt + 1 fsync |
-| w:majority *(1)* | 2 rtt + 1 fsync |
-| w:majority j:false | 2 rtt       |
-| w:majority j:true  | 2 rtt + 1 fsync |
+| `w:0`     | 0                |
+| **`w:1`** | 1 rtt            |
+| `w:2`     | 2 rtt            |
+| `w:N`     | 2 rtt            |
+| `j:true`  | 1 fsync          |
+| `w:2 j:true`     | 2 rtt + 1 fsync |
+| `w:majority` *(1)* | 2 rtt + 1 fsync |
+| `w:majority j:false` | 2 rtt       |
+| `w:majority j:true`  | 2 rtt + 1 fsync |
 
 *1) See [writeConcernMajorityJournalDefault](https://docs.mongodb.com/manual/reference/write-concern/#acknowledgement-behavior)*
 
@@ -116,12 +132,12 @@ Highload++ 2018
 -----
 # Observations
 
-* j:true is 2x slower than w:1. This is reasonable!
-* w:majority slower than j:true!
+* `j:true` is 2x slower than `w:1`. This is reasonable!
+* `w:majority` slower than `j:true`!
   * Reason: To ensure data integrity, oplog must be flushed before new entries become visible.
   * Replication cannot possibly be faster than fsync.
-  * Using j:true actually makes replication faster (25%)
-* Note: You still MUST use w:majority for durability. j:true does not ensure durability across cluster during failover.
+  * Using `j:true` actually makes replication faster (25%)
+* Note: You still MUST use `w:majority` for durability. `j:true` does not ensure durability across cluster during failover.
 
 -----
 # Test cluster 2 (Multi-AZ)
@@ -137,8 +153,8 @@ Highload++ 2018
 # Observations
 
 * Largely similar to single AZ results
-* Use of SSL adds 0.15 ms to w:0
-* fsync and replication latency dominate, so client2 is not disadvantaged except for w:1
+* Use of SSL adds 0.15 ms to `w:0`
+* fsync and replication latency dominate, so client2 is not disadvantaged except for `w:1`
 
 -----
 # Test cluster 3 (Multi-region)
@@ -154,9 +170,9 @@ Highload++ 2018
 # Observations
 
 * Geographical latency dominates everything!
-* Secondaries with uneven RTT, so w:2 and w:3 different
-* Even w:0 has its limits, average = 5 ms as TCP buffers fill up.
-* Poor 99% percentile for client2 with j:true w:2
+* Secondaries with uneven RTT, so `w:2` and `w:3` different
+* Even `w:0` has its limits, average = 5 ms as TCP buffers fill up.
+* Poor 99% percentile for client2 with `j:true w:2`
 
 -----
 # Atlas Latency Calculator
@@ -193,7 +209,7 @@ Highload++ 2018
 
 _r:majority_ has no latency overhead, but has overhead on the _MVCC_ storage engine needing to keep older snapshots in RAM.
 
-_Linearizeable_ consistency is implemented by turning reads into no-op writes with w:majority.
+_Linearizeable_ consistency is implemented by turning reads into no-op writes with `w:majority`.
 
 _Causal sessions_ are implemented by passing latest timestamp to clients. If all clients were to exchange these timestamps with each other, the result is equivalent to _Linearizable_ isolation.
 
@@ -220,9 +236,9 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 -----
 # Observations
 
-* No latency overhead from session
-* Session is faster than linearizable
-* readConcern:snapshot a little faster than readConcern:majority
+* No latency overhead from `session`
+* `session` is faster than `linearizable`
+* `readConcern:snapshot` a little faster than `readConcern:majority`
 * No errors from invariant, yet...
 * Transactions: Pymongo was ignoring default connection settings, must set `w` &amp; `r` in `start_transaction()`
 
@@ -233,9 +249,11 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 -----
 # Observations
 
-* Invariant errors on (w:1 r:local rp:secondary) &amp; (w:m r:m rp:secondary).
+* Invariant errors on
+  * `w:1 r:local rp:secondary`
+  * `w:m r:m rp:secondary`
 * No error when using session!
-* (Linearizable cannot read from secondary.)
+* (`linearizable` cannot read from secondary.)
 
 
 -----
@@ -246,19 +264,19 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 # Observations
 
 * Same results as before, but more accentuated:
-  * readConcern:snapshot now 2x faster than w:majority
-  * readPreference:secondary now clearly benefits client2
+  * `readConcern:snapshot` now 2x faster than `readConcern:majority`
+  * `readPreference:secondary` now clearly benefits client2
 -----
 # Summary of main findings
 
-* To avoid eventual consistency effects, use linearizable, session or transaction.
-  * readPreference:secondary benefit in global clusters
+* To avoid eventual consistency effects, use `linearizable`, `session` or `transaction`.
+  * `readPreference:secondary` benefit in global clusters
   * Note: For full ACID guarantees, use transaction.
-* Session is similar to linearizable but no latency overhead.
-* w:majority was slower than j:true.
-  * You still must use w:majority.
-* readConcern:snapshot is up to 2x faster than readConcern:majority.
-  * (Snapshot has more overhead on a large and busy server.)
+* `session` is similar to `linearizable` but no latency overhead.
+* `w:majority` was slower than `j:true`.
+  * You still must use `w:majority`.
+* `readConcern:snapshot` is up to 2x faster than `readConcern:majority`.
+  * (But `snapshot` has more overhead on a large and busy server.)
 
 
 -----
@@ -266,8 +284,8 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 
 * Multi-shard transactions (4.2)
   * Based on 2 Phase Commit.
-  * Needs 2x w:majority commit on each shard. Better make them faster :-)
-* Remove need for fsync before oplog reads
+  * Needs 2x `w:majority` commit on each shard. Better make them faster :-)
+    * Remove need for fsync before oplog reads
 
 </div>
 
