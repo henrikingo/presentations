@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8" />
     <title>The cost of MongoDB ACID transactions in theory and practice | by Henrik Ingo @h_ingo</title>
-    
     <meta name="description" content="Authoring impress.js presentations in Markdown" />
     <meta name="author" content="Henrik Ingo" />
     <link rel="stylesheet" href="extras/highlight/styles/github.css">
@@ -211,7 +210,7 @@ _r:majority_ has no latency overhead, but has overhead on the _MVCC_ storage eng
 
 _Linearizeable_ consistency is implemented by turning reads into no-op writes with `w:majority`.
 
-_Causal sessions_ are implemented by passing latest timestamp to clients. If all clients were to exchange these timestamps with each other, the result is equivalent to _Linearizable_ isolation.
+_Causal sessions_ are implemented by passing latest timestamp to clients. If all clients were to (telepathically) exchange these timestamps with each other, the result is equivalent to _Linearizable_ isolation.
 
 MongoDB transactions require a session. Therefore transactions provide both _Snapshot Isolation_ and _Causal Consistency_.
 
@@ -238,9 +237,10 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 
 * No latency overhead from `session`
 * `session` is faster than `linearizable`
-* `readConcern:snapshot` a little faster than `readConcern:majority`
+* Transaction a little faster than no transaction!
+  * There is only 1 `w:majority` roundtrip at `commitTransaction`
 * No errors from invariant, yet...
-* Transactions: Pymongo was ignoring default connection settings, must set `w` &amp; `r` in `start_transaction()`
+* Transactions: Pymongo was ignoring default connection settings, must set `w` &amp; `r` in `start_transaction()` [PYTHON-1668](https://jira.mongodb.org/browse/PYTHON-1668)
 
 -----
 # Consistency levels (2)
@@ -275,8 +275,8 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 * `session` is similar to `linearizable` but no latency overhead.
 * `w:majority` was slower than `j:true`.
   * You still must use `w:majority`.
-* `readConcern:snapshot` is up to 2x faster than `readConcern:majority`.
-  * (But `snapshot` has more overhead on a large and busy server.)
+* Transaction up to 2x faster than without!
+  * (But `readConcern:snapshot` has more overhead on a large and busy server, so overall transactions may or may not be faster.)
 
 
 -----
@@ -286,6 +286,8 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
   * Based on 2 Phase Commit.
   * Needs 2x `w:majority` commit on each shard. Better make them faster :-)
     * Remove need for fsync before oplog reads
+* Transactions &gt; 16 MB
+* Similar test for readonly trx (test `readConcern:snapshot`)
 
 </div>
 
