@@ -264,7 +264,8 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 # Observations
 
 * Same results as before, but more accentuated:
-  * `readConcern:snapshot` now 2x faster than `readConcern:majority`
+  * Transacion now fully 2x faster than without
+    * Because there are 2 updates
   * `readPreference:secondary` now clearly benefits client2
 -----
 # Summary of main findings
@@ -275,7 +276,7 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 * `session` is similar to `linearizable` but no latency overhead.
 * `w:majority` was slower than `j:true`.
   * You still must use `w:majority`.
-* Transaction up to 2x faster than without!
+* Transaction faster than without!
   * (But `readConcern:snapshot` has more overhead on a large and busy server, so overall transactions may or may not be faster.)
 
 
