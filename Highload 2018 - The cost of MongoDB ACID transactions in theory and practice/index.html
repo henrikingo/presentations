@@ -49,6 +49,11 @@ Highload++ 2018
   * Practice
 
 -----
+# Write Concerns (Durability)
+
+![Replica Set with different write concerns](images/write_concerns.svg)
+
+-----
 # Write Concern (Durability)
 
 * `w:0`
@@ -58,6 +63,19 @@ Highload++ 2018
 * `w:majority` (sync)
 * `w:N`
 * `w:majority + j:true`
+
+-----
+# Write Concerns Notes
+
+* `w:0` really? Yes, really.
+* Default: No durability
+* Durability is client side option: Power to developers!
+* Replication wins fsyncs for durability
+* `writeConcernMajorityJournalDefault` - ugly duckling:
+  * server side
+  * fsync by default (safe by default, wtf?)
+  * `w:majority` and `w:2` behave different
+  * Follow Raft paper
 
 -----
 # Consistency (SQL: Isolation)
@@ -75,23 +93,11 @@ Highload++ 2018
 * transactions (ACID)
   * Atomic for multi-document, multi-statement
 
+
 -----
-# Write Concerns
+# Write Concern cost
 
 ![Replica Set with different write concerns](images/write_concerns.svg)
-
------
-# Write Concerns Notes
-
-* `w:0` really? Yes, really.
-* Default: No durability
-* Durability is client side option: Power to developers!
-* Replication wins fsyncs for durability
-* `writeConcernMajorityJournalDefault` - ugly duckling:
-  * server side
-  * fsync by default (safe by default, wtf?)
-  * `w:majority` and `w:2` behave different
-  * Follow Raft paper
 
 -----
 # Write Concern cost (theory)
@@ -240,7 +246,7 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 * Transaction a little faster than no transaction!
   * There is only 1 `w:majority` roundtrip at `commitTransaction`
 * No errors from invariant, yet...
-* Transactions: Pymongo was ignoring default connection settings, must set `w` &amp; `r` in `start_transaction()` [PYTHON-1668](https://jira.mongodb.org/browse/PYTHON-1668)
+* [PYTHON-1668](https://jira.mongodb.org/browse/PYTHON-1668): Transactions: Pymongo was ignoring default connection settings, must set `w` &amp; `r` in `start_transaction()`
 
 -----
 # Consistency levels (2)
@@ -265,7 +271,7 @@ MongoDB transactions require a session. Therefore transactions provide both _Sna
 
 * Same results as before, but more accentuated:
   * Transacion now fully 2x faster than without
-    * Because there are 2 updates
+    * Because there are 2 updates   
   * `readPreference:secondary` now clearly benefits client2
 -----
 # Summary of main findings
