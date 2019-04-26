@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Performance Tech Talk: Profilers by Julian, Henrik, Eric</title>
+    
+    <meta name="description" content="" />
+    <meta name="author" content="Henrik Ingo" />
+    <!--        
+        Impress.js doesn't depend on any external stylesheets. It adds all of the styles it needs for the
+        presentation to work. 
+        
+        However, some of the `extras/` modules do come with their own CSS, and we load
+        them here. You can read about each extras module separately in their directory.
+    -->
+    <link rel="stylesheet" href="extras/highlight/styles/github.css">
+    <link rel="stylesheet" href="extras/mermaid/mermaid.forest.css">
+
+        
+    <!--
+        This file contains styles specific for this example presentation. 
+    -->
+    <link href="css/classic-slides.css" rel="stylesheet" />
+    
+</head>
+
+<body class="impress-not-supported">
+<!--
+    This fallback message is only visible when there is `impress-not-supported` class on body.
+-->
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress" data-transition-duration="1000">
+    <!-- <div class="step title tree" data-x="-4500" data-y="-3500"> -->
+    <div class="step title tree" data-x="-6300" data-y="-2000" data-z="-4000">
+        <h1>Profilers</h1>
+        <h2>Julian Edwards, Henrik Ingo, Eric Milkie</h2>
+        <h3>MongoDB Performance Tech Talks 2019</h3>
+
+        <div class="notes">
+        </div>
+    </div>
+
+    <div class="step title tree-img skip" data-x="-6500" data-y="-2000" data-z="-5000" data-scale="2">
+    </div>
+
+    <div id="toc" class="step markdown" data-x="-3000" data-y="-3500" data-z="0">
+# Agenda
+
+- What is performance, anyway?
+- "Profiler" is a kind of "tool"
+- Demos
+  - Julian Edwards: perf & FlameGraphs
+  - Henrik Ingo: gdb & calltree.py
+  - Eric Milkie: Intel VTune
+    </div>
+
+    <div class="step markdown" data-rel-x="-1700">
+# Correctness
+
+* Binary
+  * Given input => output
+  * Must not crash
+* Any deviation is FAIL
+* Failures can be reproduced and debugged in 1-3 threads
+    </div>
+
+    <div class="step markdown">
+# Performance
+
+* Better / worse. NOT binary.
+* Holistic: What is total output of all threads?
+* Profiling
+  * Where does a thread spend time over its lifecycle?
+  * Where does the system spend time, aggregated over all threads?
+    </div>
+
+    <div class="step">
+<h1>Optimization question</h1>
+
+<p>Last month I spent $450 on Starbucks &amp; $50 on champagne.</p>
+
+<p><em>What can I do to save money?</em></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p>This is profiling!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    </div>
+
+    <div class="step markdown">
+# All the tools
+
+* Evergreen
+* Build
+* Deploy
+* Test (or Prod)
+* Metrics
+* BF (or SFDC) ticket
+* **Profiling**
+* SERVER ticket
+* git commit
+    </div>
+
+    <div class="step">
+<h2>T2</h2>
+
+<p><img alt="T2 screenshot" src="img/t2-write-queuing.png" style="height: 600px;" /></p>
+    </div>
+
+    <div class="step markdown title">
+## Demo
+    </div>
+    
+    <!-- This last, empty "slide" is set to be very large using the data-scale attribute, 
+         so that it covers all the others you just saw. 
+         It's a common way of zooming out at the end, to show the whole presentation.
+         In CSS, we set pointer-events:none to make this non-clickable. 
+         It makes a difference at least for SVG content, such as the mermaid diagram. -->
+    <div id="overview" class="step" data-x="0" data-y="0" data-scale="10" style="pointer-events: none;">
+    </div>
+</div>
+
+<!--
+    Add navigation-ui controls: back, forward and a select list.
+    Add a progress indicator bar (current step / all steps)
+    Add the help popup plugin
+-->
+<div id="impress-toolbar"></div>
+
+<div id="impress-help"></div>
+
+<script type="text/javascript" src="extras/markdown/markdown.js"></script>
+<script type="text/javascript" src="js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
