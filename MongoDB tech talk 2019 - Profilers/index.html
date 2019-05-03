@@ -37,7 +37,7 @@
     <!-- <div class="step title tree" data-x="-4500" data-y="-3500"> -->
     <div class="step title tree" data-x="-6300" data-y="-2000" data-z="-4000">
         <h1>Profilers</h1>
-        <h2>Julian Edwards, Henrik Ingo, Eric Milkie</h2>
+        <h2>Julian Edwards, Henrik Ingo, <br />Bruce Lucas, Eric Milkie</h2>
         <h3>MongoDB Performance Tech Talks 2019</h3>
 
         <div class="notes">
@@ -51,10 +51,11 @@
 # Agenda
 
 - What is performance, anyway?
-- "Profiler" is a kind of "tool"
+- Profilers and other tools
 - Demos
   - Julian Edwards: perf & FlameGraphs
   - Henrik Ingo: gdb & calltree.py
+  - Bruce Lucas: eBPF & t2
   - Eric Milkie: Intel VTune
     </div>
 
@@ -105,30 +106,19 @@
 * git commit
     </div>
 
-    <div class="step">
-<h2>T2</h2>
+    <div class="step markdown">
+# Demo
 
-<p><img alt="T2 screenshot" src="img/t2-write-queuing.png" style="height: 600px;" /></p>
+- Julian Edwards: perf & FlameGraphs
+- Henrik Ingo: gdb & calltree.py
+- Bruce Lucas: eBPF & t2
+- Eric Milkie: Intel VTune
     </div>
 
-    <div class="step markdown title">
-## Demo
-    </div>
-    
-    <!-- This last, empty "slide" is set to be very large using the data-scale attribute, 
-         so that it covers all the others you just saw. 
-         It's a common way of zooming out at the end, to show the whole presentation.
-         In CSS, we set pointer-events:none to make this non-clickable. 
-         It makes a difference at least for SVG content, such as the mermaid diagram. -->
     <div id="overview" class="step" data-x="0" data-y="0" data-scale="10" style="pointer-events: none;">
     </div>
 </div>
 
-<!--
-    Add navigation-ui controls: back, forward and a select list.
-    Add a progress indicator bar (current step / all steps)
-    Add the help popup plugin
--->
 <div id="impress-toolbar"></div>
 
 <div id="impress-help"></div>

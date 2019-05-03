@@ -223,9 +223,9 @@ small {
     width: 90%;
     text-align: center;
 }
-.tree.title h1 { top: 200px; }
-.tree.title h2 { top: 500px; }
-.tree.title h3 { top: 570px; }
+.tree.title h1 { top: 120px; }
+.tree.title h2 { bottom: 90px; }
+.tree.title h3 { bottom: 0px; }
 
 
 .title h1,
@@ -237,8 +237,8 @@ small {
     text-align: center;
 }
 .title h1 { top: 50px; }
-.title h2 { top: 400px; }
-.title h3 { top: 500px; }
+.title h2 { bottom: 120px; }
+.title h3 { bottom: 0px; }
 
 
 
