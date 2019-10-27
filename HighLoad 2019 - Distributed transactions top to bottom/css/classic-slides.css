@@ -116,8 +116,12 @@ li li {
 }
 
 /* Highlight.js used for coloring pre > code blocks. */
+pre {
+    margin: 0;
+}
 pre > code {
-    font-size: 14px;
+    padding: 0;
+    font-size: 0.9em;
     text-shadow: 0 0 0 rgba(0, 0, 0, 0);
 }
 
@@ -150,7 +154,7 @@ q {
 }
 
 strike {
-    opacity: 0.7;
+    opacity: 0.9;
 }
 
 small {

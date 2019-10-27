@@ -25,8 +25,9 @@
 <div id="impress" data-transition-duration="1000">
     <div class="step title" data-x="-1000" data-y="-1500" data-z="0">
         <h1>MongoDB <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distributed transactions<br>&nbsp;&nbsp;&nbsp;&nbsp; top to bottom</h1>
-        <h2>Henrik Ingo (<a href="https://twitter.com/h_ingo">@h_ingo</a>)</h2>
+        <h2>Henrik Ingo</h2>
         <h3>HighLoad++ 2019</h3>
+        <p style="position: absolute; bottom: 0; right: 0px;"><a href="https://twitter.com/h_ingo">@h_ingo</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://henrikingo.github.io/presentations/">henrikingo.github.io/presentations/</a></p>
     </div>
 
     <div class="step title tree-img skip" data-x="-3200" data-y="-1500" data-z="-5000" data-scale="7">
@@ -38,12 +39,8 @@
         <h1>Table of Contents</h1>
         <ul>
             <li>Background &amp; History</li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>Why transactions?</li>
+            <li>Concepts &amp; algorithms</li>
         </ul>
 
     </div>
@@ -83,7 +80,7 @@
         </ul>
     </div>
 
-    <div id="cassandra-back" class="step" data-rel-x="-2000" data-rel-y="0" data-rel-z="0" data-scale="1">
+    <div id="cassandra-back" class="step" data-rel-x="-2000" data-rel-y="0" data-rel-z="0" data-scale="1" data-autoplay="0.3">
     </div>
 
     <div id="document" class="step" data-rel-x="-300" data-rel-y="200" data-rel-z="0" data-scale="1.6">
@@ -116,18 +113,22 @@
     </div>
 
 
+    <div id="transition" class="step" data-x="1000" data-rel-y="800" data-z="2000" data-scale="1" data-rotate-x="-60" data-autoplay="0.3">
+    </div>
+
+
     <div id="why" class="step" data-x="-1000" data-y="800" data-z="0">
         <h1 style="font-size: 400%; font-family: 'Permanent Marker', cursive; position: relative; top: -100px;">WHY?</h1>
         <ul style="position: relative; left: 200px; top: -150px;">
             <li class="substep">MongoDB marketing: 80% - 90% of apps don't need transactions.</li>
             <li class="substep">Henrik: Well, maybe 50%...</li>
-            <li class="substep"><a href="https://www.allthingsdistributed.com/2017/10/a-decade-of-dynamo.html">Werner Vogels on Amazon</a>: 
+            <li class="substep"><a href="https://www.allthingsdistributed.com/2017/10/a-decade-of-dynamo.html">Werner Vogels, on Amazon.com</a>: 
             <ul><li><q>About 70% of operations were of the key-value kind, where only a primary key was used and a single row would be returned. About 20% would ... still operate on only a single table.</q></li></ul>
             </li>
         </ul>
     </div>
 
-    <div id="why2" class="step" data-rel-x="0" data-rel-y="850" data-rel-z="0">
+    <div id="why2" class="step" data-rel-x="0" data-rel-y="1200" data-rel-z="0">
         <h1 style="font-size: 400%; font-family: 'Permanent Marker', cursive;">WHY?</h1>
         <ul>
             <li class="substep">Many features only needed by 10%: sharding, join...</li>
@@ -142,11 +143,141 @@
     </div>
 
     <div id="mvcc" class="step" data-x="-1000" data-y="4500" data-z="0">
-        <h1>MVCC</h1>
+        <h1>Multi Version Concurrency Control</h1>
+        <ul>
+            <li><a href="https://people.eecs.berkeley.edu/~brewer/cs262/concurrency-distributed-databases.pdf">Bernstein &amp; Goodman, 1981</a>.
+                <a href="https://dspace.mit.edu/handle/1721.1/16279">Reed, 1979</a>. <a href="http://edn.embarcadero.com/article/27007">InterBase, 1984</a>.</li>
+            <li>Updates create new versions of records</li>
+            <li>All reads from same <em>version</em></li>
+            <li>Updates to same record cause conflict</li>
+        </ul>
     </div>
 
-    <div id="next" class="step" data-rel-x="1000" data-rel-y="0" data-rel-z="0">
+    <div id="mvcc-conflict-overview" class="step" data-rel-x="0" data-rel-y="2000" data-rel-z="0" data-scale="3">
     </div>
+
+    <div id="mvcc-conflict" class="step" data-rel-x="-500" data-rel-y="-800" data-rel-z="0" data-scale="1">
+        <h1>Write Conflict</h1>
+        <table>
+            <tr>
+                <td>
+<pre><code class="javascript">> session1 = db.getMongo().startSession()
+> accounts = session1.getDatabase("examples").accounts
+> session1.<strong>startTransaction()</strong>
+> accounts.<strong>find()</strong>
+{ "_id" : 1, "balance" : 100 }
+{ "_id" : 2, "balance" : 50 }
+> accounts.<strong>update({ _id:1}, {$set: {balance:100-10} })</strong>
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })</code></pre>
+                </td><td><pre><code class="javascript">
+                </td>
+            </tr><tr>
+                <td>
+                </td><td>
+<pre><code class="javascript">> session2 = db.getMongo().startSession()
+> accounts = session2.getDatabase("examples").accounts
+> session2.<strong>startTransaction()</strong>
+> accounts.<strong>find()</strong>
+{ "_id" : 1, "balance" : 100 }
+{ "_id" : 2, "balance" : 50 }
+> accounts.<strong>update({ _id:1}, {$inc: {balance:100-11} })</strong>
+WriteCommandError({
+        "errorLabels" : ["TransientTransactionError"],
+        "operationTime" : Timestamp(1572204799, 5),
+        "errmsg" : "WriteConflict",
+        "code" : 112,   ...
+})
+> session2.abortTransaction()</code></pre>
+                </td>
+            </tr>
+            </tr><tr>
+                <td>
+<pre><code class="javascript"><strong>> accounts.find()</strong>
+{ "_id" : 1, "balance" : 90 }
+{ "_id" : 2, "balance" : 50 }
+<strong>> session1.commitTransaction()</strong>
+<strong>> db.accounts.find()</strong>
+{ "_id" : 1, "balance" : 90 }
+{ "_id" : 2, "balance" : 50 }</code></pre>
+                </td><td>
+                </td>
+            </tr>
+        </table>
+        <ul>
+        <li>Consistency is preserved!</li>
+        </ul>
+    </div>
+
+    <div id="mvcc-conflict-cont" class="step" data-rel-x="1400" data-rel-y="650" data-rel-z="0">
+    </div>
+
+    <div id="mvcc-conflict-cont2" class="step" data-rel-x="-1400" data-rel-y="700" data-rel-z="0">
+    </div>
+
+    <div id="mvcc-skew" class="step" data-rel-x="0" data-rel-y="1500" data-rel-z="0">
+        <h1>Write Skew</h1>
+        <ul>
+        <li>Business logic: Alice and Bob work in support. One of them must always be oncall.</li>
+        </ul>
+        <table>
+            <tr>
+                <td>
+<pre><code class="javascript"><strong>> db.supportteam.find()</strong>
+{ "_id" : "Alice", "status" : "oncall" }
+{ "_id" : "Bob", "status" : "oncall" }
+
+
+
+> session1 = db.getMongo().startSession()
+> supportteam = session1.getDatabase("examples").supportteam
+> session1.<strong>startTransaction()</strong>
+> supportteam.<strong>findOne</strong>({_id:"Bob"}).status
+<strong>oncall</strong>
+> supportteam.<strong>update</strong>({_id:"Alice"}, {$set: {status:"free"} })
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })</code></pre>
+                </td><td>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td><td>
+<pre><code class="javascript">> session2 = db.getMongo().startSession()
+session { "id" : UUID("5ffa03b2-56ac-41bf-b425-d9ab7214cf41") }
+> supportteam = session2.getDatabase("examples").supportteam
+> session2.<strong>startTransaction()</strong>
+> supportteam.<strong>findOne</strong>({_id:"Alice"}).status
+<strong>oncall</strong>
+> supportteam.<strong>update</strong>({_id:"Bob"}, {$set: {status:<strong>"free"</strong>} })
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> session2.<strong>commitTransaction()</strong></code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+<pre><code class="javascript">> session1.<strong>commitTransaction()</strong>
+<strong>> db.supportteam.find()</strong>
+{ "_id" : "Alice", "status" : "free" }
+{ "_id" : "Bob", "status" : "free" }</code></pre>
+                </td><td>
+                </td>
+            </tr>
+        </table>
+        <ul>
+        <li>That's not good!</li>
+        </ul>
+    </div>
+
+    <div id="mvcc-skew-cont" class="step" data-rel-x="100" data-rel-y="500" data-rel-z="0">
+    </div>
+
+    <div id="mvcc-skew-cont2" class="step" data-rel-x="1300" data-rel-y="500" data-rel-z="0">
+    </div>
+
+    <div id="mvcc-skew-cont3" class="step" data-rel-x="-1300" data-rel-y="400" data-rel-z="0">
+    </div>
+
+
+
 
 
 
