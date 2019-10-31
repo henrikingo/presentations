@@ -73,8 +73,7 @@
             </ul></li>
             <li>Log Structured Merge tree (LSM)
             <ul>
-                <li>Pinglei Guo: <a href="https://www.slideshare.net/ssuser7e134a/log-structured-merge-tree">presentation</a></li>
-                <li>Mark Callaghan: <a href="http://smalldatum.blogspot.com/2018/10/describing-tiered-and-leveled-compaction.html">blog</a>, <a href="http://smalldatum.blogspot.com/2019/01/geek-code-for-lsm-trees.html">presentation</a></li>
+                <li><a href="https://www.slideshare.net/ssuser7e134a/log-structured-merge-tree">Pinglei Guo</a>, <a href="https://www.datastax.com/blog/2011/10/leveled-compaction-apache-cassandra">Jonathan Ellis</a>, <a href="http://smalldatum.blogspot.com/2019/01/geek-code-for-lsm-trees.html">Mark</a> <a href="http://smalldatum.blogspot.com/2018/10/describing-tiered-and-leveled-compaction.html">Callaghan</a></li>
             </ul></li>
             </li>
         </ul>
@@ -138,18 +137,19 @@
         </ul>
     </div>
 
-    <div id="roadmap" class="step" data-rel-x="0" data-rel-y="1500" data-rel-z="0">
+    <div id="roadmap" class="step" data-rel-x="2000" data-rel-y="1000" data-rel-z="0">
         <img src="images/Path_to_Transactions.png" style="width: 100%;">
     </div>
 
-    <div id="mvcc" class="step" data-x="-1000" data-y="4500" data-z="0">
+    <div id="mvcc" class="step" data-x="3500" data-y="4500" data-z="0">
         <h1>Multi Version Concurrency Control</h1>
         <ul>
             <li><a href="https://people.eecs.berkeley.edu/~brewer/cs262/concurrency-distributed-databases.pdf">Bernstein &amp; Goodman, 1981</a>.
                 <a href="https://dspace.mit.edu/handle/1721.1/16279">Reed, 1979</a>. <a href="http://edn.embarcadero.com/article/27007">InterBase, 1984</a>.</li>
-            <li>Updates create new versions of records</li>
-            <li>All reads from same <em>version</em></li>
-            <li>Updates to same record cause conflict</li>
+            <li class="substep">Updates create new versions of records</li>
+            <li class="substep">All reads from same <em>version</em></li>
+            <li class="substep">Updates to same record cause conflict</li>
+            <li class="substep">Snapshot Isolation</li>
         </ul>
     </div>
 
@@ -161,41 +161,35 @@
         <table>
             <tr>
                 <td>
-<pre><code class="javascript">> session1 = db.getMongo().startSession()
-> accounts = session1.getDatabase("examples").accounts
-> session1.<strong>startTransaction()</strong>
-> accounts.<strong>find()</strong>
+<pre><code class="javascript">><strong>startTransaction()</strong>
+> <strong>find()</strong>
 { "_id" : 1, "balance" : 100 }
 { "_id" : 2, "balance" : 50 }
-> accounts.<strong>update({ _id:1}, {$set: {balance:100-10} })</strong>
-WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })</code></pre>
-                </td><td><pre><code class="javascript">
+> <strong>update({ _id:1}, {$set: {balance:100-10} })</strong></code></pre>
+                </td><td>
                 </td>
             </tr><tr>
                 <td>
                 </td><td>
-<pre><code class="javascript">> session2 = db.getMongo().startSession()
-> accounts = session2.getDatabase("examples").accounts
-> session2.<strong>startTransaction()</strong>
-> accounts.<strong>find()</strong>
+<pre><code class="javascript">> <strong>startTransaction()</strong>
+> <strong>find()</strong>
 { "_id" : 1, "balance" : 100 }
 { "_id" : 2, "balance" : 50 }
-> accounts.<strong>update({ _id:1}, {$inc: {balance:100-11} })</strong>
+> <strong>update({ _id:1}, {$inc: {balance:100-11} })</strong>
 WriteCommandError({
         "errorLabels" : ["TransientTransactionError"],
         "operationTime" : Timestamp(1572204799, 5),
         "errmsg" : "WriteConflict",
         "code" : 112,   ...
-})
-> session2.abortTransaction()</code></pre>
+})</code></pre>
                 </td>
             </tr>
             </tr><tr>
                 <td>
-<pre><code class="javascript"><strong>> accounts.find()</strong>
+<pre><code class="javascript">><strong>find()</strong>
 { "_id" : 1, "balance" : 90 }
 { "_id" : 2, "balance" : 50 }
-<strong>> session1.commitTransaction()</strong>
+> <strong>commitTransaction()</strong>
 <strong>> db.accounts.find()</strong>
 { "_id" : 1, "balance" : 90 }
 { "_id" : 2, "balance" : 50 }</code></pre>
@@ -208,10 +202,10 @@ WriteCommandError({
         </ul>
     </div>
 
-    <div id="mvcc-conflict-cont" class="step" data-rel-x="1400" data-rel-y="650" data-rel-z="0">
+    <div id="mvcc-conflict-cont" class="step" data-rel-x="900" data-rel-y="400" data-rel-z="0">
     </div>
 
-    <div id="mvcc-conflict-cont2" class="step" data-rel-x="-1400" data-rel-y="700" data-rel-z="0">
+    <div id="mvcc-conflict-cont2" class="step" data-rel-x="-900" data-rel-y="700" data-rel-z="0">
     </div>
 
     <div id="mvcc-skew" class="step" data-rel-x="0" data-rel-y="1500" data-rel-z="0">
@@ -228,28 +222,21 @@ WriteCommandError({
 
 
 
-> session1 = db.getMongo().startSession()
-> supportteam = session1.getDatabase("examples").supportteam
-> session1.<strong>startTransaction()</strong>
-> supportteam.<strong>findOne</strong>({_id:"Bob"}).status
+> <strong>startTransaction()</strong>
+> <strong>findOne</strong>({_id:"Bob"}).status
 <strong>oncall</strong>
-> supportteam.<strong>update</strong>({_id:"Alice"}, {$set: {status:"free"} })
-WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })</code></pre>
+> <strong>update</strong>({_id:"Alice"}, {$set: {status:<strong>"free"</strong>} })</code></pre>
                 </td><td>
                 </td>
             </tr>
             <tr>
                 <td>
                 </td><td>
-<pre><code class="javascript">> session2 = db.getMongo().startSession()
-session { "id" : UUID("5ffa03b2-56ac-41bf-b425-d9ab7214cf41") }
-> supportteam = session2.getDatabase("examples").supportteam
-> session2.<strong>startTransaction()</strong>
-> supportteam.<strong>findOne</strong>({_id:"Alice"}).status
+<pre><code class="javascript">> <strong>startTransaction()</strong>
+> <strong>findOne</strong>({_id:"Alice"}).status
 <strong>oncall</strong>
-> supportteam.<strong>update</strong>({_id:"Bob"}, {$set: {status:<strong>"free"</strong>} })
-WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
-> session2.<strong>commitTransaction()</strong></code></pre>
+> <strong>update</strong>({_id:"Bob"}, {$set: {status:<strong>"free"</strong>} })
+> <strong>commitTransaction()</strong></code></pre>
                 </td>
             </tr>
             <tr>
@@ -267,16 +254,127 @@ WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
         </ul>
     </div>
 
-    <div id="mvcc-skew-cont" class="step" data-rel-x="100" data-rel-y="500" data-rel-z="0">
+    <div id="mvcc-skew-cont" class="step" data-rel-x="100" data-rel-y="600" data-rel-z="0">
     </div>
 
-    <div id="mvcc-skew-cont2" class="step" data-rel-x="1300" data-rel-y="500" data-rel-z="0">
+    <div id="mvcc-skew-cont2" class="step" data-rel-x="900" data-rel-y="300" data-rel-z="0">
     </div>
 
-    <div id="mvcc-skew-cont3" class="step" data-rel-x="-1300" data-rel-y="400" data-rel-z="0">
+    <div id="mvcc-skew-cont3" class="step" data-rel-x="-1000" data-rel-y="300" data-rel-z="0">
     </div>
 
 
+    <div id="serializeable" class="step" data-x="2000" data-y="4500" data-z="0">
+        <h1>Serializeable</h1>
+        <p style="text-align: left;">Avoids any and all anomalies, incl write skew.</p>
+        <ul>
+            <li>Reality check:
+                <ul>
+                <li>MySQL: <a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html">Provides serializeable</a>, nobody uses it.</li>
+                <li>Oracle: <a href="https://blog.dbi-services.com/oracle-serializable-is-not-serializable/">Serializable is actually SI</a>.</li>
+                <li>PostgreSQL: <a href="https://www.postgresql.org/docs/current/transaction-iso.html#XACT-SERIALIZABLE">Serializable Snapshot Isolation</a> since 2011<br>
+                    <a href="https://drkp.net/papers/ssi-vldb12.pdf">Ports &amp; Grittner, 2012</a>. <a href="https://courses.cs.washington.edu/courses/cse444/08au/544M/READING-LIST/fekete-sigmod2008.pdf">Cahill et.al, 2008.</a></li>
+                </li>
+                </ul>
+            </li>
+            <li>Most use SI (or RR) with <code>SELECT ... FOR UPDATE</code>
+                <ul>
+                <li>MongoDB: <a href="https://www.mongodb.com/blog/post/how-to-select--for-update-inside-mongodb-transactions">Use <code>findAndModify()</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="replication" class="step" data-x="500" data-y="4500" data-z="0">
+        <h1>Replication</h1>
+        <p style="position: absolute; right: 50px; top: 30px; transform: rotate(30deg);"
+           class="substep">(Durability)</p>
+        <ul class="substep">
+            <li><a href="https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf">Ongaro, 2014</a>: Raft replication</li>
+            <li>MongoDB predates Raft, but is similar:
+                <ul>
+                    <li>Single primary, many secondaries</li>
+                    <li>Majority based</li>
+                    <li>Transaction log</a>
+                </ul>
+            </li>
+            <li>Differences
+                <ul>
+                    <li>Pull vs push</li>
+                    <li>Apply first, then replicate</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="distributed-si" class="step" data-x="-1000" data-y="4500" data-z="0">
+        <h1>Distributed Snapshot Isolation</h1>
+        <ul>
+            <li>Basic concept:
+                <ul>
+                    <li>Clients can ask to read a specific MVCC snapshot <code>T<sub>n</sub></code></li>
+                    <li>Ask for same <code>T<sub>n</sub></code> from each shard</li>
+                </ul>
+            </li>
+            <li>So now we just need:
+                <ul>
+                    <li>Cluster-wide clock</li>
+                    <li>Storage engine must use externally provided <code>T<sub>n</sub></code> </li>
+                    <li>Writes <code>T<sub>n</sub></code> and <code>T<sub>n+1</sub></code> must commit in same order on all shards</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="lamport" class="step" data-rel-x="0" data-rel-y="1000" data-z="0">
+        <h1>Lamport clock</h1>
+        <ul>
+            <li> <a href="http://delivery.acm.org/10.1145/3320000/3314049/p636-tyulenev.pdf?ip=88.115.230.207&id=3314049&acc=TRUSTED&key=4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35%2EE47D41B086F0CDA3&__acm__=1572516395_ec0b642bd05e02ac2fb11edd28297bba">Tyulenev et.al, 2019</a>. <a href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Lamport, 1978</a>.</li>
+            <li>MongoDB: Monotically increasing timestamp</li>
+            <li>Gossip: If A communicates with B, pass time
+                <ul>
+                    <li>Causality: event on A <em>happened before</em> event on B</li>
+                    <li>Partial ordering: If A and B don't communicate, no causality</li>
+                    <li>Clients pass time too</li>
+                </ul>
+            </li>
+            <li>Causal Consistency is the strongest partition-tolerant consistency level (<a href="https://jepsen.io/consistency">jepsen.io</a>)</li>
+        </ul>
+    </div>
+
+    <div id="causality" class="step" data-rel-x="0" data-rel-y="1000" data-z="0">
+        <h1>Causality vs Linearizeability</h1>
+        <img src="images/causality.png" style='height: 100%; width: 100%; object-fit: contain'>
+    </div>
+
+    <div id="twopc" class="step" data-x="-2500" data-y="4500" data-z="0">
+        <h1>Two Phase Commit (2PC)</h1>
+        <ul>
+            <li><a href="https://pdos.csail.mit.edu/6.824/papers/rstar.pdf">Mohan et.al, 1986</a>.</li>
+            <li>PREPARE -&gt; all YES -&gt; COMMIT
+                <ul>
+                    <li>Prepare is binding: Must be durable</li>
+                    <li>Commit must succeed</li>
+                    <li>MongoDB: 2x majority commit</li>
+                </ul>
+            </li>
+            <li>Used
+                <ul>
+                    <li>Between shards</li>
+                    <li>Replication! (MySQL NDB Cluster)</li>
+                    <li>Between different databases (1 Oracle, 1 DB2)</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="conclusion" class="step" data-x="-8300" data-y="-1300" data-z="0">
+        <h1 style="text-align: left;">Conclusion</h1>
+        <img src="images/DistractedBoyfriendMeme_girls_captions.png" style="position: absolute; right: 445px; top: 100px;">
+        <p style="text-align: left; width: 400px;">ACID transactions are possible in a distributed, web scale database.</p>
+        <p style="text-align: left;">Not easy, but a lot of fun!</p>
+        <p style="position: absolute; bottom: 0;"><a href="https://twitter.com/h_ingo">@h_ingo</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://henrikingo.github.io/presentations/">henrikingo.github.io/presentations/</a></p>
+    </div>
 
 
 

@@ -104,11 +104,19 @@ h3 {
 
 p {
     text-align: center;
-    margin: 0.7em;
+    margin: 0.5em 0;
+}
+
+ul {
+    margin: 0.5em 0;
+}
+
+ul ul {
+    margin: 0em;
 }
 
 li {
-    margin: 0.2em;    
+    margin: 0.2em 0;    
 }
 
 li li {
@@ -124,7 +132,9 @@ pre > code {
     font-size: 0.9em;
     text-shadow: 0 0 0 rgba(0, 0, 0, 0);
 }
-
+pre > code strong {
+    font-size: 1.15em;
+}
 /* Inline code, no Highlight.js */
 code {
     font-family: "Cutive mono","Courier New", monospace;
@@ -136,6 +146,10 @@ blockquote {
     font-family: 'PT Serif';
     font-style: italic;
     font-weight: 400;    
+}
+
+a {
+    color: blue;
 }
 
 em {
