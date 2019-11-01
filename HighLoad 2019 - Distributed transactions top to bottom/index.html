@@ -79,10 +79,7 @@
         </ul>
     </div>
 
-    <div id="cassandra-back" class="step" data-rel-x="-2000" data-rel-y="0" data-rel-z="0" data-scale="1" data-autoplay="0.3">
-    </div>
-
-    <div id="document" class="step" data-rel-x="-300" data-rel-y="200" data-rel-z="0" data-scale="1.6">
+    <div id="document" class="step" data-rel-x="-2300" data-rel-y="200" data-rel-z="0" data-scale="1.6">
     </div>
 
     <div id="newsql" class="step" data-rel-x="700" data-rel-y="850" data-rel-z="0" data-scale="0.7">
@@ -153,10 +150,10 @@
         </ul>
     </div>
 
-    <div id="mvcc-conflict-overview" class="step" data-rel-x="0" data-rel-y="2000" data-rel-z="0" data-scale="3">
+    <div id="mvcc-conflict-overview" class="step" data-rel-x="2000" data-rel-y="2000" data-rel-z="0" data-scale="3">
     </div>
 
-    <div id="mvcc-conflict" class="step" data-rel-x="-500" data-rel-y="-800" data-rel-z="0" data-scale="1">
+    <div id="mvcc-conflict" class="step" data-rel-x="-1000" data-rel-y="-800" data-rel-z="0" data-scale="1">
         <h1>Write Conflict</h1>
         <table>
             <tr>
@@ -264,8 +261,8 @@ WriteCommandError({
     </div>
 
 
-    <div id="serializeable" class="step" data-x="2000" data-y="4500" data-z="0">
-        <h1>Serializeable</h1>
+    <div id="serializable" class="step" data-x="2000" data-y="4500" data-z="0">
+        <h1>Serializable</h1>
         <p style="text-align: left;">Avoids any and all anomalies, incl write skew.</p>
         <ul>
             <li>Reality check:
@@ -284,6 +281,29 @@ WriteCommandError({
             </li>
         </ul>
     </div>
+
+    <div id="spanner" class="step" data-rel-x="0" data-rel-y="1500" data-rel-z="0"
+         style="background-color: #bcd35f; border-radius: 10px;">
+        <h1>Spanner sidebar</h1>
+        <ul>
+            <li>How do you even do distributed serializable?
+                <ul>
+                    <li>Classic solution: dependency graph of all transactions</li>
+                    <li>Not very distributed</li>
+                </ul>
+            </li>
+            <li>Google: We just order trx by wall clock timestamp
+                <ul>
+                    <li>You can't trust server clock!!</li>
+                    <li>Google: We put atomic clocks in every data center</li>
+                    <li><a href="https://static.googleusercontent.com/media/research.google.com/en//archive/spanner-osdi2012.pdf">Corbett et.al, 2012</a></li>
+                </ul>
+            </li>
+            <li>As of 2017 GCP offers TrueTime as a service</li>
+        </ul>
+    </div>
+
+
 
     <div id="replication" class="step" data-x="500" data-y="4500" data-z="0">
         <h1>Replication</h1>
@@ -318,9 +338,9 @@ WriteCommandError({
             </li>
             <li>So now we just need:
                 <ul>
-                    <li>Cluster-wide clock</li>
                     <li>Storage engine must use externally provided <code>T<sub>n</sub></code> </li>
                     <li>Writes <code>T<sub>n</sub></code> and <code>T<sub>n+1</sub></code> must commit in same order on all shards</li>
+                    <li>Cluster-wide clock</li>
                 </ul>
             </li>
         </ul>
@@ -343,8 +363,18 @@ WriteCommandError({
     </div>
 
     <div id="causality" class="step" data-rel-x="0" data-rel-y="1000" data-z="0">
-        <h1>Causality vs Linearizeability</h1>
+        <h1>Causality vs Linearizability</h1>
         <img src="images/causality.png" style='height: 100%; width: 100%; object-fit: contain'>
+    </div>
+
+    <div id="tunable-consistency" class="step" data-rel-x="0" data-rel-y="1000" data-z="0">
+        <h1>MongoDB tunable consistency</h1>
+        <ul>
+            <li>Typically choosing sync vs async replication is a global setting. Or not an option at all!</li>
+            <li>MongoDB: Replication internals async. Client semantics tunable on a per trx level.</li>
+            <li>Even writes vs reads tunable separately. For example, linearizable read + non-durable write...</li>
+            <li><a href="http://www.vldb.org/pvldb/vol12/p2071-schultz.pdf">Schultz et.al, 2019</a></li>
+        </ul>
     </div>
 
     <div id="twopc" class="step" data-x="-2500" data-y="4500" data-z="0">
@@ -355,6 +385,7 @@ WriteCommandError({
                 <ul>
                     <li>Prepare is binding: Must be durable</li>
                     <li>Commit must succeed</li>
+                    <li>Crash recovery is non-trivial</li>
                     <li>MongoDB: 2x majority commit</li>
                 </ul>
             </li>
@@ -368,10 +399,11 @@ WriteCommandError({
         </ul>
     </div>
 
-    <div id="conclusion" class="step" data-x="-8300" data-y="-1300" data-z="0">
+    <div id="conclusion" class="step" data-x="-10300" data-y="-1300" data-z="0">
         <h1 style="text-align: left;">Conclusion</h1>
-        <img src="images/DistractedBoyfriendMeme_girls_captions.png" style="position: absolute; right: 445px; top: 100px;">
+        <img src="images/DistractedBoyfriendMeme_girls_captions.png" style="width: 600px; position: absolute; right: 125px; top: 0px;">
         <p style="text-align: left; width: 400px;">ACID transactions are possible in a distributed, web scale database.</p>
+        <p>&nbsp;</p>
         <p style="text-align: left;">Not easy, but a lot of fun!</p>
         <p style="position: absolute; bottom: 0;"><a href="https://twitter.com/h_ingo">@h_ingo</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://henrikingo.github.io/presentations/">henrikingo.github.io/presentations/</a></p>
     </div>
@@ -380,7 +412,7 @@ WriteCommandError({
 
 
 
-    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10" style="pointer-events: none;">
+    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="12" style="pointer-events: none;">
     </div>
 </div>
 
