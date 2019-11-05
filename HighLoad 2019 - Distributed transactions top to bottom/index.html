@@ -163,11 +163,14 @@
         <table>
             <tr>
                 <td>
-<pre><code class="javascript">><strong>startTransaction()</strong>
+<pre><code class="javascript">> <strong>startTransaction()</strong>
 > <strong>find()</strong>
 { "_id" : 1, "balance" : 100 }
 { "_id" : 2, "balance" : 50 }
-> <strong>update({ _id:1}, {$set: {balance:100-10} })</strong></code></pre>
+> <strong>update({ _id:1}, {$set: {balance:100-10} })</strong>
+><strong>find()</strong>
+{ "_id" : 1, "balance" : 90 }
+{ "_id" : 2, "balance" : 50 }</code></pre>
                 </td><td>
                 </td>
             </tr><tr>
@@ -188,10 +191,7 @@ WriteCommandError({
             </tr>
             </tr><tr>
                 <td>
-<pre><code class="javascript">><strong>find()</strong>
-{ "_id" : 1, "balance" : 90 }
-{ "_id" : 2, "balance" : 50 }
-> <strong>commitTransaction()</strong>
+<pre><code class="javascript">> <strong>commitTransaction()</strong>
 <strong>> db.accounts.find()</strong>
 { "_id" : 1, "balance" : 90 }
 { "_id" : 2, "balance" : 50 }</code></pre>
@@ -243,7 +243,7 @@ WriteCommandError({
             </tr>
             <tr>
                 <td>
-<pre><code class="javascript">> session1.<strong>commitTransaction()</strong>
+<pre><code class="javascript">> <strong>commitTransaction()</strong>
 <strong>> db.supportteam.find()</strong>
 { "_id" : "Alice", "status" : "free" }
 { "_id" : "Bob", "status" : "free" }</code></pre>
@@ -319,6 +319,7 @@ WriteCommandError({
             <li>MongoDB predates Raft, but is similar:
                 <ul>
                     <li>Single primary, many secondaries</li>
+                    <li>Initial sync</li>
                     <li>Majority based</li>
                     <li>Transaction log</a>
                 </ul>
