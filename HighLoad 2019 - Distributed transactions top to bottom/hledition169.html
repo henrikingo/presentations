@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>MongoDB Distributed transactions from top to bottom | by Henrik Ingo @henrikingo</title>
+    
+    <meta name="description" content="MongoDB Distributed transactions from top to bottom" />
+    <meta name="author" content="Henrik Ingo" />
+
+    <link rel="stylesheet" href="impress.js/extras/highlight/styles/github.css">
+
+    <link href="css/classic-slides169.css" rel="stylesheet" />
+    
+</head>
+
+<body class="impress-not-supported">
+<!--
+    This fallback message is only visible when there is `impress-not-supported` class on body.
+-->
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress" data-transition-duration="1000">
+    <div class="step title" data-x="-1000" data-y="-1500" data-z="0">
+        <h1>MongoDB <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distributed transactions<br>&nbsp;&nbsp;&nbsp;&nbsp; top to bottom</h1>
+        <h2>Henrik Ingo</h2>
+        <h3>HighLoad++ 2019</h3>
+        <p style="position: absolute; bottom: 0; right: 0px;"><a href="https://twitter.com/h_ingo">@h_ingo</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://henrikingo.github.io/presentations/">henrikingo.github.io/presentations/</a></p>
+    </div>
+
+    <div class="step title tree-img skip" data-x="-3200" data-y="-1500" data-z="-5000" data-scale="7">
+    
+    </div>
+
+
+    <div id="toc" class="step skip" data-x="1000" data-y="-1500" data-z="0">
+        <h1>Table of Contents</h1>
+        <ul>
+            <li>Background &amp; History</li>
+            <li>Why transactions?</li>
+            <li>Concepts &amp; algorithms
+                <ul>
+                    <li>Plenty of links to further reading</li>
+                </ul>
+            </li>
+        </ul>
+        <p style="position: absolute; bottom: 0; right: 0px;"><a href="https://twitter.com/h_ingo">@h_ingo</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://henrikingo.github.io/presentations/">henrikingo.github.io/presentations/</a></p>
+
+    </div>
+
+    <div id="history" class="step history" data-rel-x="2000">
+        <h1>Circa 2007...</h1>
+        <img src="images/DistractedBoyfriendMeme_bw.jpg" />
+    </div>
+
+    <div id="nosqlvenn" class="step skip" data-rel-x="-700" data-rel-y="900" data-rel-z="1000" data-scale="1">
+        <img src="images/NoSQL-venn.png" align="right" height="2000"/>
+    </div>
+
+    <div id="keyvalue" class="step skip" data-rel-x="0" data-rel-y="50" data-rel-z="0" data-scale="0.9">
+    </div>
+
+    <div id="widecolumn" class="step skip" data-rel-x="-300" data-rel-y="350" data-rel-z="0" data-scale="0.9">
+    </div>
+
+    <div id="cassandra" class="step skip" data-rel-x="2000" data-rel-y="0" data-rel-z="0" data-scale="0.9"
+         style="background-color: #bcd35f; border-radius: 10px;">
+        <h1>Cassandra sidebar</h1>
+        <ul>
+            <li>Dynamo replication
+            <ul>
+                <li><a href="https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf">DeCandia et.al. 2007</a>, <a href="https://www.allthingsdistributed.com/2017/10/a-decade-of-dynamo.html">Vogels 2017</a></li>
+                <li>Client reads &amp; writes multiple nodes</li>
+                <li>Majority-style N+M consistency (See <a href="http://openlife.cc/blogs/2019/february/20-years-later-whats-left-cap-theorem">CAP theorem, 1999.</a>)</li>
+                <li>Con's: read-amplification, repair-on-read</li>
+            </ul></li>
+            <li>Log Structured Merge tree (LSM)
+            <ul>
+                <li><a href="https://www.slideshare.net/ssuser7e134a/log-structured-merge-tree">Pinglei Guo</a>, <a href="https://www.datastax.com/blog/2011/10/leveled-compaction-apache-cassandra">Jonathan Ellis</a>, <a href="http://smalldatum.blogspot.com/2019/01/geek-code-for-lsm-trees.html">Mark</a> <a href="http://smalldatum.blogspot.com/2018/10/describing-tiered-and-leveled-compaction.html">Callaghan</a></li>
+            </ul></li>
+            </li>
+        </ul>
+    </div>
+
+    <div id="document" class="step skip" data-rel-x="-2300" data-rel-y="200" data-rel-z="0" data-scale="1.6">
+    </div>
+
+    <div id="newsql" class="step skip" data-rel-x="700" data-rel-y="850" data-rel-z="0" data-scale="0.7">
+    </div>
+
+    <div id="chaplin" class="step skip" data-rel-x="2000" data-rel-y="500" data-rel-z="0" data-scale="1">
+        <h1 style="text-align: left;">What about RDBMS?</h1>
+        <img src="images/Chaplin-DistractedBoyfriend.jpg" style="position: relative; left: -100px;" />
+        <div class="substep" style="text-align: left; position: absolute; top: 50px; right: 20px;">
+            <ul>
+            <li>Oracle RAC
+                <ul><li>Not webscale</li></ul>
+            </li>
+            <li>MySQL
+                <ul><li>Replication -&gt; Galera Cluster</li>
+                    <li><strike>MySQL Fabric</strike></li>
+                    <li>Vitesse?</li>
+                </ul>
+            </li>
+            <li>PostgreSQL
+                <ul><li>Logical Replication in 2017</li>
+                    <li>Sharding: Citus</li>
+                </ul>
+            </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div id="transition" class="step" data-x="1000" data-rel-y="800" data-z="2000" data-scale="1" data-rotate-x="-60" data-autoplay="0.3">
+    </div>
+
+
+    <div id="why" class="step" data-x="-1000" data-y="800" data-z="0">
+        <h1 style="font-size: 400%; font-family: 'Permanent Marker', cursive; margin-top: 0px;">WHY?</h1>
+        <ul style="margin-left: 280px; margin-top: 0px; margin-bottom: 0px; position: relative; top: -100px;">
+            <li class="substep">MongoDB marketing: 80% - 90% of apps don't need transactions.</li>
+            <li class="substep">Henrik: Well, maybe 50%...</li>
+            <li class="substep"><a href="https://www.allthingsdistributed.com/2017/10/a-decade-of-dynamo.html">Werner Vogels, on Amazon.com</a>: 
+            <ul><li><q>About 70% of operations were of the key-value kind, where only a primary key was used and a single row would be returned. About 20% would ... still operate on only a single table.</q></li></ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="why2" class="step" data-rel-x="0" data-rel-y="1200" data-rel-z="0">
+        <h1 style="font-size: 400%; font-family: 'Permanent Marker', cursive; margin-top: 0px;">WHY?</h1>
+        <ul>
+            <li class="substep">Many features only needed by 10%: sharding, join...</li>
+            <li class="substep">Important to some well paying customers</li>
+            <li class="substep">Classic example: Move 100€ from account A to B</li>
+            <li class="substep">By-products: Snapshot Isolation, Causal Consistency, Secondary reads...</li>
+        </ul>
+    </div>
+
+    <div id="roadmap" class="step" data-rel-x="2000" data-rel-y="1000" data-rel-z="0">
+        <img src="images/Path_to_Transactions.png" style="width: 100%;">
+    </div>
+
+    <div id="mvcc" class="step" data-x="3500" data-y="4500" data-z="0">
+        <h1>Multi Version Concurrency Control</h1>
+        <ul>
+            <li><a href="https://people.eecs.berkeley.edu/~brewer/cs262/concurrency-distributed-databases.pdf">Bernstein &amp; Goodman, 1981</a>.
+                <a href="https://dspace.mit.edu/handle/1721.1/16279">Reed, 1979</a>. <a href="http://edn.embarcadero.com/article/27007">InterBase, 1984</a>.</li>
+            <li class="substep">Updates create new copies (versions) of records</li>
+            <li class="substep">All reads from same <em>version</em>
+                <ul>
+                    <li>No read locks</li>
+                    <li>Obviously consistent</li>
+                </ul>
+            </li>
+            <li class="substep">Updates to same record cause conflict</li>
+            <li class="substep">Snapshot Isolation</li>
+        </ul>
+    </div>
+
+    <div id="mvcc-conflict-overview" class="step" data-rel-x="2000" data-rel-y="2000" data-rel-z="0" data-scale="3">
+    </div>
+
+    <div id="mvcc-conflict" class="step" data-rel-x="-1000" data-rel-y="-800" data-rel-z="0" data-scale="1">
+        <h1>Write Conflict</h1>
+        <table>
+            <tr>
+                <td>
+<pre><code class="javascript">> <strong>startTransaction()</strong>
+> <strong>find()</strong>
+{ "_id" : 1, "balance" : 100 }
+{ "_id" : 2, "balance" : 50 }
+> <strong>update({ _id:1}, {$set: {balance:100-10} })</strong>
+><strong>find()</strong>
+{ "_id" : 1, "balance" : 90 }
+{ "_id" : 2, "balance" : 50 }</code></pre>
+                </td><td>
+                </td>
+            </tr><tr>
+                <td>
+                </td><td>
+<pre><code class="javascript">> <strong>startTransaction()</strong>
+> <strong>find()</strong>
+{ "_id" : 1, "balance" : 100 }
+{ "_id" : 2, "balance" : 50 }
+> <strong>update({ _id:1}, {$inc: {balance:100-11} })</strong>
+WriteCommandError({
+        "errorLabels" : ["TransientTransactionError"],
+        "operationTime" : Timestamp(1572204799, 5),
+        "errmsg" : "WriteConflict",
+        "code" : 112,   ...
+})</code></pre>
+                </td>
+            </tr>
+            </tr><tr>
+                <td>
+<pre><code class="javascript">> <strong>commitTransaction()</strong>
+<strong>> db.accounts.find()</strong>
+{ "_id" : 1, "balance" : 90 }
+{ "_id" : 2, "balance" : 50 }</code></pre>
+                </td><td>
+                </td>
+            </tr>
+        </table>
+        <ul>
+        <li>Consistency is preserved!</li>
+        </ul>
+    </div>
+
+    <div id="mvcc-conflict-cont" class="step" data-rel-x="1400" data-rel-y="700" data-rel-z="0">
+    </div>
+
+    <div id="mvcc-conflict-cont2" class="step" data-rel-x="-1500" data-rel-y="700" data-rel-z="0">
+    </div>
+
+    <div id="mvcc-skew" class="step" data-rel-x="0" data-rel-y="1500" data-rel-z="0">
+        <h1>Write Skew</h1>
+        <ul>
+        <li>Business logic: Alice and Bob work in support. One of them must always be oncall.</li>
+        </ul>
+        <table>
+            <tr>
+                <td>
+<pre><code class="javascript"><strong>> db.supportteam.find()</strong>
+{ "_id" : "Alice", "status" : "oncall" }
+{ "_id" : "Bob", "status" : "oncall" }
+
+
+
+> <strong>startTransaction()</strong>
+> <strong>findOne</strong>({_id:"Bob"}).status
+<strong>oncall</strong>
+> <strong>update</strong>({_id:"Alice"}, {$set: {status:<strong>"free"</strong>} })</code></pre>
+                </td><td>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td><td>
+<pre><code class="javascript">> <strong>startTransaction()</strong>
+> <strong>findOne</strong>({_id:"Alice"}).status
+<strong>oncall</strong>
+> <strong>update</strong>({_id:"Bob"}, {$set: {status:<strong>"free"</strong>} })
+> <strong>commitTransaction()</strong></code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+<pre><code class="javascript">> <strong>commitTransaction()</strong>
+<strong>> db.supportteam.find()</strong>
+{ "_id" : "Alice", "status" : "free" }
+{ "_id" : "Bob", "status" : "free" }</code></pre>
+                </td><td>
+                </td>
+            </tr>
+        </table>
+        <ul>
+        <li>That's not good!</li>
+        </ul>
+    </div>
+
+    <div id="mvcc-skew-cont" class="step" data-rel-x="0" data-rel-y="600" data-rel-z="0">
+    </div>
+
+    <div id="mvcc-skew-cont2" class="step" data-rel-x="1400" data-rel-y="300" data-rel-z="0">
+    </div>
+
+    <div id="mvcc-skew-cont3" class="step" data-rel-x="-1500" data-rel-y="500" data-rel-z="0">
+    </div>
+
+
+    <div id="serializable" class="step" data-x="1500" data-y="4500" data-z="0">
+        <h1>Serializable</h1>
+        <p style="text-align: left;">Avoids any and all anomalies, incl write skew.</p>
+        <ul>
+            <li>Reality check:
+                <ul>
+                <li>MySQL: <a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html">Provides serializeable</a>, nobody uses it.</li>
+                <li>Oracle: <a href="https://blog.dbi-services.com/oracle-serializable-is-not-serializable/">Serializable is actually SI</a>.</li>
+                <li>PostgreSQL: <a href="https://www.postgresql.org/docs/current/transaction-iso.html#XACT-SERIALIZABLE">Serializable Snapshot Isolation</a> since 2011<br>
+                    <a href="https://drkp.net/papers/ssi-vldb12.pdf">Ports &amp; Grittner, 2012</a>. <a href="https://courses.cs.washington.edu/courses/cse444/08au/544M/READING-LIST/fekete-sigmod2008.pdf">Cahill et.al, 2008.</a></li>
+                </li>
+                </ul>
+            </li>
+            <li>Most use SI (or RR) with <code>SELECT ... FOR UPDATE</code>
+                <ul>
+                <li>MongoDB: <a href="https://www.mongodb.com/blog/post/how-to-select--for-update-inside-mongodb-transactions">Use <code>findAndModify()</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="spanner" class="step skip" data-rel-x="0" data-rel-y="1500" data-rel-z="0"
+         style="background-color: #bcd35f; border-radius: 10px;">
+        <h1>Spanner sidebar</h1>
+        <ul>
+            <li>How do you even do distributed serializable?
+                <ul>
+                    <li>Classic solution: dependency graph of all transactions</li>
+                    <li>Not very distributed</li>
+                </ul>
+            </li>
+            <li>Google: We just order trx by wall clock timestamp
+                <ul>
+                    <li>You can't trust server clock!!</li>
+                    <li>Google: We put atomic clocks in every data center</li>
+                    <li><a href="https://static.googleusercontent.com/media/research.google.com/en//archive/spanner-osdi2012.pdf">Corbett et.al, 2012</a></li>
+                </ul>
+            </li>
+            <li>As of 2017 GCP offers TrueTime as a service</li>
+        </ul>
+    </div>
+
+
+
+    <div id="replication" class="step" data-x="-500" data-y="4500" data-z="0">
+        <h1>Replication</h1>
+        <p style="position: absolute; right: 50px; top: 30px; transform: rotate(30deg);"
+           class="substep">(Durability)</p>
+        <ul class="substep">
+            <li><a href="https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf">Ongaro, 2014</a>: Raft replication &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a href="http://openlife.cc/blogs/2015/september/4-modifications-raft-consensus">Ingo, 2015</a>)
+                <ul>
+                    <li>Single primary, many secondaries</li>
+                    <li>Initial sync</li>
+                    <li>Majority based</li>
+                    <li>Transaction log</a>
+                </ul>
+            </li>
+            <li>MongoDB differences
+                <ul>
+                    <li>Pull vs push</li>
+                    <li>Apply first, then replicate</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="distributed-si" class="step" data-x="-2500" data-y="4500" data-z="0">
+        <h1>Distributed Snapshot Isolation</h1>
+        <ul>
+            <li>Basic concept:
+                <ul>
+                    <li>Clients can ask to read a specific MVCC snapshot <code>T<sub>n</sub></code></li>
+                    <li>Ask for same <code>T<sub>n</sub></code> from each shard</li>
+                </ul>
+            </li>
+            <li>So now we just need:
+                <ul>
+                    <li>Storage engine must use externally provided <code>T<sub>n</sub></code> </li>
+                    <li>Writes <code>T<sub>n</sub></code> and <code>T<sub>n+1</sub></code> must commit in same order on all shards</li>
+                    <li>Cluster-wide clock</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="lamport" class="step" data-rel-x="0" data-rel-y="1000" data-z="0">
+        <h1>Lamport clock</h1>
+        <ul>
+            <li> <a href="http://delivery.acm.org/10.1145/3320000/3314049/p636-tyulenev.pdf?ip=88.115.230.207&id=3314049&acc=TRUSTED&key=4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35%2EE47D41B086F0CDA3&__acm__=1572516395_ec0b642bd05e02ac2fb11edd28297bba">Tyulenev et.al, 2019</a>. <a href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Lamport, 1978</a>.</li>
+            <li>MongoDB: Monotonically increasing timestamp</li>
+            <li>Gossip: If A communicates with B, pass time
+                <ul>
+                    <li>Causality: event on A <em>happened before</em> event on B</li>
+                    <li>Partial ordering: If A and B don't communicate, no causality</li>
+                    <li>Clients pass time too</li>
+                </ul>
+            </li>
+            <li>Causal Consistency is the strongest partition-tolerant consistency level (<a href="https://jepsen.io/consistency">jepsen.io</a>)</li>
+        </ul>
+    </div>
+
+    <div id="causality" class="step" data-rel-x="0" data-rel-y="1000" data-z="0">
+        <h1>Understanding causality</h1>
+        <img src="images/causality.png" style='height: 90%; width: 100%; object-fit: contain'>
+    </div>
+
+    <div id="tunable-consistency" class="step" data-rel-x="0" data-rel-y="1000" data-z="0">
+        <h1>MongoDB tunable consistency</h1>
+        <ul>
+            <li>Typically choosing sync vs async replication is a global setting. Or not an option at all!</li>
+            <li>MongoDB: Replication internals async, but each client can choose sync or async semantics.</li>
+            <li>Even writes vs reads tunable separately. For example, linearizable read + non-durable write...</li>
+            <li><a href="http://www.vldb.org/pvldb/vol12/p2071-schultz.pdf">Schultz et.al, 2019</a></li>
+        </ul>
+    </div>
+
+    <div id="twopc" class="step" data-x="-4500" data-y="4500" data-z="0">
+        <h1>Two Phase Commit (2PC)</h1>
+        <ul>
+            <li><a href="https://pdos.csail.mit.edu/6.824/papers/rstar.pdf">Mohan et.al, 1986</a>.</li>
+            <li>PREPARE -&gt; all YES -&gt; COMMIT
+                <ul>
+                    <li>Prepare is binding: Must be durable</li>
+                    <li>Commit must succeed</li>
+                    <li>Crash recovery is non-trivial</li>
+                    <li>MongoDB: 2x majority commit</li>
+                </ul>
+            </li>
+            <li>Used
+                <ul>
+                    <li>Between shards, Replication, Between different databases</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="conclusion" class="step" data-x="-12300" data-y="-1300" data-z="0">
+        <h1 style="text-align: left; margin-left: 0.4em;">Summary</h1>
+        <img src="images/DistractedBoyfriendMeme_girls_captions.png" style="width: 500px; position: absolute; right: 225px; top: 50px;">
+        <p style="text-align: left; width: 400px;">What did we learn today:</p>
+        <p>&nbsp;</p>
+        <p style="text-align: left;">MVCC, Snapshot Isolation, Write Skew, Serializeable/SSI, Raft, Lamport, Causal Consistency, Tunable consistency, 2PC.</p>
+        <p style="text-align: left;"><em>Bonus slides:</em> NoSQL typology, Cassandra, Dynamo, CAP, LSM, Spanner.</p>
+        <p style="position: absolute; bottom: 0; right: 0;"><a href="https://twitter.com/h_ingo">@h_ingo</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://henrikingo.github.io/presentations/">henrikingo.github.io/presentations/</a></p>
+    </div>
+
+
+
+
+
+    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="12" style="pointer-events: none;">
+    </div>
+</div>
+
+<!--
+    Add navigation-ui controls: back, forward and a select list.
+    Add a progress indicator bar (current step / all steps)
+    Add the help popup plugin
+-->
+<div id="impress-toolbar"></div>
+
+<div id="impress-help"></div>
+
+<!-- Extra modules
+     Load highlight.js, mermaid.js, markdown.js and MathJax.js from extras.
+     If you're curious about details, these are initialized in src/plugins/extras/extras.js -->
+<script type="text/javascript" src="impress.js/extras/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="impress.js/extras/markdown/markdown.js"></script>
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="impress.js/js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
