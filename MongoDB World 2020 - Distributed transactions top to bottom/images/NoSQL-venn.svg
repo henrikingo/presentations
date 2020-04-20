@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="NoSQL-venn.svg"
+   inkscape:export-filename="/home/hingo/hacking/presentations/gh-pages/HighLoad 2019 - Distributed transactions top to bottom/images/NoSQL-venn.png"
+   inkscape:export-xdpi="142.98"
+   inkscape:export-ydpi="142.98">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="307.77275"
+     inkscape:cy="596.13482"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="3200"
+     inkscape:window-height="1669"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Circles">
+    <ellipse
+       style="opacity:1;fill:#e9afaf;fill-opacity:1;stroke:none;stroke-width:5.32405472;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path1021"
+       cx="157.55539"
+       cy="263.62347"
+       rx="64.812859"
+       ry="31.270533" />
+    <ellipse
+       style="opacity:1;fill:#6ab541;fill-opacity:1;stroke:none;stroke-width:3.94314742;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path1019"
+       cx="70.258995"
+       cy="130.8927"
+       rx="141.51921"
+       ry="124.28032"
+       inkscape:export-xdpi="142.98"
+       inkscape:export-ydpi="142.98" />
+    <ellipse
+       style="opacity:1;fill:#bcd35f;fill-opacity:1;stroke:none;stroke-width:3.11199999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path1017"
+       cx="110.33865"
+       cy="92.555626"
+       rx="83.789001"
+       ry="70.96006" />
+    <ellipse
+       style="opacity:1;fill:#ffe680;fill-opacity:1;stroke:none;stroke-width:2.72376204;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path1015"
+       cx="128.82391"
+       cy="63.139164"
+       rx="51.850288"
+       ry="33.141418" />
+  </g>
+  <g
+     inkscape:label="Text"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline">
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot815"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.5px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="matrix(0.21910498,0,0,0.21910498,14.519655,11.269948)"><flowRegion
+         id="flowRegion817"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle"><rect
+           id="rect819"
+           width="324.56464"
+           height="191.18536"
+           x="378.80719"
+           y="243.68697"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle" /></flowRegion><flowPara
+         id="flowPara839">Memcache, Couchbase, Voldemort, Riak, Redis</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot831"
+       style="font-style:normal;font-weight:normal;font-size:27.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="scale(0.26458333)"><flowRegion
+         id="flowRegion833"><rect
+           id="rect835"
+           width="51.51778"
+           height="91.923882"
+           x="624.27429"
+           y="402.28091" /></flowRegion><flowPara
+         id="flowPara837" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.78259373px;line-height:125%;font-family:FreeSans;-inkscape-font-specification:FreeSans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.35573068px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="111.68988"
+       y="57.544785"
+       id="text845"><tspan
+         sodipodi:role="line"
+         id="tspan843"
+         x="111.68988"
+         y="57.544785"
+         style="stroke-width:0.35573068px">Key-Value</tspan></text>
+    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,-42.003268,53.403035)"
+       xml:space="preserve"
+       id="flowRoot815-0"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.5px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion817-7"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle"><rect
+           id="rect819-6"
+           width="275.77167"
+           height="213.1422"
+           x="378.80719"
+           y="243.68697"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle" /></flowRegion><flowPara
+         id="flowPara905">Cassandra, HBase,</flowPara><flowPara
+         id="flowPara851">DynamoDB</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.62927628px;line-height:125%;font-family:FreeSans;-inkscape-font-specification:FreeSans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.38651913px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="64.327209"
+       y="110.23409"
+       id="text845-6"><tspan
+         sodipodi:role="line"
+         id="tspan843-5"
+         x="64.327209"
+         y="110.23409"
+         style="stroke-width:0.38651913px">Wide Column*</tspan></text>
+    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,-30.660006,73.712947)"
+       xml:space="preserve"
+       id="flowRoot815-0-3"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.5px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion817-7-7"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle"><rect
+           id="rect819-6-6"
+           width="360.62448"
+           height="57.578701"
+           x="378.80719"
+           y="243.68697"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle" /></flowRegion><flowPara
+         id="flowPara905-9"
+         style="font-size:21.33333397px">*) Key-value with columns</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.4660187,0,0,0.4660187,-216.49845,69.331547)"
+       xml:space="preserve"
+       id="flowRoot815-7"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.5px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-xdpi="142.98"
+       inkscape:export-ydpi="142.98"><flowRegion
+         id="flowRegion817-2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle"><rect
+           id="rect819-64"
+           width="275.77167"
+           height="213.1422"
+           x="378.80719"
+           y="243.68697"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle" /></flowRegion><flowPara
+         id="flowPara839-0">MongoDB</flowPara><flowPara
+         id="flowPara991">MarkLogic</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.72166824px;line-height:125%;font-family:FreeSans;-inkscape-font-specification:FreeSans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.68078798px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-15.05097"
+       y="172.17786"
+       id="text845-1"><tspan
+         sodipodi:role="line"
+         id="tspan843-2"
+         x="-15.05097"
+         y="172.17786"
+         style="stroke-width:0.68078798px">Document</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot815-8"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.5px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="matrix(0.21910498,0,0,0.21910498,29.046326,211.46402)"><flowRegion
+         id="flowRegion817-0"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle"><rect
+           id="rect819-1"
+           width="435.56863"
+           height="174.10783"
+           x="378.80719"
+           y="243.68697"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:center;text-anchor:middle" /></flowRegion><flowPara
+         id="flowPara1085">OrientDB, ArangoDB, Tarantool...</flowPara><flowPara
+         id="flowPara1093">Spanner</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.78259373px;line-height:125%;font-family:FreeSans;-inkscape-font-specification:FreeSans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.35573074px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="110.8707"
+       y="257.73868"
+       id="text845-64"><tspan
+         sodipodi:role="line"
+         id="tspan843-9"
+         x="110.8707"
+         y="257.73868"
+         style="stroke-width:0.35573074px">Graph, Object, NewSQL</tspan></text>
+  </g>
+</svg>
