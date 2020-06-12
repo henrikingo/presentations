@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>DBTest.io 2020: Automated System Performance Testing at MongoDB</title>
+    <meta name="author" content="Henrik Ingo" />
+    <link rel="stylesheet" href="impress.js/extras/highlight/styles/github.css">
+    <link rel="stylesheet" href="impress.js/extras/mermaid/mermaid.forest.css">
+
+    <!-- This file contains common styles for example presentations. -->
+    <link href="css/impress-common.css" rel="stylesheet" />
+    <!--
+        This file contains styles specific for this example presentation. 
+    -->
+    <link href="css/classic-slides.css" rel="stylesheet" />
+</head>
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress"
+    data-transition-duration="1000"
+
+    data-width="1920"
+    data-height="1080"
+    data-max-scale="3"
+    data-min-scale="0"
+    data-perspective="1000">
+
+    <div class="step" data-x="-2200" data-y="-3000" data-z="-1000">
+        <img src="images/screenshot_article.png" alt="Screenshot of the article" />
+    </div>
+
+
+    <div class="step slide" data-rel-x="950" data-rel-y="600" data-z="-500" style="text-align: center;">
+        <img src="images/screenshot_dsi_github.png" alt="Screenshot of DSI Github repo" width="1500"/>
+    </div>
+
+    <div id="context" class="step" data-rel-x="2500" data-rel-y="1000" data-z="0" >
+        <h1>Context</h1>
+        <table border="1">
+            <tr>
+                <td rowspan="2" style="width: 33%">
+                    <a href="https://engineering.mongodb.com/post/evergreen-continuous-integration-why-we-reinvented-the-wheel">Kyle Erf, 2016:<br>
+                     Evergreen Continuous Integration: Why We Reinvented The Wheel</a>
+                </td>
+                <td rowspan="2" style="width: 33%">
+                    <div style="z-index: 2; border: 6px solid red; width: 450px; height: 300px; border-radius: 200px; position: absolute; top: 400px; left: 600px; padding: 100px;"
+                        class="substep">
+                        <a href="https://arxiv.org/pdf/2004.08425.pdf">Ingo &amp; Daly, 2020:<br>
+                        Automated System Performance Testing at MongoDB</a>
+                    </div>
+                </td>
+                <td style="width: 33%">
+                    <a href="https://engineering.mongodb.com/post/reducing-variability-in-performance-tests-on-ec2-setup-and-key-results">Ingo &amp; Daly, 2019:<br>
+                    Reducing variability in performance tests on EC2: Setup and Key Results</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="https://arxiv.org/abs/2003.00584">David Daly, et.al. 2020:<br>
+                    Change Point Detection in Software Performance Testing</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="step slide" data-rel-x="0" data-rel-y="1500">
+        <h1>Requirements</h1>
+        <ol>
+        <li>Full end-to-end automation</li>
+        <li>Support both CI and manual benchmarking</li>
+        <li>Elastic, public cloud infrastructure</li>
+        <li>Everything configurable</li>
+        <li>All configuration is via a single, consistent, YAML based system</li>
+        <li>Clear modularity for executables and configuration</li>
+        <li>Diagnosability</li>
+        <li>Repeatability</li>
+        </ol>
+    </div>
+
+    <div class="step" data-rel-x="2300" data-rel-y="0">
+        <img src="images/architecture_diagram.png" alt="Architecture Diagram" width="1900" style="margin-top:200px; margin-left:200px;">
+    </div>
+
+    <div id="dsi" class="step" data-rel-x="300" data-rel-y="900" data-scale="1.3">
+    </div>
+
+    <div class="step" data-rel-x="-800" data-rel-y="400" data-rel-z="-1000" data-scale="0.3" style="text-align: center;">
+        <img src="images/mongodb_setup.yml.png" alt="Listing 1: mongodb_setup.yml" height="950">
+        <div style="z-index: 2; border: 6px solid red; width: 1500px; height: 300px; border-radius: 200px; position: absolute; top: 350px; left: 150px;"
+            class="substep"></div>
+        <div style="z-index: 2; border: 6px solid red; width: 1500px; height: 220px; border-radius: 200px; position: absolute; top: 120px; left: 150px;"
+            class="substep"></div>
+        <div style="z-index: 2; border: 6px solid red; width: 1500px; height: 300px; border-radius: 200px; position: absolute; top: 700px; left: 150px;"
+            class="substep"></div>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="400" data-rel-z="0" data-scale="0.3" style="text-align: center;">
+        <img src="images/test_control.yml.png" alt="Listing 2: test_control.yml" height="950">
+        <div style="z-index: 2; border: 6px solid red; width: 1500px; height: 80px; border-radius: 50px; position: absolute; top: 220px; left: 100px;"
+            class="substep"></div>
+        <div style="z-index: 2; border: 6px solid red; width: 1500px; height: 200px; border-radius: 200px; position: absolute; top: 320px; left: 100px;"
+            class="substep"></div>
+        <div style="z-index: 2; border: 6px solid red; width: 700px; height: 35px; border-radius: 50px; position: absolute; top: 400px; left: 510px;"
+            class="substep"></div>
+    </div>
+
+    <div class="step" data-rel-to="dsi" data-rel-x="0" data-rel-y="0" data-scale="1.3">
+    </div>
+
+    <div class="step" id="evergreen" data-rel-x="3000" data-rel-y="0" style="text-align: center;">
+        <img src="images/Evergreen-full.png" alt="Evergreen CI result page" height="900" style="border: 5px solid gray">
+    </div>
+    <div class="step helper-border" data-rel-x="-300" data-rel-y="-330" data-scale="0.25">
+    </div>
+    <div class="step helper-border" data-rel-x="750" data-rel-y="30" data-scale="0.3">
+    </div>
+    <div class="step helper-border" data-rel-x="-850" data-rel-y="150" data-scale="0.15">
+    </div>
+    <div class="step helper-border" data-rel-x="270" data-rel-y="360" data-scale="0.5">
+    </div>
+    <div class="step" data-rel-to="evergreen" data-rel-x="0" data-rel-y="0">
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="-1500">
+        <h1>Some interesting choices</h1>
+        <ul>
+        <li>No CLI options</li>
+        <li>Passthru options without input validation</li>
+        <li>Translate YAML to JSON</li>
+        <li>Bought a real domain to have a test TLS cert</li>
+        </ul>
+    </div>
+
+    <div class="step" data-rel-x="0" data-rel-y="-1500">
+        <h1>Results</h1>
+        <ul>
+        <li>200 tests, 20 MongoDB configurations</li>
+        <li>Flexible, config only framework</li>
+        <li>Diagnosability &amp; Repeatability</li>
+        <li>For MongoDB 4.2 cycle:
+            <ul>
+            <li>63 regressions, all but one fixed</li>
+            <li>Compare: 20 microbenchmarks regressions</li>
+            <li>17 net improvements</li>
+            </ul>
+        </li>
+        </ul>
+    </div>
+
+    <div id="overview" class="step skip" data-x="4500" data-y="1500" data-scale="10" style="pointer-events: none;">
+    </div>
+</div>
+
+<div id="impress-toolbar"></div>
+<div class="impress-progressbar"><div></div></div>
+<div class="impress-progress"></div>
+
+<div id="impress-help"></div>
+
+<!-- Extra modules
+     Load highlight.js, mermaid.js, markdown.js and MathJax.js from extras.
+     If you're curious about details, these are initialized in src/plugins/extras/extras.js -->
+<script type="text/javascript" src="impress.js/extras/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="impress.js/extras/mermaid/mermaid.min.js"></script>
+<script type="text/javascript" src="impress.js/extras/markdown/markdown.js"></script>
+<script type="text/javascript" src="impress.js/extras/mathjax/MathJax.js?config=TeX-AMS_CHTML"></script>
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="impress.js/js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
