@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>5 kinds of NoSQL | Froscon 2020 | by Henrik Ingo</title>
+    
+    <meta name="description" content="5 kinds of NoSQL" />
+    <meta name="author" content="Henrik Ingo" />
+    <link rel="stylesheet" href="impress.js/extras/highlight/styles/github.css">
+    <link rel="stylesheet" href="impress.js/extras/mermaid/mermaid.forest.css">
+
+    <!-- This file contains common styles for example presentations. -->
+    <link href="impress.js/css/impress-common.css" rel="stylesheet" />   
+    <!--
+        This file contains styles specific for this example presentation. 
+    -->
+    <link href="css/classic-slides.css" rel="stylesheet" />
+    
+</head>
+
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+
+<div id="impress"
+    data-transition-duration="1000"
+
+    data-width="1920"
+    data-height="1080"
+    data-max-scale="3"
+    data-min-scale="0"
+    data-perspective="1000">
+
+    <div id="title" class="step slide title intro" data-x="-2200" data-y="-3000" data-rotate-x="90">
+        <h1>5 kinds of NoSQL</h1>
+        <h2>Froscon 2020</h2>
+        <h3>Henrik Ingo, Datastax</h3>
+
+        <div class="notes">
+        Any element with the class="notes" will not be displayed. This can
+        be used for speaker notes. In fact, the impressConsole plugin will
+        show it in the speaker console!
+        </div>
+    </div>
+
+    <div id="choice" class="step slide intro" data-rel-y="3000" data-scale="3">
+        <p style="font-weight: bold; font-size: 300%; position: absolute; top: 200px; left: -100px; transform: rotate(-10deg);"
+        class="fade-in"
+        >RDBMS</p>
+        <p style="font-weight: bold; font-size: 300%; position: absolute; top: 210px; right: 100px; transform: rotate(10deg);"
+        class="fade-in"
+        >NoSQL</p>
+        <img src="images/4758705076_6ef9de796c_o.png"
+        style="width: 600px; position: absolute; bottom: 0px; left: 450px;">
+    </div>
+
+    <div id="choice-subslide" class="step slide subslide" data-rel-x="0" data-rel-y="0" data-rel-z="0" data-scale="3">
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <img src="images/dbengines.png" width="1600">
+    </div>
+
+
+    <div id="nosql_overview" class="step slide" data-rel-x="1200" data-rel-y="-200" data-scale="1">
+        <p>&nbsp;</p>
+    </div>
+    <div id="nosql_overview2" class="step slide" data-rel-x="0" data-rel-y="0" data-scale="1">
+        <p>&nbsp;</p>
+    </div>
+
+
+    <div id="keyvalue" class="step slide zfix" data-rel-to="nosql_overview" data-rel-x="-1100" data-rel-y="-200" data-rel-z="-500">
+        <h1>Key-Value</h1>
+        <img src="images/memcached-tutorial.png"
+            class="substep" style="position: absolute; left: 100px; top: 300px; height: 200px; object-fit: contain;">
+        <img src="images/1200px-Redis_Logo.svg_.png"
+            class="substep" style="position: absolute; left: 100px; top: 600px; width: 400px; object-fit: contain;">
+        <div class="substep" style="position: absolute; left: 700px;">
+            It's fast because...
+            <ul>
+                <li>It's simple</li>
+                <li>It's in RAM</li>
+                <li>It's denormalized</li>
+                <li>Can use hash index</li>
+                <li>Hash based sharding</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <pre><code class="bash"
+>redis 127.0.0.1:6379> SET name "Henrik"
+OK 
+redis 127.0.0.1:6379> GET name 
+"Henrik"
+redis 127.0.0.1:6379> SET age "43"
+OK 
+redis 127.0.0.1:6379> GET age
+"43"</code></pre>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>Use cases</em></p>
+        <p>Cache. Session cache.</p>
+        <p>In-memory, low latency computing. (Write heavy.)</p>
+        <p>Recommendation engines &amp; Machine Learning.</p>
+        <p>Queue</p>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>One more thing...</em></p>
+        <p>Redis complex data types: lists, sets, maps and streams.</p>
+    </div>
+
+
+
+    <div id="widecolumn" class="step slide zfix" data-rel-to="nosql_overview" data-rel-x="0" data-rel-y="-200" data-rel-z="-500">
+        <h1>Wide-Column</h1>
+        <img src="images/GCPBigTable.png"
+            class="substep" style="position: absolute; left: 100px; top: 300px; width: 400px; object-fit: contain;">
+        <img src="images/Cassandra1.png"
+            class="substep" style="position: absolute; left: 100px; top: 500px; width: 400px; object-fit: contain;">
+        <img src="images/dynamodb.png"
+            class="substep" style="position: absolute; left: 100px; top: 700px; width: 400px; object-fit: contain;">
+        <div class="substep" style="position: absolute; left: 500px;">
+            What does it do???
+            <ul>
+                <li>Tables, rows &amp; columns.</li>
+                <li>All data access uses Primary Key</li>
+                <li>PK can be composite: <br>Partition Key + Clustering Keys</li>
+                <li>Partition Key is required</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <pre><code class="sql"
+>CREATE TABLE people (id UUID PRIMARY KEY, firstname text, lastname text);
+
+INSERT INTO people (id, lastname, firstname) 
+    VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'Ingo','Henrik');
+
+SELECT lastname, firstname FROM people WHERE id = 5b6962dd-3f90-4c93-8f61-eabfa4a803e2;
+</code></pre>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>Use cases</em></p>
+        <p>Large (aka Web Scale) +100TB databases</p>
+        <p>Write optimized storage engine</p>
+        <p>Write availability (Dynamo HA)</p>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>One more thing...</em></p>
+        <p><strong>Useful</strong> secondary indexes: See Cassandra 4.0 and DataStax Enterprise 6.8.3.</p>
+    </div>
+
+
+
+    <div id="document" class="step slide zfix" data-rel-to="nosql_overview" data-rel-x="1000" data-rel-y="-200" data-rel-z="-500">
+        <h1>Document</h1>
+        <img src="images/MongoDB_logo_Mongo_DB.png"
+            class="substep" style="position: absolute; left: 100px; top: 300px; width: 400px; object-fit: contain;">
+        <img src="images/Marklogic-logo.png"
+            class="substep" style="position: absolute; left: 100px; top: 500px; width: 400px; object-fit: contain;">
+        <div class="substep" style="position: absolute; left: 700px;">
+            What does it do???
+            <ul>
+                <li>Records are JSON or XML</li>
+                <li>Flexible schema: <br>Structure but not fixed</li>
+                <li>Secondary indexes, complex queries, transactions</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <pre><code class="json"
+>> db.somecollection.insert({firstname: "Henrik", lastname: "Ingo", age: 42})
+> db.somecollection.createIndex({lastname:1, firstname:1});
+
+> db.somecollection.find({lastname: "Henrik"})
+{_id: ObjectId("507f1f77bcf86cd799439011"), firstname: "Henrik", 
+lastname: "Ingo", age: 42}
+</code></pre>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>Use cases</em></p>
+        <p>General purpose database. Competes with RDBMS.</p>
+        <p>Main selling points compared to relational:<br>
+           JSON API, flexible schema, sharding.</p>
+        <p>Flexible schema strengths: Data hub.</p>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>What does the future look like...</em></p>
+        <p>Incremental innovation? Performance, GUI tools, integrations, SDKs...</p>
+    </div>
+
+
+
+    <div id="graph" class="step slide zfix" data-rel-to="nosql_overview" data-rel-x="-1100" data-rel-y="800" data-rel-z="-500">
+        <h1>Graph</h1>
+        <img src="images/neo4j-x.png"
+            class="substep" style="position: absolute; left: 100px; top: 300px; width: 400px; object-fit: contain;">
+        <img src="images/DS_Logo_Primary.png"
+            class="substep" style="position: absolute; left: 100px; top: 550px; width: 400px; object-fit: contain;">
+        <div class="substep" style="position: absolute; left: 700px;">
+            What does it do???
+            <ul>
+                <li>Records are nodes, connected by edges</li>
+                <li>Both can have properties</li>
+                <li>Indexes enable queries</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <pre><code class="java"
+>gremlin> graph = TinkerFactory.createModern()
+==> tinkergraph[vertices:6 edges:6]
+gremlin> g = graph.traversal()
+==> graphtraversalsource[tinkergraph[vertices:6 edges:6], standard]
+gremlin> g.V().has('name','marko').out('knows').values('name')
+==> 'vadas'
+==> 'josh'
+</code></pre>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>Use cases</em></p>
+        <p>Analytical. Find friends of friends that own a cat</p>
+        <p>Social media, recommendation engines, etc.</p>
+        <p>National security</p>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>One more thing...</em></p>
+        <p>Gremlin, Cypher, GraphQL</p>
+        <p>OLTP graph databases exist. (Datastax)</p>
+        <p>Interesting unsolved problem: Optimal sharding for graph DBs.</p>
+    </div>
+
+    <div id="spark" class="step slide zfix" data-rel-to="nosql_overview" data-rel-x="0" data-rel-y="800" data-rel-z="-500">
+        <h1>Query Engine</h1>
+        <img src="images/Apache_Spark_logo.svg.png"
+            class="substep" style="position: absolute; left: 100px; top: 300px; width: 400px; object-fit: contain;">
+        <img src="images/presto.png"
+            class="substep" style="position: absolute; left: 100px; top: 600px; width: 400px; object-fit: contain;">
+        <div class="substep" style="position: absolute; left: 700px;">
+            What does it do???
+            <ul>
+                <li>Formerly known as Hadoop</li>
+                <li>"Batch" queries</li>
+                <li>But also interactive</li>
+                <li>Data stored in HDFS, S3, Cassandra, MongoDB...</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <pre><code class="scala"
+>import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder().appName("Froscon demo").getOrCreate()
+import spark.implicits._
+val df = spark.read.json("people.json")
+df.createOrReplaceTempView("people")
+val sqlDF = spark.sql("SELECT * FROM people")
+sqlDF.show()
++-----------+----------+-----+
+| firstname | lastname | age |
++-----------+----------+-----+
+| Henrik    | Ingo     | 43  |
++-----------+----------+-----+
+</code></pre>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>Use cases</em></p>
+        <p>Data lake. S3.</p>
+        <p>Personalized user profile</p>
+        <p>Fraud detection, national security...</p>
+        <p>"Reporting"</p>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>One more thing...</em></p>
+        <p>Spark Streaming (mini-batch)</p>
+        <p>AWS Athena = Presto</p>
+    </div>
+
+
+    <div id="search" class="step slide zfix" data-rel-to="nosql_overview" data-rel-x="1100" data-rel-y="800" data-rel-z="-500">
+        <h1>Search</h1>
+        <img src="images/800px-Lucene_logo_green.svg.png"
+            class="substep" style="position: absolute; left: 100px; top: 300px; width: 400px; object-fit: contain;">
+        <img src="images/Solr_Logo_on_white.png"
+            class="substep" style="position: absolute; left: 100px; top: 400px; width: 400px; object-fit: contain;">
+        <img src="images/elastic.png"
+            class="substep" style="position: absolute; left: 100px; top: 600px; width: 400px; object-fit: contain;">
+        <div class="substep" style="position: absolute; left: 700px;">
+            What does it do???
+            <ul>
+                <li>Search for words</li>
+                <li>Ranked results</li>
+                <li>Faceting, highlighting</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <pre><code class="json"
+>> curl -POST http://localhost:9200/froscon/people/id1 -curl 
+ -H 'Content-Type: application/json' -d '{"name":"Henrik Ingo"}'
+
+> curl -XGET localhost:9200/froscon/_search?q=name:Ingo
+
+[{_index: "froscon", _type: "people", _id: id1, _source:
+{_id: "name":"Henrik Ingo"}
+</code></pre>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>Use cases</em></p>
+        <p>Google for your website</p>
+        <p>Queries beyond the typical RDBMS BTree</p>
+        <p>Kibana analytics</p>
+        <p>Security monitoring</p>
+    </div>
+
+    <div class="step slide subslide zfix" data-rel-x="0" data-rel-y="0" data-rel-z="0">
+        <p><em>One more thing...</em></p>
+        <p>Elastic = MongoDB in size</p>
+    </div>
+
+
+    <div id="licenses1" class="step slide zfix" data-x="2200" data-y="0" data-z="0" style="font-size: 3em;">
+        <p>Until 2018</p>
+        <table border="1" style="width: 100%">
+            <tr><td></td><td>Apache/BSD</td><td>*GPL</td><td>open core</td><td>proprietary</td></tr>
+            <tr><td>Key-Value</td><td>Memcache</td><td></td><td>Redis</td><td></td></tr>
+            <tr><td>Wide Col</td><td>Cassandra</td><td></td><td></td><td>BigTable, DynamoDB</td></tr>
+            <tr><td>Document</td><td>MongoDB</td><td></td><td></td><td>MarkLogic</td></tr>
+            <tr><td>Graph</td><td></td><td>Neo4j</td><td>DSE Graph</td><td></td></tr>
+            <tr><td>Query Eng</td><td>Spark, Presto</td><td></td><td></td><td>Athena</td></tr>
+            <tr><td>Search</td><td>Lucene, Solr</td><td></td><td>Elastic</td><td></td></tr>
+        </table>
+    </div>
+
+    <div id="licenses2" class="step slide zfix" data-x="2200" data-y="0" data-z="0" style="font-size: 3em;">
+        <p>After 2018</p>
+        <table border="1" style="width: 100%">
+            <tr><td></td><td>Apache/BSD</td><td>*GPL</td><td>open core</td><td>proprietary</td></tr>
+            <tr><td>Key-Value</td><td>Memcache</td><td>Redis</td><td></td><td><strike>Redis</strike></td></tr>
+            <tr><td>Wide Col</td><td>Cassandra</td><td></td><td></td><td>BigTable, DynamoDB</td></tr>
+            <tr><td>Document</td><td></td><td></td><td></td><td><strong>MongoDB</strong></td></tr>
+            <tr><td>Graph</td><td></td><td></td><td><strong>Neo4j</strong></td><td></td></tr>
+            <tr><td>Query Eng</td><td>Spark, Presto</td><td></td><td></td><td>Athena</td></tr>
+            <tr><td>Search</td><td>Lucene, Solr, <br><strong>Open Distro</strong></td><td>Elastic</td><td></td><td></td></tr>
+        </table>
+    </div>
+
+    <div class="step slide title" data-x="2200" data-y="-3000">
+        <p>Image credits:</p>
+        <p><a href="https://www.flickr.com/photos/jadewd/4758705076/in/photolist-8fvBef-2i1fjZ7-22HqnPq-d5AKw-N11QXE-54nrbG-2iShihK-a9G6UW-BJM9M6-ffbbL6-6Zkaoq-5VfC6x-zBnhr-ECmujN-6LCCiH-mef3aF-HsCkgV-62qJer-KihqZC-d4Gi43-coiicW-23z4Xq-MtfZew-5TTqDx-6MRBVU-fFR73V-8kDhX7-a53kr3-iWzyJ6-CZg1PK-2j39vzs-pchW4R-7JPqXF-2jkfq8g-2e3mFL-nTFNcS-hWgkQ2-DeHpWg-fyh527-BbYfnD-74pXwx-8J3FUz-25qzEns-8VEoaN-DsUF7X-8SwsLJ-8NanZV-9K9ufk-sbaWHn-bDhjEf">jay~dee @ Flickr</a></p>
+    </div>
+
+
+    <!-- This last, empty "slide" is set to be very large using the data-scale attribute, 
+         so that it covers all the other slides you just saw. 
+         It's a common way of zooming out at the end, to show the whole presentation.
+         In CSS, we set pointer-events:none to make this slide non-clickable. 
+         It makes a difference at least for SVG content, such as the mermaid diagram. -->
+    <div id="overview" class="step" data-x="4500" data-y="1500" data-scale="10" style="pointer-events: none;">
+    </div>
+</div>
+
+<!--
+    Add navigation-ui controls: back, forward and a select list.
+    Add a progress indicator bar (current step / all steps)
+    Add the help popup plugin
+-->
+<div id="impress-toolbar"></div>
+<div id="impress-help"></div>
+
+<!-- Extra modules
+     Load highlight.js, mermaid.js, markdown.js and MathJax.js from extras.
+     If you're curious about details, these are initialized in src/plugins/extras/extras.js -->
+<script type="text/javascript" src="impress.js/extras/highlight/highlight.pack.js"></script>
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="impress.js/js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
