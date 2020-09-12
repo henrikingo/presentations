@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>5 kinds of NoSQL | Froscon 2020 | by Henrik Ingo</title>
+    
+    <meta name="description" content="5 kinds of NoSQL" />
+    <meta name="author" content="Henrik Ingo" />
+
+    <!-- This file contains common styles for example presentations. -->
+    <link href="impress.js/css/impress-common.css" rel="stylesheet" />   
+    <!--
+        This file contains styles specific for this example presentation. 
+    -->
+    <link href="css/classic-slides.css" rel="stylesheet" />
+    
+</head>
+
+<body class="impress-not-supported">
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+
+<div id="impress"
+    data-transition-duration="1000"
+
+    data-width="1920"
+    data-height="1080"
+    data-max-scale="3"
+    data-min-scale="0"
+    data-perspective="1000">
+
+    <div class="step slide markdown" data-rel-x="0" data-rel-y="3000" data-rotate-x="0">
+# In defense of extreme copyleft
+## Henrik Ingo
+### State of the Source 2020
+-----
+# Agenda
+
+* Cryptographic Autonomy License 
+* Server Side Public License
+* BSD + Patents
+-----
+## Spectrum
+
+Permissive &lt; - &gt; Copyleft
+
+BSD/MIT&nbsp;&nbsp;&nbsp; Apache&nbsp;&nbsp;&nbsp; Mozilla&nbsp;&nbsp;&nbsp; LGPL&nbsp;&nbsp;&nbsp; GPL&nbsp;&nbsp;&nbsp; AGPL&nbsp;&nbsp;&nbsp; **This talk**
+-----
+    4.2. Maintain User Autonomy.
+
+    In addition to providing each Recipient the opportunity to have Access to the Source Code,
+    You cannot use the permissions given under this License to interfere with a Recipient’s 
+    ability to fully use an independent copy of the Work generated from the Source Code You 
+    provide with the Recipient’s own User Data.
+-----
+    “User Data” means any data that is an input to or an output from the Work, where the 
+    presence of the data is necessary for substantially identical use of the Work in an 
+    equivalent context chosen by the Recipient, and where the Recipient has an existing 
+    ownership interest, an existing right to possess, or where the data has been generated 
+    by, for, or has been assigned to the Recipient.
+-----
+![Mongodb interview in Protocol, June 2020](images/Mongodb_2020_interview.png)
+-----
+### AGPL
+
+13 Remote Network Interaction; Use with the GNU General Public License.
+
+Notwithstanding any other provision of this License, **if you modify the Program, your **
+**modified version must prominently offer all users interacting with it remotely through a**
+**computer network (if your version supports such interaction)** an opportunity to receive 
+the Corresponding Source of your version by providing access to the Corresponding Source 
+from a network server at no charge, through some standard or customary means of 
+facilitating copying of software. This Corresponding Source shall include the Corresponding 
+Source for any work covered by version 3 of the GNU General Public License that is 
+incorporated pursuant to the following paragraph.
+-----
+# Apache Software License
+
+3 Grant of Patent License. ...  **where **
+**such license applies only to those patent claims licensable by such Contributor that **
+**are necessarily infringed by** their Contribution(s) alone or by combination of their 
+Contribution(s) with the Work to which such Contribution(s) was submitted. 
+-----
+# GPL
+
+A contributor's **“essential patent claims”**  are all patent claims owned or controlled by the contributor,
+
+...
+
+but do not include claims that would be infringed only as a consequence of further modification of the contributor version.
+
+.
+-----
+### Summary
+
+1. CAL extends copyleft to user data
+  * Also fixes some issues with AGPL, such as software without UI.
+2. Copyleft for microservice architecture is a valid concept.
+3. Copyleft for patents
+  * Not just essential claims!
+
+.
+
+
+    </div>
+
+
+
+    <!-- This last, empty "slide" is set to be very large using the data-scale attribute, 
+         so that it covers all the other slides you just saw. 
+         It's a common way of zooming out at the end, to show the whole presentation.
+         In CSS, we set pointer-events:none to make this slide non-clickable. 
+         It makes a difference at least for SVG content, such as the mermaid diagram. -->
+    <div id="overview" class="step" data-x="4500" data-y="1500" data-scale="10" style="pointer-events: none;">
+    </div>
+</div>
+
+<!--
+    Add navigation-ui controls: back, forward and a select list.
+    Add a progress indicator bar (current step / all steps)
+    Add the help popup plugin
+-->
+<div id="impress-toolbar"></div>
+<div id="impress-help"></div>
+
+<!-- Extra modules
+     Load highlight.js, mermaid.js, markdown.js and MathJax.js from extras.
+     If you're curious about details, these are initialized in src/plugins/extras/extras.js -->
+<script type="text/javascript" src="impress.js/extras/markdown/markdown.js"></script>
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="impress.js/js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
